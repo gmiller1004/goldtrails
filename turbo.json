@@ -1,6 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "MAILCHIMP_API_KEY",
+    "MAILCHIMP_AUDIENCE_ID",
+    "MAILCHIMP_SERVER",
+    "SHOPIFY_STORE_DOMAIN",
+    "SHOPIFY_STOREFRONT_ACCESS_TOKEN",
+    "SHOPIFY_STOREFRONT_API_VERSION"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

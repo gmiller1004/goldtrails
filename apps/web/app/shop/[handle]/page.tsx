@@ -1,0 +1,69 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ProductImageGallery } from "@/components/shop/product-image-gallery";
+import { ProductPurchaseControls } from "@/components/shop/product-purchase-controls";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getDetectors, getShopProductByHandle } from "@/lib/shopify";
+
+function teaser(text: string) {
+  const cleaned = text.trim();
+  if (!cleaned) return "Field-tested gear for serious detectorists.";
+  return cleaned;
+}
+
+export default async function ShopProductPage({ params }: { params: Promise<{ handle: string }> }) {
+  const { handle } = await params;
+  const product = await getShopProductByHandle(handle);
+  if (!product) notFound();
+
+  const all = await getDetectors();
+  const related = all.filter((item) => item.handle !== handle).slice(0, 3);
+
+  return (
+    <div className="mx-auto w-full max-w-6xl space-y-8 px-4 py-10 sm:px-6 sm:py-14">
+      <section className="rounded-2xl border border-secondary bg-white p-6 shadow-sm sm:p-8">
+        <div className="grid gap-8 md:grid-cols-[1fr_1.1fr] md:items-start">
+          <ProductImageGallery
+            title={product.title}
+            images={product.images.length ? product.images : product.image ? [product.image] : []}
+          />
+
+          <div className="space-y-4">
+            <p className="text-xs uppercase tracking-[0.24em] text-primary">Shop Detail</p>
+            <h1 className="text-3xl font-semibold text-foreground sm:text-4xl">{product.title}</h1>
+            <p className="text-sm leading-relaxed text-muted-foreground">{teaser(product.description)}</p>
+
+            <div className="flex flex-wrap gap-3">
+              <div className="w-full sm:w-auto sm:min-w-[280px]">
+                <ProductPurchaseControls product={product} className="w-full" />
+              </div>
+              <Link href="/cart" className="inline-flex items-center text-sm font-medium no-underline">
+                Go to cart
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-2xl bg-muted/30 p-4 sm:p-6">
+        <h2 className="mb-4 text-2xl font-semibold text-foreground">Related Gear</h2>
+        <div className="grid gap-5 md:grid-cols-3">
+          {related.map((item) => (
+            <Card key={item.id}>
+              <CardHeader className="space-y-2">
+                <CardTitle className="text-base text-foreground">
+                  <Link href={`/shop/${item.handle}`} className="no-underline">
+                    {item.title}
+                  </Link>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProductPurchaseControls product={item} className="w-full" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
