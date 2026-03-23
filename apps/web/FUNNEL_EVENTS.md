@@ -26,7 +26,7 @@ Use these fields when available:
 
 - `page_path`: current pathname
 - `page_type`: `home`, `masterclass`, `guide`, `shop`, `events`, `thank-you`
-- `cta`: short identifier such as `masterclass`, `shop`, `events`, `next-guide`
+- `cta`: short identifier such as `masterclass`, `shop`, `events`, `gpaa_membership`, `next-guide`
 - `guide`: guide slug for guide CTA events
 - `source`: CTA location such as `shop-grid`, `thank-you-upsell`, `thank-you-hero`
 - `product_id`, `product_title`, `variant_id`, `price` for commerce events

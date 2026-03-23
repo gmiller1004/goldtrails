@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Gold Trails">
+  <rect width="32" height="32" rx="7" fill="#ffffff"/>
+  <path
+    fill="#d4a017"
+    d="M8 23.5 16 6.5l8 17H8Zm2.2-1.7h11.6L16 10.2 10.2 21.8Z"
+  />
+  <path fill="#1a140f" d="M14.2 18.3h3.6v1.7h-3.6v-1.7Z" opacity=".85"/>
+</svg>

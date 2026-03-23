@@ -1,5 +1,6 @@
 import { TrackedDownloadButton } from "@/components/analytics/tracked-download-button";
 import { TrackedLinkButton } from "@/components/analytics/tracked-link-button";
+import { GpaaMembershipPitch } from "@/components/gpaa-membership-pitch";
 import { LeadForm } from "@/components/lead-form";
 import { ThankYouUpsell } from "@/components/shop/thank-you-upsell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,8 @@ export default async function ThankYouPage() {
           </TrackedDownloadButton>
         </div>
       </section>
+
+      <GpaaMembershipPitch />
 
       <section className="grid gap-5 rounded-2xl bg-muted/30 p-4 sm:p-6 md:grid-cols-2">
         <Card>

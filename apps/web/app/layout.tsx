@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   title: "Gold Trails with Kevin Hoagland – Metal Detecting Masterclass & Events",
   description:
     "Masterclass lessons, events, and resources for metal detecting enthusiasts.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
 };
 
 export default function RootLayout({
