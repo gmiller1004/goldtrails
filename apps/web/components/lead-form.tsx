@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 
 const leadFormSchema = z.object({
   name: z.string().trim().optional(),
-  email: z.email("Please enter a valid email address."),
+  email: z.string().email("Please enter a valid email address."),
 });
 
 type LeadFormValues = z.infer<typeof leadFormSchema>;

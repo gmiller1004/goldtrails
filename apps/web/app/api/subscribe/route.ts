@@ -4,7 +4,7 @@ import { z } from "zod";
 
 const subscribeSchema = z.object({
   name: z.string().trim().optional(),
-  email: z.email("A valid email is required."),
+  email: z.string().email("A valid email is required."),
   attribution: z
     .object({
       utm_source: z.string().optional(),
