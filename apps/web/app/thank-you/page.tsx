@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { TrackedDownloadButton } from "@/components/analytics/tracked-download-button";
 import { TrackedLinkButton } from "@/components/analytics/tracked-link-button";
 import { GpaaMembershipPitch } from "@/components/gpaa-membership-pitch";
 import { LeadForm } from "@/components/lead-form";
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
   ...pageMetadata({
     title: "Thank you",
     description:
-      "Your Gold Trails masterclass download is on the way. Check your email or download the PDF here.",
+      "Your Gold Trails masterclass is on the way — check your email (and spam) for the PDF and next steps.",
     path: "/thank-you",
   }),
   robots: { index: false, follow: false },
@@ -32,19 +31,9 @@ export default async function ThankYouPage() {
           Your Masterclass is on the way! Check your inbox (and spam)
         </h1>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-          We&apos;ve sent your free PDF and next-step resources. If it does not arrive in a
-          few minutes, check promotions and spam folders.
+          We&apos;ve sent your free PDF and next-step resources to your inbox. If it does not
+          arrive in a few minutes, check promotions and spam folders.
         </p>
-        <div className="mt-6 flex justify-center">
-          <TrackedDownloadButton
-            href="/masterclass.pdf"
-            eventName="pdf_download_click"
-            eventProps={{ source: "thank-you-hero" }}
-            className="w-full max-w-sm text-base sm:w-auto"
-          >
-            Download Masterclass PDF
-          </TrackedDownloadButton>
-        </div>
       </section>
 
       <GpaaMembershipPitch />
