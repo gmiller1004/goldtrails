@@ -1,6 +1,7 @@
 export type ShopifyProduct = {
   id: string;
   title: string;
+  rawTitle: string;
   price: string;
   image: string | null;
   images: string[];
@@ -8,6 +9,9 @@ export type ShopifyProduct = {
   description: string;
   tags: string[];
   eventDate?: string | null;
+  eventStartDate?: string | null;
+  eventEndDate?: string | null;
+  eventLocation?: string | null;
   variantId: string | null;
   variantTitle?: string | null;
   availableForSale: boolean;
@@ -43,6 +47,15 @@ type ProductNode = {
     };
   };
   metafield: {
+    value: string | null;
+  } | null;
+  startDateMetafield: {
+    value: string | null;
+  } | null;
+  endDateMetafield: {
+    value: string | null;
+  } | null;
+  locationMetafield: {
     value: string | null;
   } | null;
   variants: {
@@ -95,6 +108,15 @@ const PRODUCTS_QUERY = `
             }
           }
           metafield(namespace: "custom", key: "event_date") {
+            value
+          }
+          startDateMetafield: metafield(namespace: "custom", key: "start-date") {
+            value
+          }
+          endDateMetafield: metafield(namespace: "custom", key: "end-date") {
+            value
+          }
+          locationMetafield: metafield(namespace: "custom", key: "location") {
             value
           }
           variants(first: 50) {
@@ -175,6 +197,9 @@ async function storefrontRequest<T>(query: string, variables: Record<string, unk
 }
 
 function mapProduct(node: ProductNode): ShopifyProduct {
+  const eventStartDate = node.startDateMetafield?.value ?? node.metafield?.value ?? null;
+  const eventEndDate = node.endDateMetafield?.value ?? null;
+  const isEvent = node.tags.includes("gold-trails-event");
   const variants = node.variants.edges.map((edge) => {
     const variant = edge.node;
     return {
@@ -195,7 +220,8 @@ function mapProduct(node: ProductNode): ShopifyProduct {
 
   return {
     id: node.id,
-    title: node.title,
+    title: cleanProductTitle(node.title, isEvent),
+    rawTitle: node.title,
     price: defaultVariant?.price ?? `${currencyCode} ${Number(amount).toFixed(2)}`,
     image: node.featuredImage?.url ?? null,
     images: node.images.edges.map((edge) => edge.node.url).filter(Boolean),
@@ -203,12 +229,41 @@ function mapProduct(node: ProductNode): ShopifyProduct {
     description: node.description,
     tags: node.tags,
     eventDate: node.metafield?.value ?? null,
+    eventStartDate,
+    eventEndDate,
+    eventLocation: node.locationMetafield?.value?.trim() || null,
     variantId,
     variantTitle: defaultVariant?.title ?? null,
     availableForSale,
     variants,
     reserveUrl,
   };
+}
+
+function cleanProductTitle(title: string, isEvent: boolean) {
+  if (!isEvent) return title;
+
+  const separators = [" | ", " - ", " — ", " – "];
+  for (const separator of separators) {
+    const idx = title.lastIndexOf(separator);
+    if (idx < 0) continue;
+    const suffix = title.slice(idx + separator.length).trim();
+    if (looksLikeDateSegment(suffix)) {
+      return title.slice(0, idx).trim();
+    }
+  }
+
+  return title.replace(/\s+\((?:\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|[A-Za-z]{3,9}\s+\d{1,2}(?:,\s*\d{4})?)\)$/, "").trim();
+}
+
+function looksLikeDateSegment(value: string) {
+  if (!value) return false;
+  if (/\d{1,2}\/\d{1,2}(?:\/\d{2,4})?/.test(value)) return true;
+  if (/\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\b/i.test(value) && /\d/.test(value)) {
+    return true;
+  }
+  if (/\b\d{4}\b/.test(value) && /\d{1,2}/.test(value)) return true;
+  return false;
 }
 
 type CartCreateResponse = {
@@ -263,7 +318,7 @@ export async function createCheckoutUrl(
 }
 
 function parseEventDate(node: ProductNode) {
-  const rawValue = node.metafield?.value;
+  const rawValue = node.startDateMetafield?.value ?? node.metafield?.value;
   if (!rawValue) {
     return null;
   }
