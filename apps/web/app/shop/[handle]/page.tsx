@@ -13,7 +13,14 @@ function teaser(text: string) {
 
 function formatDate(value?: string | null) {
   if (!value) return null;
-  const parsed = new Date(value);
+  const dateOnly = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  let parsed: Date;
+  if (dateOnly) {
+    const [, year, month, day] = dateOnly;
+    parsed = new Date(Number(year), Number(month) - 1, Number(day));
+  } else {
+    parsed = new Date(value);
+  }
   if (Number.isNaN(parsed.getTime())) return value;
   return new Intl.DateTimeFormat("en-US", {
     month: "long",

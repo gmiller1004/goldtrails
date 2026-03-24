@@ -13,7 +13,14 @@ type EventCardProps = {
 
 function formatDate(value?: string | null) {
   if (!value) return null;
-  const parsed = new Date(value);
+  const dateOnly = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  let parsed: Date;
+  if (dateOnly) {
+    const [, year, month, day] = dateOnly;
+    parsed = new Date(Number(year), Number(month) - 1, Number(day));
+  } else {
+    parsed = new Date(value);
+  }
   if (Number.isNaN(parsed.getTime())) return value;
   return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(parsed);
 }
@@ -36,11 +43,17 @@ function buildTeaser(description: string) {
 export function EventCard({ event }: EventCardProps) {
   const formattedDate = formatDateRange(event.eventStartDate, event.eventEndDate, event.eventDate);
   const teaser = buildTeaser(event.description);
+  const includesCamp = event.eventLocation?.toLowerCase().includes("camp") ?? false;
 
   return (
     <Card className="flex h-full flex-col overflow-hidden">
       {event.image ? (
         <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-secondary/60 bg-muted/20">
+          {includesCamp ? (
+            <span className="absolute left-3 top-3 z-10 inline-flex items-center rounded-full border border-primary/40 bg-white/95 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground shadow-sm">
+              Dry Campsite Included
+            </span>
+          ) : null}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={event.image} alt={event.title} className="h-full w-full object-cover" />
         </div>
