@@ -3,8 +3,9 @@ import { getDetectors } from "@/lib/shopify";
 
 export default async function ShopPage() {
   const products = await getDetectors();
-  const detectors = products.filter((product) => product.tags.includes("metal-detector"));
-  const coils = products.filter((product) => product.tags.includes("coil"));
+  const metalDetectors = products.filter((product) => product.tags.includes("metal-detector"));
+  const goldDetectors = metalDetectors.filter((product) => product.tags.includes("gold-detector"));
+  const coinRelicDetectors = metalDetectors.filter((product) => !product.tags.includes("gold-detector"));
   const fieldGear = products.filter(
     (product) => product.tags.includes("field-gear") || product.tags.includes("detecting-gear"),
   );
@@ -14,7 +15,7 @@ export default async function ShopPage() {
       <header className="space-y-3 text-center">
         <p className="text-xs uppercase tracking-[0.24em] text-primary">Gold Trails Shop</p>
         <h1 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-          Detectors, Coils & Field Gear
+          Detectors & Field Gear
         </h1>
         <p className="mx-auto max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
           Build your setup with proven tools Kevin recommends for real-world hunting.
@@ -24,13 +25,13 @@ export default async function ShopPage() {
 
       <section className="space-y-8">
         <div className="rounded-2xl bg-muted/30 p-4 sm:p-6">
-          <h2 className="mb-4 text-2xl font-semibold text-foreground">Detectors</h2>
-          <ShopGrid products={detectors} />
+          <h2 className="mb-4 text-2xl font-semibold text-foreground">Gold Detectors</h2>
+          <ShopGrid products={goldDetectors} />
         </div>
 
         <div className="rounded-2xl bg-muted/30 p-4 sm:p-6">
-          <h2 className="mb-4 text-2xl font-semibold text-foreground">Coils</h2>
-          <ShopGrid products={coils} />
+          <h2 className="mb-4 text-2xl font-semibold text-foreground">Coin &amp; Relic Detectors</h2>
+          <ShopGrid products={coinRelicDetectors} />
         </div>
 
         <div className="rounded-2xl bg-muted/30 p-4 sm:p-6">
