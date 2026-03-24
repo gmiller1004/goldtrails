@@ -52,7 +52,13 @@ type ProductNode = {
   startDateMetafield: {
     value: string | null;
   } | null;
+  startDateMetafieldAlt: {
+    value: string | null;
+  } | null;
   endDateMetafield: {
+    value: string | null;
+  } | null;
+  endDateMetafieldAlt: {
     value: string | null;
   } | null;
   locationMetafield: {
@@ -113,7 +119,13 @@ const PRODUCTS_QUERY = `
           startDateMetafield: metafield(namespace: "custom", key: "start-date") {
             value
           }
+          startDateMetafieldAlt: metafield(namespace: "custom", key: "start_date") {
+            value
+          }
           endDateMetafield: metafield(namespace: "custom", key: "end-date") {
+            value
+          }
+          endDateMetafieldAlt: metafield(namespace: "custom", key: "end_date") {
             value
           }
           locationMetafield: metafield(namespace: "custom", key: "location") {
@@ -197,8 +209,15 @@ async function storefrontRequest<T>(query: string, variables: Record<string, unk
 }
 
 function mapProduct(node: ProductNode): ShopifyProduct {
-  const eventStartDate = node.startDateMetafield?.value ?? node.metafield?.value ?? null;
-  const eventEndDate = node.endDateMetafield?.value ?? null;
+  const eventStartDate =
+    node.startDateMetafield?.value ??
+    node.startDateMetafieldAlt?.value ??
+    node.metafield?.value ??
+    null;
+  const eventEndDate =
+    node.endDateMetafield?.value ??
+    node.endDateMetafieldAlt?.value ??
+    null;
   const isEvent = node.tags.includes("gold-trails-event");
   const variants = node.variants.edges.map((edge) => {
     const variant = edge.node;
@@ -318,7 +337,10 @@ export async function createCheckoutUrl(
 }
 
 function parseEventDate(node: ProductNode) {
-  const rawValue = node.startDateMetafield?.value ?? node.metafield?.value;
+  const rawValue =
+    node.startDateMetafield?.value ??
+    node.startDateMetafieldAlt?.value ??
+    node.metafield?.value;
   if (!rawValue) {
     return null;
   }
