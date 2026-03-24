@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
 import { TrackedLinkButton } from "@/components/analytics/tracked-link-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { absoluteUrl, pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "How to Find Gold Nuggets | Gold Trails",
-  description:
-    "A practical nugget hunting strategy: terrain research, systematic gridding, coil control, and target recovery.",
-};
+const guideDescription =
+  "A practical nugget hunting strategy: terrain research, systematic gridding, coil control, and target recovery.";
+
+export const metadata: Metadata = pageMetadata({
+  title: "How to Find Gold Nuggets",
+  description: guideDescription,
+  path: "/guides/how-to-find-gold-nuggets",
+});
 
 export default function FindGoldNuggetsGuidePage() {
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: "How to Find Gold Nuggets: A Repeatable Field Plan",
-    description: metadata.description,
+    description: guideDescription,
     author: {
       "@type": "Person",
       name: "Kevin Hoagland",
@@ -22,7 +26,7 @@ export default function FindGoldNuggetsGuidePage() {
       "@type": "Organization",
       name: "Gold Trails",
     },
-    mainEntityOfPage: "https://goldtrails.com/guides/how-to-find-gold-nuggets",
+    mainEntityOfPage: absoluteUrl("/guides/how-to-find-gold-nuggets"),
   };
 
   return (

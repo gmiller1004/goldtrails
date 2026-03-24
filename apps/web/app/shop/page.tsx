@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import { ShopGrid } from "@/components/shop/shop-grid";
 import { getDetectors } from "@/lib/shopify";
+import { pageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Shop Metal Detectors & Field Gear",
+  description:
+    "Gold detectors, coin & relic machines, and field gear curated by Kevin Hoagland. Add to cart and check out securely via Shopify.",
+  path: "/shop",
+});
 
 export default async function ShopPage() {
   const products = await getDetectors();

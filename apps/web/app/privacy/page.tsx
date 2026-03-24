@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy – Gold Trails",
-  description: "How Gold Trails collects, uses, and protects your personal information.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Privacy Policy",
+  description: "How Gold Trails collects, uses, and protects your personal information when you use the site and storefront.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

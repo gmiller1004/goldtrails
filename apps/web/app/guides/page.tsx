@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { pageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Metal Detecting Field Guides",
+  description:
+    "Free tactical guides: choosing a beginner detector, ground balancing in hot ground, and how to find gold nuggets-with Kevin Hoagland.",
+  path: "/guides",
+});
 
 const guides = [
   {

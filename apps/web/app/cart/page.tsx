@@ -1,4 +1,15 @@
+import type { Metadata } from "next";
 import { CartPageClient } from "@/components/cart/cart-page-client";
+import { pageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: "Cart",
+    description: "Review metal detectors, events, and gear in your Gold Trails cart before Shopify checkout.",
+    path: "/cart",
+  }),
+  robots: { index: false, follow: true },
+};
 
 export default function CartPage() {
   return (

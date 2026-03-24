@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { LeadForm } from "@/components/lead-form";
 import { TrackedLinkButton } from "@/components/analytics/tracked-link-button";
 import { MediaTrust } from "@/components/media-trust";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { testimonials } from "@/lib/testimonials";
+import { DEFAULT_SITE_TITLE } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: { absolute: DEFAULT_SITE_TITLE },
+  description:
+    "Download the free metal detecting masterclass (75-page PDF), join Gold Trails events with Kevin Hoagland, and shop detectors and field gear-trusted GPAA training.",
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (
@@ -163,7 +172,7 @@ export default function Home() {
 
       <section className="bg-white py-14 sm:py-16">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-          <MediaTrust compact />
+          <MediaTrust />
         </div>
       </section>
     </div>

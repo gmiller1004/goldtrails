@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
 import { TrackedLinkButton } from "@/components/analytics/tracked-link-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { absoluteUrl, pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "How to Ground Balance in Hot Ground | Gold Trails",
-  description:
-    "Learn how to ground balance in mineralized soil, reduce detector chatter, and improve target confidence in the field.",
-};
+const guideDescription =
+  "Learn how to ground balance in mineralized soil, reduce detector chatter, and improve target confidence in the field.";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Ground Balancing in Hot Ground",
+  description: guideDescription,
+  path: "/guides/ground-balancing-hot-ground",
+});
 
 export default function GroundBalancingGuidePage() {
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: "Ground Balancing in Hot Ground: The Practical Method",
-    description: metadata.description,
+    description: guideDescription,
     author: {
       "@type": "Person",
       name: "Kevin Hoagland",
@@ -22,7 +26,7 @@ export default function GroundBalancingGuidePage() {
       "@type": "Organization",
       name: "Gold Trails",
     },
-    mainEntityOfPage: "https://goldtrails.com/guides/ground-balancing-hot-ground",
+    mainEntityOfPage: absoluteUrl("/guides/ground-balancing-hot-ground"),
   };
 
   return (

@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
 import { TrackedLinkButton } from "@/components/analytics/tracked-link-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { absoluteUrl, pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Best Metal Detector for Beginners | Gold Trails",
-  description:
-    "Learn how beginners should choose a metal detector by ground type, budget, and goals from Gold Trails with Kevin Hoagland.",
-};
+const guideDescription =
+  "Learn how beginners should choose a metal detector by ground type, budget, and goals from Gold Trails with Kevin Hoagland.";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Best Metal Detector for Beginners",
+  description: guideDescription,
+  path: "/guides/best-metal-detector-for-beginners",
+});
 
 export default function BeginnersDetectorGuidePage() {
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: "Best Metal Detector for Beginners (And How To Choose Right)",
-    description: metadata.description,
+    description: guideDescription,
     author: {
       "@type": "Person",
       name: "Kevin Hoagland",
@@ -22,7 +26,7 @@ export default function BeginnersDetectorGuidePage() {
       "@type": "Organization",
       name: "Gold Trails",
     },
-    mainEntityOfPage: "https://goldtrails.com/guides/best-metal-detector-for-beginners",
+    mainEntityOfPage: absoluteUrl("/guides/best-metal-detector-for-beginners"),
   };
 
   return (

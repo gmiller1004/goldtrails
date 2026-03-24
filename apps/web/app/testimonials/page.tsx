@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { MediaTrust } from "@/components/media-trust";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { testimonials } from "@/lib/testimonials";
+import { pageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Student Testimonials",
+  description:
+    "Verified reviews and stories from metal detectorists who trained with Kevin Hoagland at Gold Trails events and classes.",
+  path: "/testimonials",
+});
 
 export default function TestimonialsPage() {
   return (
@@ -35,7 +44,7 @@ export default function TestimonialsPage() {
         </div>
       </section>
 
-      <MediaTrust compact />
+      <MediaTrust />
 
       <section className="rounded-2xl border border-secondary bg-white p-6 text-center shadow-sm sm:p-8">
         <h2 className="text-2xl font-semibold text-foreground">Ready To Learn In The Field?</h2>

@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductImageGallery } from "@/components/shop/product-image-gallery";
 import { ProductPurchaseControls } from "@/components/shop/product-purchase-controls";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getDetectors, getShopProductByHandle } from "@/lib/shopify";
+import { pageMetadata } from "@/lib/site";
 
 function teaser(text: string) {
   const cleaned = text.trim();
@@ -36,6 +38,31 @@ function formatDateRange(start?: string | null, end?: string | null, fallback?: 
   if (startFormatted) return startFormatted;
   if (endFormatted) return endFormatted;
   return formatDate(fallback);
+}
+
+function metaDescription(description: string, title: string): string {
+  const cleaned = description.replace(/\s+/g, " ").trim();
+  const max = 160;
+  if (cleaned.length > max) return `${cleaned.slice(0, max - 1).trimEnd()}…`;
+  if (cleaned.length > 0) return cleaned;
+  return `${title} – Gold Trails shop.`;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ handle: string }>;
+}): Promise<Metadata> {
+  const { handle } = await params;
+  const product = await getShopProductByHandle(handle);
+  if (!product) {
+    return { title: "Product" };
+  }
+  return pageMetadata({
+    title: product.title,
+    description: metaDescription(product.description, product.title),
+    path: `/shop/${handle}`,
+  });
 }
 
 export default async function ShopProductPage({ params }: { params: Promise<{ handle: string }> }) {

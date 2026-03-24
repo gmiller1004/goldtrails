@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { TrackedDownloadButton } from "@/components/analytics/tracked-download-button";
 import { TrackedLinkButton } from "@/components/analytics/tracked-link-button";
 import { GpaaMembershipPitch } from "@/components/gpaa-membership-pitch";
@@ -5,6 +6,17 @@ import { LeadForm } from "@/components/lead-form";
 import { ThankYouUpsell } from "@/components/shop/thank-you-upsell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getDetectors } from "@/lib/shopify";
+import { pageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: "Thank you",
+    description:
+      "Your Gold Trails masterclass download is on the way. Check your email or download the PDF here.",
+    path: "/thank-you",
+  }),
+  robots: { index: false, follow: false },
+};
 
 export default async function ThankYouPage() {
   const products = await getDetectors();

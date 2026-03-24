@@ -1,7 +1,18 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { TrackedLinkButton } from "@/components/analytics/tracked-link-button";
 import { LeadForm } from "@/components/lead-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { pageMetadata } from "@/lib/site";
+
+const masterclassDescription =
+  "Free 75-page metal detecting masterclass PDF by Kevin Hoagland: detector settings, ground balance, gridding, legal hunting, and field-tested tactics.";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Free Metal Detecting Masterclass PDF",
+  description: masterclassDescription,
+  path: "/masterclass",
+});
 
 const tocItems = [
   "The Ripple Effect: How every metal detector really works",
@@ -69,7 +80,7 @@ export default function MasterclassPage() {
               ))}
             </div>
             <p className="text-sm font-medium text-foreground">
-              47 pages of practical instruction from 55 years in the field.
+              75 pages of practical instruction from 55 years in the field.
             </p>
           </div>
 

@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { pageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = pageMetadata({
+  title: "About Kevin Hoagland",
+  description:
+    "Kevin Hoagland: GPAA Executive Director of Outreach, Gold Trails TV host, and metal detecting educator with 55+ years in the field and on HISTORY Channel.",
+  path: "/about",
+});
 
 const timeline = [
   "1970: Kevin builds his first metal detector at age nine.",

@@ -6,6 +6,7 @@ import { AttributionBootstrap } from "@/components/analytics/attribution-bootstr
 import { MobileMasterclassCta } from "@/components/mobile-masterclass-cta";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE, getSiteUrl, SITE_NAME } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,9 +20,45 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gold Trails with Kevin Hoagland – Metal Detecting Masterclass & Events",
-  description:
-    "Masterclass lessons, events, and resources for metal detecting enthusiasts.",
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: DEFAULT_SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DEFAULT_SITE_DESCRIPTION,
+  keywords: [
+    "metal detecting",
+    "gold prospecting",
+    "Kevin Hoagland",
+    "Gold Trails",
+    "GPAA",
+    "metal detector training",
+    "masterclass",
+    "gold nuggets",
+  ],
+  authors: [{ name: "Kevin Hoagland", url: getSiteUrl() }],
+  creator: "Gold Trails",
+  publisher: "Gold Trails",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: getSiteUrl(),
+    siteName: SITE_NAME,
+    title: DEFAULT_SITE_TITLE,
+    description: DEFAULT_SITE_DESCRIPTION,
+    images: [{ url: "/bookcover/uUgPy.jpg", width: 900, height: 1200, alt: "Metal Detecting masterclass ebook cover" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_SITE_TITLE,
+    description: DEFAULT_SITE_DESCRIPTION,
+    images: ["/bookcover/uUgPy.jpg"],
+  },
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
   },

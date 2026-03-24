@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { EventCard } from "@/components/event-card";
 import { EventTestimonialsGrid } from "@/components/event-testimonials-grid";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getGoldTrailsTestimonials } from "@/lib/judgeme";
 import { getEvents } from "@/lib/shopify";
+import { pageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Gold Trails Events & Claim Meetups",
+  description:
+    "Browse upcoming Gold Trails metal detecting events and claim meetups with Kevin Hoagland. Register through secure Shopify checkout.",
+  path: "/events",
+});
 
 function EventsSkeleton() {
   return (

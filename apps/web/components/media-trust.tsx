@@ -1,14 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type MediaTrustProps = {
-  compact?: boolean;
-};
-
 const items = [
   {
     label: "HISTORY Channel",
     title: "Lost Gold of the Aztecs",
     detail: "Season 1 cast profile featuring Kevin Hoagland.",
+  },
+  {
+    label: "Travel Channel",
+    title: "Best Places to Find Cache and Treasures",
+    detail: "Season 1, Episode 3.",
+  },
+  {
+    label: "Discovery Channel",
+    title: "Gold Rush: Freddy Dodge's Mine Rescue",
+    detail: "Season 1, Episode 1.",
   },
   {
     label: "GPAA Series",
@@ -22,7 +28,7 @@ const items = [
   },
 ];
 
-export function MediaTrust({ compact = false }: MediaTrustProps) {
+export function MediaTrust() {
   return (
     <section className="rounded-2xl bg-muted/30 p-4 sm:p-6">
       <div className="mb-5 text-center">
@@ -31,7 +37,7 @@ export function MediaTrust({ compact = false }: MediaTrustProps) {
           Featured Across TV and Live Field Education
         </h2>
       </div>
-      <div className={`grid gap-4 ${compact ? "md:grid-cols-3" : "md:grid-cols-3"}`}>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <Card key={item.title}>
             <CardHeader className="space-y-1 pb-2">

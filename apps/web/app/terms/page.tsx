@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Terms of Use – Gold Trails",
-  description: "Terms governing use of the Gold Trails website, content, and storefront.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Terms of Use",
+  description: "Terms governing use of the Gold Trails website, guides, free masterclass, and Shopify storefront.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

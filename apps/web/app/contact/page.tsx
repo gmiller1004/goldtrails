@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact-form";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Contact – Gold Trails",
-  description: "Get in touch with Gold Trails about events, orders, media, or general questions.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Contact",
+  description: "Contact Gold Trails about events, shop orders, media, the free masterclass, or general questions.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
