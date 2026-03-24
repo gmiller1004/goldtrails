@@ -1,6 +1,7 @@
 import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { sendMasterclassLeadNotification } from "@/lib/masterclass-lead-email";
 
 const subscribeSchema = z.object({
   name: z.string().trim().optional(),
@@ -155,6 +156,12 @@ export async function POST(request: Request) {
       referrer: attribution.referrer,
     });
   }
+
+  await sendMasterclassLeadNotification({
+    name,
+    email,
+    attribution,
+  });
 
   return NextResponse.json(
     { success: true, message: "Thanks! Check your email for the PDF" },
