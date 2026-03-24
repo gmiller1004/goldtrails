@@ -192,14 +192,6 @@ export default function PrivacyPage() {
             through the Site.
           </p>
         </section>
-
-        <section className="rounded-lg border border-secondary bg-muted/20 p-4 text-xs sm:text-sm">
-          <p className="text-foreground">
-            <strong>Note:</strong> This policy is provided for general business and compliance
-            awareness. It is not legal advice. Have qualified counsel review your final terms for your
-            specific situation, especially if you operate in multiple states or countries.
-          </p>
-        </section>
       </div>
     </div>
   );
