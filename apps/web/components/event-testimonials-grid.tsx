@@ -9,12 +9,15 @@ type EventTestimonialsGridProps = {
   testimonials: EventTestimonial[];
 };
 
-const COLLAPSED_LINE_CLAMP_STYLE = {
+/** ~5 lines of body — “Read more” when longer */
+const READ_MORE_THRESHOLD = 240;
+
+const COLLAPSED_CLAMP_STYLE = {
   display: "-webkit-box",
   WebkitLineClamp: 5,
-  WebkitBoxOrient: "vertical",
+  WebkitBoxOrient: "vertical" as const,
   overflow: "hidden",
-} as const;
+};
 
 export function EventTestimonialsGrid({ testimonials }: EventTestimonialsGridProps) {
   const [expandedById, setExpandedById] = useState<Record<number, boolean>>({});
@@ -26,7 +29,7 @@ export function EventTestimonialsGrid({ testimonials }: EventTestimonialsGridPro
   const shouldShowToggleById = useMemo(() => {
     const map: Record<number, boolean> = {};
     for (const review of testimonials) {
-      map[review.id] = review.body.length > 260;
+      map[review.id] = review.body.length > READ_MORE_THRESHOLD;
     }
     return map;
   }, [testimonials]);
@@ -40,35 +43,45 @@ export function EventTestimonialsGrid({ testimonials }: EventTestimonialsGridPro
         return (
           <Card
             key={review.id}
-            className={`border-secondary/70 transition-all ${expanded ? "h-auto" : "h-[340px]"}`}
+            className={`flex h-full min-h-[320px] flex-col border-secondary/70 shadow-sm transition-shadow ${
+              !expanded ? "overflow-hidden" : ""
+            }`}
           >
-            <CardHeader className="space-y-2 pb-3">
+            <CardHeader className="shrink-0 space-y-2 pb-2">
               <p className="text-sm font-medium text-foreground">
                 {"★".repeat(review.rating)}
                 <span className="ml-2 text-xs text-muted-foreground">({review.rating}/5)</span>
               </p>
-              {review.title ? <p className="text-base font-semibold text-foreground">{review.title}</p> : null}
+              {review.title ? (
+                <p className="text-base font-semibold leading-snug text-foreground">{review.title}</p>
+              ) : null}
             </CardHeader>
-            <CardContent className="flex h-full flex-col space-y-3 text-sm text-muted-foreground">
-              <p className="leading-relaxed" style={expanded ? undefined : COLLAPSED_LINE_CLAMP_STYLE}>
-                {review.body}
-              </p>
+
+            <CardContent className="flex flex-1 flex-col gap-3 p-6 pt-0 pb-5 text-sm text-muted-foreground">
+              <div className="min-h-0 flex-1">
+                <p
+                  className="leading-relaxed"
+                  style={!expanded && showToggle ? COLLAPSED_CLAMP_STYLE : undefined}
+                >
+                  {review.body}
+                </p>
+              </div>
+
               {showToggle ? (
                 <Button
                   type="button"
                   size="sm"
                   variant="ghost"
-                  className="mt-auto w-fit px-0 text-primary hover:bg-transparent hover:text-primary/80"
+                  className="h-8 shrink-0 self-start px-0 text-primary no-underline hover:bg-transparent hover:text-primary/80"
                   onClick={() => toggle(review.id)}
                 >
                   {expanded ? "Show less" : "Read more"}
                 </Button>
-              ) : (
-                <div className="mt-auto" />
-              )}
-              <div className="pt-1 text-xs text-muted-foreground/90">
+              ) : null}
+
+              <div className="shrink-0 border-t border-secondary/60 pt-3 text-xs text-muted-foreground/90">
                 <p className="font-medium text-foreground/90">{review.reviewerName}</p>
-                <p>{review.productTitle}</p>
+                <p className="leading-snug">{review.productTitle}</p>
               </div>
             </CardContent>
           </Card>
@@ -77,4 +90,3 @@ export function EventTestimonialsGrid({ testimonials }: EventTestimonialsGridPro
     </div>
   );
 }
-
