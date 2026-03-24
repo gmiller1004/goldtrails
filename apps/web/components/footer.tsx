@@ -26,7 +26,7 @@ export function Footer() {
           <Link href="/about" className="no-underline text-muted-foreground hover:text-foreground">About</Link>
           <Link href="/testimonials" className="no-underline text-muted-foreground hover:text-foreground">Testimonials</Link>
           <Link href="/cart" className="no-underline text-muted-foreground hover:text-foreground">Cart</Link>
-          <a href="mailto:hello@goldtrails.com" className="no-underline text-muted-foreground hover:text-foreground">Contact</a>
+          <Link href="/contact" className="no-underline text-muted-foreground hover:text-foreground">Contact</Link>
           <Link href="/privacy" className="no-underline text-muted-foreground hover:text-foreground">Privacy</Link>
           <Link href="/terms" className="no-underline text-muted-foreground hover:text-foreground">Terms</Link>
         </div>

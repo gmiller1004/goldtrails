@@ -21,6 +21,7 @@ export function Header() {
       { href: "/shop", label: "Shop" },
       { href: "/guides", label: "Guides" },
       { href: "/about", label: "About" },
+      { href: "/contact", label: "Contact" },
     ],
     [],
   );

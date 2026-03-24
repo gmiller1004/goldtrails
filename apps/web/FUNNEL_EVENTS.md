@@ -19,13 +19,16 @@ This document defines the baseline funnel events available for reporting.
 - `home_cta_click`
 - `masterclass_cta_click`
 - `thank_you_cta_click`
+- `contact_form_submit`
+- `contact_form_success`
+- `contact_form_failure`
 
 ## Event Payload Guidance
 
 Use these fields when available:
 
 - `page_path`: current pathname
-- `page_type`: `home`, `masterclass`, `guide`, `shop`, `events`, `thank-you`
+- `page_type`: `home`, `masterclass`, `guide`, `shop`, `events`, `thank-you`, `contact`
 - `cta`: short identifier such as `masterclass`, `shop`, `events`, `gpaa_membership`, `next-guide`
 - `guide`: guide slug for guide CTA events
 - `source`: CTA location such as `shop-grid`, `thank-you-upsell`, `thank-you-hero`
