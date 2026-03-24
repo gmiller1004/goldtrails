@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { EventCard } from "@/components/event-card";
+import { EventTestimonialsGrid } from "@/components/event-testimonials-grid";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getGoldTrailsTestimonials } from "@/lib/judgeme";
 import { getEvents } from "@/lib/shopify";
@@ -96,28 +97,7 @@ async function EventTestimonials({
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {testimonials.map((review) => (
-          <Card key={review.id} className="h-full border-secondary/70">
-            <CardHeader className="space-y-2 pb-3">
-              <p className="text-sm font-medium text-foreground">
-                {"★".repeat(review.rating)}
-                <span className="ml-2 text-xs text-muted-foreground">({review.rating}/5)</span>
-              </p>
-              {review.title ? (
-                <p className="text-base font-semibold text-foreground">{review.title}</p>
-              ) : null}
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-muted-foreground">
-              <p className="leading-relaxed">{review.body}</p>
-              <div className="pt-1 text-xs text-muted-foreground/90">
-                <p className="font-medium text-foreground/90">{review.reviewerName}</p>
-                <p>{review.productTitle}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <EventTestimonialsGrid testimonials={testimonials} />
     </section>
   );
 }
