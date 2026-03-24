@@ -90,11 +90,9 @@ async function EventTestimonials({
     <section className="rounded-2xl border border-secondary/70 bg-white p-5 shadow-sm sm:p-6">
       <div className="mb-5 space-y-2 text-center">
         <p className="text-xs uppercase tracking-[0.2em] text-primary">From the field</p>
-        <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">
-          Gold Trails Reviews (4+ Stars)
-        </h2>
+        <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">Gold Trails Reviews</h2>
         <p className="text-sm text-muted-foreground sm:text-base">
-          Verified customer feedback from Judge.me for Gold Trails products.
+          Verified customer feedback from Judge.me for Gold Trails events.
         </p>
       </div>
 

@@ -15,15 +15,6 @@ type JudgeMeResponse = {
   reviews?: JudgeMeReview[];
 };
 
-type JudgeMeProduct = {
-  external_id?: number | string;
-  title?: string | null;
-};
-
-type JudgeMeProductsResponse = {
-  products?: JudgeMeProduct[];
-};
-
 export type EventTestimonial = {
   id: number;
   rating: number;
@@ -35,13 +26,15 @@ export type EventTestimonial = {
 };
 
 const PAGE_SIZE = 100;
-const MAX_PRODUCT_PAGES = 20;
-const MAX_REVIEW_PAGES_PER_PRODUCT = 10;
+const MAX_REVIEW_PAGES = 30;
 const EVENT_REVIEW_TITLE_PATTERN = /(gold trails|claim meetup|kevin hoagland)/i;
 
 function getJudgeMeConfig() {
   const apiKey = process.env.JUDGEME_API_KEY;
-  const shopDomain = process.env.JUDGEME_SHOP_DOMAIN ?? process.env.SHOPIFY_STORE_DOMAIN;
+  const rawDomain = process.env.JUDGEME_SHOP_DOMAIN ?? process.env.SHOPIFY_STORE_DOMAIN;
+  const shopDomain = rawDomain
+    ?.replace(/^https?:\/\//i, "")
+    .replace(/\/+$/, "");
 
   if (!apiKey || !shopDomain) return null;
   return { apiKey, shopDomain };
@@ -60,10 +53,10 @@ export async function getGoldTrailsTestimonials(): Promise<EventTestimonial[]> {
   }
 
   try {
-    const products: JudgeMeProduct[] = [];
+    const collected: JudgeMeReview[] = [];
 
-    for (let page = 1; page <= MAX_PRODUCT_PAGES; page += 1) {
-      const url = new URL("https://judge.me/api/v1/products");
+    for (let page = 1; page <= MAX_REVIEW_PAGES; page += 1) {
+      const url = new URL("https://judge.me/api/v1/reviews");
       url.searchParams.set("api_token", config.apiKey);
       url.searchParams.set("shop_domain", config.shopDomain);
       url.searchParams.set("per_page", String(PAGE_SIZE));
@@ -74,59 +67,18 @@ export async function getGoldTrailsTestimonials(): Promise<EventTestimonial[]> {
       });
 
       if (!response.ok) {
-        console.error("Judge.me products request failed.", response.status);
+        const details = await response.text();
+        console.error("Judge.me reviews request failed.", response.status, details.slice(0, 240));
         break;
       }
 
-      const payload = (await response.json()) as JudgeMeProductsResponse;
-      const pageProducts = payload.products ?? [];
+      const payload = (await response.json()) as JudgeMeResponse;
+      const reviews = payload.reviews ?? [];
 
-      if (!pageProducts.length) break;
-      products.push(...pageProducts);
+      if (!reviews.length) break;
+      collected.push(...reviews);
 
-      if (pageProducts.length < PAGE_SIZE) break;
-    }
-
-    const targetExternalIds = Array.from(
-      new Set(
-        products
-          .filter((product) => isTargetEventProduct(product.title))
-          .map((product) => String(product.external_id ?? "").trim())
-          .filter(Boolean),
-      ),
-    );
-
-    if (!targetExternalIds.length) {
-      return [];
-    }
-
-    const collected: JudgeMeReview[] = [];
-
-    for (const productExternalId of targetExternalIds) {
-      for (let page = 1; page <= MAX_REVIEW_PAGES_PER_PRODUCT; page += 1) {
-        const url = new URL("https://judge.me/api/v1/reviews");
-        url.searchParams.set("api_token", config.apiKey);
-        url.searchParams.set("shop_domain", config.shopDomain);
-        url.searchParams.set("product_external_id", productExternalId);
-        url.searchParams.set("per_page", String(PAGE_SIZE));
-        url.searchParams.set("page", String(page));
-
-        const response = await fetch(url.toString(), {
-          next: { revalidate: 60 * 30 },
-        });
-
-        if (!response.ok) {
-          console.error("Judge.me reviews request failed.", response.status, productExternalId);
-          break;
-        }
-
-        const payload = (await response.json()) as JudgeMeResponse;
-        const reviews = payload.reviews ?? [];
-        if (!reviews.length) break;
-        collected.push(...reviews);
-
-        if (reviews.length < PAGE_SIZE) break;
-      }
+      if (reviews.length < PAGE_SIZE) break;
     }
 
     return Array.from(new Map(collected.map((review) => [review.id, review])).values())
