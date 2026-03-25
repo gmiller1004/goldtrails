@@ -49,6 +49,16 @@ export function trackEvent(event: string, properties: EventProperties = {}) {
 
   if (typeof window.gtag === "function") {
     window.gtag("event", event, properties);
+
+    if (event === "lead_form_success") {
+      window.gtag("event", "generate_lead", {
+        lead_type: "masterclass",
+      });
+    }
+
+    if (event === "contact_form_success") {
+      window.gtag("event", "contact");
+    }
   }
 
   if (event === "lead_form_success") {
@@ -66,6 +76,15 @@ export function trackEvent(event: string, properties: EventProperties = {}) {
       content_type: "product",
       content_ids: String(properties.product_id ?? ""),
       content_name: String(properties.product_title ?? ""),
+      currency: String(properties.currency ?? "USD"),
+      value: parseCurrencyValue(properties.value),
+    });
+  }
+
+  if (event === "begin_checkout") {
+    trackMetaEvent("InitiateCheckout", {
+      content_type: "product",
+      num_items: Number(properties.num_items ?? 0),
       currency: String(properties.currency ?? "USD"),
       value: parseCurrencyValue(properties.value),
     });

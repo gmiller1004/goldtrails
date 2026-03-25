@@ -28,7 +28,7 @@ export function AddToCartButton({
   const { addItem } = useCart();
   const variantId = selectedVariantId ?? product.variantId;
   const price = selectedPrice ?? product.price;
-  const [currency] = price.split(" ");
+  const [currency, amount] = price.split(" ");
   const variantTitle = selectedVariantTitle ?? product.variantTitle ?? null;
   const selectedVariant = product.variants.find((variant) => variant.id === variantId) ?? null;
   const isAvailable = selectedVariant ? selectedVariant.availableForSale : product.availableForSale;
@@ -51,7 +51,7 @@ export function AddToCartButton({
           variant_id: variantId,
           variant_title: variantTitle ?? "Default Title",
           currency: currency || "USD",
-          value: price,
+          value: Number(amount || 0),
         });
         onAdded?.({
           variantId,

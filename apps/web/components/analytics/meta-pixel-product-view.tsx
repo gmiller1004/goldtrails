@@ -10,6 +10,12 @@ type MetaPixelProductViewProps = {
   price: string;
 };
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 function parsePrice(price: string) {
   const [currency, amount] = price.split(" ");
   return {
@@ -21,6 +27,22 @@ function parsePrice(price: string) {
 export function MetaPixelProductView({ productId, title, handle, price }: MetaPixelProductViewProps) {
   useEffect(() => {
     const parsed = parsePrice(price);
+
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", "view_item", {
+        currency: parsed.currency,
+        value: parsed.value,
+        items: [
+          {
+            item_id: productId,
+            item_name: title,
+            item_category: "shop",
+            item_variant: handle,
+          },
+        ],
+      });
+    }
+
     trackMetaEvent("ViewContent", {
       content_type: "product",
       content_ids: [productId].join(","),

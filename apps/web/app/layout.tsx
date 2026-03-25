@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { Ga4PageView } from "@/components/analytics/ga4-pageview";
 import { MetaPixelPageView } from "@/components/analytics/meta-pixel-pageview";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
@@ -73,11 +74,31 @@ export default function RootLayout({
 }>) {
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
   const enableMetaPixel = process.env.NODE_ENV === "production" && Boolean(pixelId);
+  const gaMeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID;
+  const enableGa4 = process.env.NODE_ENV === "production" && Boolean(gaMeasurementId);
 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full`}>
       <body className="bg-white text-foreground antialiased min-h-screen flex flex-col">
         <CartProvider>
+          {enableGa4 ? (
+            <>
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+                strategy="afterInteractive"
+              />
+              <Script id="ga4-init" strategy="afterInteractive">
+                {`
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  window.gtag = gtag;
+                  gtag('js', new Date());
+                  gtag('config', '${gaMeasurementId}', { send_page_view: false });
+                `}
+              </Script>
+              <Ga4PageView />
+            </>
+          ) : null}
           {enableMetaPixel ? (
             <>
               <Script id="meta-pixel" strategy="afterInteractive">

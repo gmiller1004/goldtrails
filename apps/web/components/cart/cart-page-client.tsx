@@ -7,7 +7,6 @@ import { useCart } from "@/components/cart/cart-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { trackEvent } from "@/lib/analytics";
-import { trackMetaEvent } from "@/lib/meta-pixel";
 
 function parsePrice(price: string) {
   const [currency, amount] = price.split(" ");
@@ -48,7 +47,7 @@ export function CartPageClient() {
       if (!response.ok) throw new Error("Checkout URL failed");
       const payload = (await response.json()) as { checkoutUrl?: string };
       if (!payload.checkoutUrl) throw new Error("Missing checkout URL");
-      trackMetaEvent("InitiateCheckout", {
+      trackEvent("begin_checkout", {
         num_items: items.reduce((count, item) => count + item.quantity, 0),
         value: Number(total),
         currency,
