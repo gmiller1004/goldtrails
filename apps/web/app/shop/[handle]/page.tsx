@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MetaPixelProductView } from "@/components/analytics/meta-pixel-product-view";
 import { ProductImageGallery } from "@/components/shop/product-image-gallery";
 import { ProductPurchaseControls } from "@/components/shop/product-purchase-controls";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -78,6 +79,12 @@ export default async function ShopProductPage({ params }: { params: Promise<{ ha
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-8 px-4 py-10 sm:px-6 sm:py-14">
+      <MetaPixelProductView
+        productId={product.id}
+        title={product.title}
+        handle={product.handle}
+        price={product.price}
+      />
       <section className="rounded-2xl border border-secondary bg-white p-6 shadow-sm sm:p-8">
         <div className="grid gap-8 md:grid-cols-[1fr_1.1fr] md:items-start">
           <ProductImageGallery
