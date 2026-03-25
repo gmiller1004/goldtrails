@@ -83,7 +83,7 @@ export function buildMasterclassLeadHtml({ name, email, attribution }: Mastercla
       const k = escapeHtml(key);
       const v = escapeHtml(val.trim());
       attrRows.push(
-        `<tr><td style="padding:6px 12px 6px 0;vertical-align:top;color:#6b5e4e;"><strong>${k}</strong></td><td style="padding:6px 0;vertical-align:top;">${v}</td></tr>`,
+        `<tr><td style="padding:6px 12px 6px 0;vertical-align:top;color:#6b5e4e;width:112px;"><strong>${k}</strong></td><td style="padding:6px 0;vertical-align:top;word-break:break-word;overflow-wrap:anywhere;white-space:normal;">${v}</td></tr>`,
       );
     }
   }
@@ -136,7 +136,7 @@ export function buildMasterclassLeadHtml({ name, email, attribution }: Mastercla
             <tr>
               <td style="padding:8px 24px 20px 24px;">
                 <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#6b5e4e;"><strong>Attribution</strong></p>
-                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a140f;">${attrBlock}</table>
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a140f;table-layout:fixed;">${attrBlock}</table>
               </td>
             </tr>
             <tr>
