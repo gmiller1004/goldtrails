@@ -90,6 +90,12 @@ export async function sendReviewApprovalEmail(input: ReviewApprovalEmailInput): 
     body: JSON.stringify({
       personalizations: [{ to: [{ email: to }], subject }],
       from: { email: from },
+      // SendGrid click tracking rewrites links via a tracking domain (/ls/click); that hop can
+      // trigger browser "not secure" warnings. Disable for this transactional approval link.
+      tracking_settings: {
+        click_tracking: { enable: false, enable_text: false },
+        open_tracking: { enable: false },
+      },
       content: [
         { type: "text/plain", value: buildReviewApprovalText(input) },
         { type: "text/html", value: buildReviewApprovalHtml(input) },
