@@ -144,6 +144,18 @@ export default async function ShopProductPage({ params }: { params: Promise<{ ha
           ))}
         </div>
       </section>
+
+      {isEvent ? (
+        <section className="rounded-xl border border-secondary/60 bg-muted/20 px-4 py-4 sm:px-5 sm:py-5">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">Cancellation policy</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            We plan and cap these events so everyone gets real hands-on time. To host them responsibly—and
+            to open seats for people on the waitlist when plans change—refunds are available only when you
+            request cancellation <strong className="font-medium text-foreground">at least 7 days before the
+            event start date</strong>. Requests inside that window help us cover committed costs and staffing.
+          </p>
+        </section>
+      ) : null}
     </div>
   );
 }

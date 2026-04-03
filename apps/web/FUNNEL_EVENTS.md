@@ -101,7 +101,7 @@ Use this as a starter blueprint for a weekly growth dashboard.
 
 ### Data Source
 
-- GA4 property for `goldtrails.com`
+- GA4 property for `goldtrails.gold`
 - Date range default: Last 28 days
 - Compare to: Previous period
 

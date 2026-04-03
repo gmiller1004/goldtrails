@@ -12,10 +12,10 @@ export const DEFAULT_SITE_DESCRIPTION =
 
 /**
  * Canonical site origin (no trailing slash). Set `NEXT_PUBLIC_SITE_URL` in production
- * (e.g. https://goldtrails.com) so metadata, sitemap, and JSON-LD use the correct domain.
+ * (e.g. https://goldtrails.gold) so metadata, sitemap, and JSON-LD use the correct domain.
  */
 export function getSiteUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://goldtrails.com";
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://goldtrails.gold";
   return raw.replace(/\/$/, "");
 }
 
