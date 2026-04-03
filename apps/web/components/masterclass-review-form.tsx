@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { trackEvent } from "@/lib/analytics";
@@ -34,8 +35,10 @@ type MasterclassReviewFormProps = {
 
 export function MasterclassReviewForm({ className }: MasterclassReviewFormProps) {
   const [done, setDone] = useState(false);
+  const [starHover, setStarHover] = useState<number | null>(null);
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
@@ -113,21 +116,62 @@ export function MasterclassReviewForm({ className }: MasterclassReviewFormProps)
         {errors.email ? <p className="text-xs text-primary">{errors.email.message}</p> : null}
       </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="review-rating" className="text-sm font-medium text-foreground">
+      <div className="space-y-2">
+        <span id="review-rating-label" className="text-sm font-medium text-foreground">
           Rating
-        </label>
-        <select
-          id="review-rating"
-          className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-sm text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
-          {...register("rating", { valueAsNumber: true })}
-        >
-          {[5, 4, 3, 2, 1].map((n) => (
-            <option key={n} value={n}>
-              {n} — {n === 5 ? "Excellent" : n === 1 ? "Needs improvement" : "Good"}
-            </option>
-          ))}
-        </select>
+        </span>
+        <Controller
+          name="rating"
+          control={control}
+          render={({ field }) => {
+            const shown = starHover ?? field.value;
+            return (
+              <div
+                role="radiogroup"
+                aria-labelledby="review-rating-label"
+                className="flex flex-wrap items-center gap-0.5"
+                onMouseLeave={() => setStarHover(null)}
+              >
+                {[1, 2, 3, 4, 5].map((n) => {
+                  const active = n <= shown;
+                  return (
+                    <button
+                      key={n}
+                      type="button"
+                      role="radio"
+                      aria-checked={field.value === n}
+                      aria-label={`${n} out of 5 stars`}
+                      className={cn(
+                        "rounded-md p-1 transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+                      )}
+                      onMouseEnter={() => setStarHover(n)}
+                      onFocus={() => setStarHover(n)}
+                      onBlur={() => setStarHover(null)}
+                      onClick={() => {
+                        field.onChange(n);
+                        setStarHover(null);
+                      }}
+                    >
+                      <Star
+                        className={cn(
+                          "h-9 w-9 sm:h-10 sm:w-10",
+                          active
+                            ? "fill-amber-400 text-amber-500 drop-shadow-sm"
+                            : "fill-transparent text-muted-foreground/45",
+                        )}
+                        strokeWidth={active ? 0 : 1.35}
+                        aria-hidden
+                      />
+                    </button>
+                  );
+                })}
+                <span className="ml-2 text-sm tabular-nums text-muted-foreground">
+                  {field.value} / 5
+                </span>
+              </div>
+            );
+          }}
+        />
         {errors.rating ? <p className="text-xs text-primary">{errors.rating.message}</p> : null}
       </div>
 
