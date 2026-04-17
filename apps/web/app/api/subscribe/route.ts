@@ -1,8 +1,6 @@
 import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { sendMasterclassLeadNotification } from "@/lib/masterclass-lead-email";
-
 const subscribeSchema = z.object({
   name: z.string().trim().optional(),
   email: z.string().email("A valid email is required."),
@@ -157,11 +155,7 @@ export async function POST(request: Request) {
     });
   }
 
-  await sendMasterclassLeadNotification({
-    name,
-    email,
-    attribution,
-  });
+  // SendGrid lead notifications disabled (volume). Re-enable via sendMasterclassLeadNotification in @/lib/masterclass-lead-email if needed.
 
   return NextResponse.json(
     { success: true, message: "Thanks! Check your email for the PDF" },
