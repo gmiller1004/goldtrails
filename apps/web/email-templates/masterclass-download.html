@@ -3,6 +3,18 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Klaviyo — Flow step 1 (Day 0). Welcome / delivery — trigger: subscribed to "Gold Trails — Masterclass" list.
+
+      See email-templates/README.md for the full ~45-day nurture sequence (GPAA join, Property Guide, events, magazine, YouTube).
+
+      Suggested fields in Klaviyo:
+        Subject: Your Gold Trails Masterclass Download
+        Preview text: PDF and EPUB links inside — grab them before your next hunt.
+
+      Personalization: first_name (from signup). Defaults to "Friend" if empty.
+      Unsubscribe: {% unsubscribe_link %} (required in custom HTML; see footer link)
+    -->
     <title>Your Gold Trails Masterclass Download</title>
   </head>
   <body style="margin:0; padding:0; background-color:#f5f0e6;">
@@ -27,7 +39,7 @@
             </tr>
             <tr>
               <td style="padding:18px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:17px; line-height:1.65;">
-                Hey <strong>*|FNAME|*</strong>,
+                Hey <strong>{{ first_name|default:'Friend' }}</strong>,
               </td>
             </tr>
             <tr>
@@ -91,7 +103,7 @@
             <tr>
               <td style="padding:16px 24px 24px 24px; border-top:1px solid #e0d4b3; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:12px; line-height:1.6; text-align:center;">
                 You are receiving this because you requested the Gold Trails masterclass.<br />
-                <a href="*|UNSUB|*" style="color:#6b5e4e; text-decoration:underline;">Unsubscribe</a>
+                <a href="{% unsubscribe_link %}" style="color:#6b5e4e; text-decoration:underline;">Unsubscribe</a>
               </td>
             </tr>
           </table>

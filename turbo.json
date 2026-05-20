@@ -3,6 +3,8 @@
   "ui": "tui",
   "globalEnv": [
     "DATABASE_URL",
+    "KLAVIYO_API_KEY",
+    "KLAVIYO_LIST_ID",
     "MAILCHIMP_API_KEY",
     "MAILCHIMP_AUDIENCE_ID",
     "MAILCHIMP_SERVER",

@@ -1,6 +1,8 @@
 import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { getKlaviyoConfig, subscribeMasterclassToKlaviyo } from "@/lib/klaviyo";
+
 const subscribeSchema = z.object({
   name: z.string().trim().optional(),
   email: z.string().email("A valid email is required."),
@@ -46,36 +48,22 @@ function makeAttributionTag(prefix: string, value?: string) {
   return `${prefix}-${cleaned}`.slice(0, 64);
 }
 
-export async function POST(request: Request) {
+async function subscribeViaMailchimp(
+  email: string,
+  firstName: string,
+  lastName: string,
+  attribution: z.infer<typeof subscribeSchema>["attribution"],
+) {
   const apiKey = process.env.MAILCHIMP_API_KEY;
   const audienceId = process.env.MAILCHIMP_AUDIENCE_ID;
   const server = process.env.MAILCHIMP_SERVER;
 
   if (!apiKey || !audienceId || !server) {
     return NextResponse.json(
-      { success: false, error: "Mailchimp environment variables are not configured." },
+      { success: false, error: "Lead capture is not configured." },
       { status: 500 },
     );
   }
-
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ success: false, error: "Invalid JSON body." }, { status: 400 });
-  }
-
-  const parsed = subscribeSchema.safeParse(body);
-  if (!parsed.success) {
-    const firstError = parsed.error.issues[0]?.message ?? "Invalid request payload.";
-    return NextResponse.json({ success: false, error: firstError }, { status: 400 });
-  }
-
-  const email = parsed.data.email.trim().toLowerCase();
-  const name = parsed.data.name?.trim() ?? "";
-  const attribution = parsed.data.attribution;
-  const [firstName, ...rest] = name.split(/\s+/).filter(Boolean);
-  const lastName = rest.join(" ");
 
   const subscriberHash = toSubscriberHash(email);
   const authHeader = `Basic ${toBasicAuth(apiKey)}`;
@@ -93,8 +81,7 @@ export async function POST(request: Request) {
         email_address: email,
         status_if_new: "subscribed",
         merge_fields: {
-          // Keep merge fields stable even when a name is omitted.
-          FNAME: firstName || "Friend",
+          FNAME: firstName,
           LNAME: lastName,
         },
       }),
@@ -112,7 +99,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: message }, { status: upsertResponse.status });
   }
 
-  let tagResponse: Response;
   const tags = [
     "ebook-masterclass",
     makeAttributionTag("src", attribution?.utm_source),
@@ -120,6 +106,7 @@ export async function POST(request: Request) {
     makeAttributionTag("cmp", attribution?.utm_campaign),
   ].filter(Boolean) as string[];
 
+  let tagResponse: Response;
   try {
     tagResponse = await fetch(`${baseUrl}/lists/${audienceId}/members/${subscriberHash}/tags`, {
       method: "POST",
@@ -144,6 +131,56 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: message }, { status: tagResponse.status });
   }
 
+  return null;
+}
+
+export async function POST(request: Request) {
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ success: false, error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  const parsed = subscribeSchema.safeParse(body);
+  if (!parsed.success) {
+    const firstError = parsed.error.issues[0]?.message ?? "Invalid request payload.";
+    return NextResponse.json({ success: false, error: firstError }, { status: 400 });
+  }
+
+  const email = parsed.data.email.trim().toLowerCase();
+  const name = parsed.data.name?.trim() ?? "";
+  const attribution = parsed.data.attribution;
+  const [firstName, ...rest] = name.split(/\s+/).filter(Boolean);
+  const lastName = rest.join(" ");
+  const resolvedFirstName = firstName || "Friend";
+
+  if (getKlaviyoConfig()) {
+    const result = await subscribeMasterclassToKlaviyo({
+      email,
+      firstName: resolvedFirstName,
+      lastName,
+      attribution,
+    });
+
+    if (!result.ok) {
+      console.error("[subscribe] Klaviyo failed:", result.status, result.message);
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            result.status >= 500
+              ? "Could not subscribe right now. Please try again."
+              : result.message,
+        },
+        { status: result.status >= 400 && result.status < 600 ? result.status : 502 },
+      );
+    }
+  } else {
+    const mailchimpResponse = await subscribeViaMailchimp(email, resolvedFirstName, lastName, attribution);
+    if (mailchimpResponse) return mailchimpResponse;
+  }
+
   if (attribution) {
     console.log("Lead attribution captured:", {
       email,
@@ -154,8 +191,6 @@ export async function POST(request: Request) {
       referrer: attribution.referrer,
     });
   }
-
-  // SendGrid lead notifications disabled (volume). Re-enable via sendMasterclassLeadNotification in @/lib/masterclass-lead-email if needed.
 
   return NextResponse.json(
     { success: true, message: "Thanks! Check your email for the PDF" },
