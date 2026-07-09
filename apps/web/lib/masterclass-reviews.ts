@@ -53,3 +53,52 @@ export async function approveMasterclassReviewByToken(token: string): Promise<bo
   `) as unknown as Array<{ id: string }>;
   return rows.length > 0;
 }
+
+export type MasterclassReview = {
+  id: string;
+  reviewerName: string;
+  rating: number;
+  body: string;
+  approvedAt: string | null;
+};
+
+export async function getApprovedMasterclassReviews(limit = 24): Promise<MasterclassReview[]> {
+  try {
+    if (!process.env.DATABASE_URL?.trim()) {
+      return [];
+    }
+
+    const sql = getDb();
+    const rows = (await sql`
+      SELECT
+        id::text AS id,
+        reviewer_name,
+        rating,
+        body,
+        approved_at::text AS approved_at
+      FROM masterclass_reviews
+      WHERE status = 'approved'
+      ORDER BY approved_at DESC NULLS LAST, created_at DESC
+      LIMIT ${limit}
+    `) as unknown as Array<{
+      id: string;
+      reviewer_name: string;
+      rating: number;
+      body: string;
+      approved_at: string | null;
+    }>;
+
+    return rows.map((row) => ({
+      id: row.id,
+      reviewerName: row.reviewer_name,
+      rating: row.rating,
+      body: row.body,
+      approvedAt: row.approved_at,
+    }));
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn("Could not load masterclass reviews:", error);
+    }
+    return [];
+  }
+}

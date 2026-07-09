@@ -5,9 +5,12 @@ import { Suspense } from "react";
 import { NewHomeFaq } from "@/components/new-home/new-home-faq";
 import { NewHomeJumpStrip } from "@/components/new-home/new-home-jump-strip";
 import { NewHomeFooter, NewHomeHeader } from "@/components/new-home/new-home-chrome";
+import { NewHomeEventReviews } from "@/components/new-home/new-home-event-reviews";
 import { NewHomeEvents, NewHomeEventsSkeleton } from "@/components/new-home/new-home-events";
-import { PartnersSection } from "@/components/new-home/partners-section";
+import { NewHomeReviews } from "@/components/new-home/new-home-reviews";
+import { TrainingVideoModal } from "@/components/new-home/training-video-modal";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
+import { PartnersSection } from "@/components/new-home/partners-section";
 import { WaitlistForm } from "@/components/new-home/waitlist-form";
 import { LeadForm } from "@/components/lead-form";
 import { cn } from "@/lib/utils";
@@ -281,12 +284,7 @@ export default function NewHomePage() {
               combine classroom instruction with in-field drills for ground balance, tones, and coil
               control.
             </p>
-            <Link
-              href="/about"
-              className="mt-6 inline-flex text-sm font-semibold text-[#5a6348] no-underline hover:text-[#3d4535]"
-            >
-              Read full bio →
-            </Link>
+            <TrainingVideoModal />
           </div>
           <div className="grid grid-cols-2 gap-3">
             {["gt1.jpg", "gt2.jpg", "gt3.jpg", "gt4.jpg"].map((file) => (
@@ -306,6 +304,8 @@ export default function NewHomePage() {
           </div>
         </div>
       </section>
+
+      <NewHomeReviews />
 
       {/* Webinars */}
       <section id="webinars" className="border-t border-[#3d4535]/40 bg-[#3d4535] text-[#f7f2e8]">
@@ -372,6 +372,9 @@ export default function NewHomePage() {
         </div>
         <Suspense fallback={<NewHomeEventsSkeleton />}>
           <NewHomeEvents />
+        </Suspense>
+        <Suspense fallback={null}>
+          <NewHomeEventReviews />
         </Suspense>
       </section>
 
