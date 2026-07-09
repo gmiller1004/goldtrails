@@ -21,9 +21,23 @@ type LeadFormValues = z.infer<typeof leadFormSchema>;
 
 type LeadFormProps = {
   className?: string;
+  eyebrow?: string;
+  title?: string;
+  submitLabel?: string;
+  showHeader?: boolean;
+  redirectTo?: string;
+  buttonClassName?: string;
 };
 
-export function LeadForm({ className }: LeadFormProps) {
+export function LeadForm({
+  className,
+  eyebrow = "Free Masterclass Access",
+  title = "Get Kevin's Metal Detecting Masterclass",
+  submitLabel = "Download Free Masterclass",
+  showHeader = true,
+  redirectTo = "/thank-you",
+  buttonClassName,
+}: LeadFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -71,7 +85,7 @@ export function LeadForm({ className }: LeadFormProps) {
       toast.success("Success! Your Masterclass PDF is on its way. Check your inbox (and spam).", {
         className: "border border-primary/40 bg-white text-foreground",
       });
-      router.push("/thank-you");
+      router.push(redirectTo);
     } catch {
       trackEvent("lead_form_failure");
       toast.error("Could not subscribe right now. Please try again.");
@@ -82,12 +96,12 @@ export function LeadForm({ className }: LeadFormProps) {
 
   return (
     <div className={cn("rounded-lg border border-secondary bg-white p-6 shadow-md", className)}>
-      <p className="mb-1 text-xs uppercase tracking-[0.2em] text-primary">
-        Free Masterclass Access
-      </p>
-      <h2 className="mb-5 text-xl font-semibold text-foreground">
-        Get Kevin&apos;s Metal Detecting Masterclass
-      </h2>
+      {showHeader ? (
+        <>
+          <p className="mb-1 text-xs uppercase tracking-[0.2em] text-primary">{eyebrow}</p>
+          <h2 className="mb-5 text-xl font-semibold text-foreground">{title}</h2>
+        </>
+      ) : null}
 
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="space-y-1.5">
@@ -123,11 +137,15 @@ export function LeadForm({ className }: LeadFormProps) {
           ) : null}
         </div>
 
-        <Button type="submit" disabled={isSubmitting} className="w-full py-3 text-base">
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className={cn("w-full py-3 text-base font-semibold", buttonClassName)}
+        >
           {isSubmitting ? (
             <span className="inline-flex items-center gap-2">
               <svg
-                className="h-4 w-4 animate-spin text-primary"
+                className="h-4 w-4 animate-spin text-primary-foreground"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -143,7 +161,7 @@ export function LeadForm({ className }: LeadFormProps) {
               Claiming your spot...
             </span>
           ) : (
-            "Download Free Masterclass"
+            submitLabel
           )}
         </Button>
       </form>

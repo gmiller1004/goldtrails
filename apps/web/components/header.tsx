@@ -13,6 +13,10 @@ export function Header() {
   const pathname = usePathname();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
+  if (pathname.startsWith("/new-home")) {
+    return null;
+  }
+
   const links = useMemo(
     () => [
       { href: "/", label: "Home" },

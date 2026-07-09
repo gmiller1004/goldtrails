@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 
-const hiddenOn = ["/masterclass", "/cart", "/thank-you"];
+const hiddenOn = ["/masterclass", "/cart", "/thank-you", "/new-home"];
 
 export function MobileMasterclassCta() {
   const pathname = usePathname();

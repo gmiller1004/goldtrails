@@ -168,44 +168,60 @@ function getStorefrontConfig() {
 async function storefrontRequest<T>(query: string, variables: Record<string, unknown>) {
   const config = getStorefrontConfig();
   if (!config) {
-    console.error("Shopify Storefront configuration is missing.");
     return null as T | null;
   }
 
-  try {
-    const response = await fetch(config.endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Shopify-Storefront-Access-Token": config.token,
-      },
-      body: JSON.stringify({ query, variables }),
-      cache: "no-store",
-    });
+  const body = JSON.stringify({ query, variables });
 
-    if (!response.ok) {
-      console.error("Shopify Storefront API request failed.", response.status);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const response = await fetch(config.endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Storefront-Access-Token": config.token,
+        },
+        body,
+        next: { revalidate: 60 },
+        signal: AbortSignal.timeout(10_000),
+      });
+
+      if (!response.ok) {
+        console.error("Shopify Storefront API request failed.", response.status);
+        return null as T | null;
+      }
+
+      const payload = (await response.json()) as {
+        data?: T;
+        errors?: Array<{ message?: string }>;
+      };
+
+      if (payload.errors?.length) {
+        console.error(
+          "Shopify Storefront GraphQL errors:",
+          payload.errors.map((err) => err.message).filter(Boolean).join("; "),
+        );
+        return null as T | null;
+      }
+
+      return payload.data ?? null;
+    } catch (error) {
+      if (attempt === 0) {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        continue;
+      }
+
+      const message = error instanceof Error ? error.message : String(error);
+      if (process.env.NODE_ENV === "development") {
+        console.warn(`Shopify Storefront unavailable (${message})`);
+      } else {
+        console.error("Shopify request exception:", error);
+      }
       return null as T | null;
     }
-
-    const payload = (await response.json()) as {
-      data?: T;
-      errors?: Array<{ message?: string }>;
-    };
-
-    if (payload.errors?.length) {
-      console.error(
-        "Shopify Storefront GraphQL errors:",
-        payload.errors.map((err) => err.message).filter(Boolean).join("; "),
-      );
-      return null as T | null;
-    }
-
-    return payload.data ?? null;
-  } catch (error) {
-    console.error("Shopify request exception:", error);
-    return null as T | null;
   }
+
+  return null as T | null;
 }
 
 function mapProduct(node: ProductNode): ShopifyProduct {
