@@ -148,7 +148,7 @@ export const eventsFaq = [
   {
     question: "Do I need GPAA or LDMA membership?",
     answer:
-      "Italian Bar is private LDMA property. Membership requirements vary by event — review the event description and contact us if you're unsure before you register.",
+      "No. While Italian Bar is a private LDMA campground, Gold Trails training events are open to the public — you do not need GPAA or LDMA membership to register.",
   },
   {
     question: "How do I register?",
