@@ -70,6 +70,7 @@ After step 10, move non-converters to a **monthly newsletter** or **sunset** seg
 | `gpaa-membership-nonmembers.html` | Ready to hunt real gold-bearing ground with your family? |
 | `nurture-youtube-followup.html` | One more rabbit hole for detectorists |
 | `gpaa-membership-reminder.html` | Still planning your next prospecting trip? |
+| `events-notify-welcome.html` | You're on the list for Gold Trails field training |
 
 ## Other email (not in this folder)
 
@@ -77,3 +78,42 @@ After step 10, move non-converters to a **monthly newsletter** or **sunset** seg
 |-----|----------|
 | Contact form (SendGrid) | `lib/contact-email.ts` |
 | Masterclass lead notify (SendGrid, off) | `lib/masterclass-lead-email.ts` |
+
+## Events notify list (`/events` page)
+
+Signups post to `/api/subscribe/events` when `KLAVIYO_API_KEY` and `KLAVIYO_EVENTS_LIST_ID` are set.
+
+**Recommended Klaviyo setup**
+
+1. Create list: `Gold Trails — Events notify` (dedicated list; do not reuse the masterclass list).
+2. Set `KLAVIYO_EVENTS_LIST_ID` in `.env.local` / Vercel.
+3. Flow trigger (pick one or combine with AND):
+   - **When someone is added to list:** `Gold Trails — Events notify`
+   - **OR** when profile is tagged: `gold-trails-events-notify`
+4. Segment filter (optional): profile property `gold_trails_events_notify` equals `true`.
+
+**Profile fields set on subscribe**
+
+| Field | Value |
+|-------|--------|
+| `gold_trails_events_notify` | `true` |
+| `events_signup_source` | `goldtrails_events_page` |
+| `events_signup_at` | ISO timestamp |
+| Tag | `gold-trails-events-notify` (requires `tags:write` on API key) |
+
+UTM / landing attribution is stored on `events_*` properties when available from the browser session.
+
+### Events notify flow — step 1 (Day 0)
+
+| Step | Day | Subject line | File |
+|------|-----|--------------|------|
+| 1 | 0 | You're on the list for Gold Trails field training | `events-notify-welcome.html` |
+
+Paste `events-notify-welcome.html` into the first email action in your events-notify flow. Set subject and preview text from the HTML comment at the top of the file.
+
+**Suggested follow-up steps** (build in Klaviyo as you add them):
+
+| Step | Day | Idea |
+|------|-----|------|
+| 2 | 3–7 | Reminder when a session is open / low seats (manual or triggered) |
+| 3 | — | New session announcement (triggered when you add Shopify events) |

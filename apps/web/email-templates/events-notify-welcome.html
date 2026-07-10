@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Klaviyo — Events notify flow step 1 (Day 0). Thank-you / confirmation.
+      Trigger: subscribed to "Gold Trails — Events notify" list (or tagged gold-trails-events-notify).
+
+      Suggested fields in Klaviyo:
+        Subject: You're on the list for Gold Trails field training
+        Preview text: We'll email you first when new Italian Bar sessions open — seats go fast.
+
+      Personalization: first_name (from signup). Defaults to "Friend" if empty.
+      Unsubscribe: {% unsubscribe_link %} (required in custom HTML; see footer link)
+
+      Primary CTA: https://goldtrails.gold/events
+    -->
+    <title>You're on the list for Gold Trails field training</title>
+  </head>
+  <body style="margin:0; padding:0; background-color:#f5f0e6;">
+    <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#f5f0e6; opacity:0;">
+      We'll email you first when new Italian Bar sessions open — seats go fast.
+    </div>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f0e6; margin:0; padding:24px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px; background-color:#ffffff; border:1px solid #e0d4b3; border-radius:12px;">
+            <tr>
+              <td style="padding:24px 24px 8px 24px; text-align:center;">
+                <img
+                  src="https://cdn.shopify.com/s/files/1/2568/9508/files/goldtrailslogo.jpg?v=1774307068"
+                  alt="Gold Trails logo"
+                  width="56"
+                  style="display:block; margin:0 auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 24px 0 24px; font-family:Georgia, 'Times New Roman', serif; color:#1a140f; font-size:30px; line-height:1.25; text-align:center;">
+                You're on the list
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:17px; line-height:1.65;">
+                Hey <strong>{{ first_name|default:'Friend' }}</strong>,
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                Thanks for raising your hand for Gold Trails field training updates. You're on the list — when we open new sessions at LDMA Italian Bar, you'll hear from us before the general announcement.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                These are hands-on days on real Mother Lode ground: panning and sluicing the Stanislaus, highbanking, metal detecting, and field coaching with me and the crew. Dry campsites are included with most sessions — or you can stay in Columbia or Sonora and day-trip in if the canyon road isn't a fit for your rig.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                <strong>Sessions sell out.</strong> This list is the fastest way to know when registration opens. In the meantime, if something is already on the calendar, you can grab a seat now:
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding:24px 24px 0 24px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td align="center" style="border-radius:8px; background-color:#d4a017;">
+                      <a
+                        href="https://goldtrails.gold/events"
+                        style="display:inline-block; padding:14px 28px; font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; color:#ffffff; text-decoration:none;"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View upcoming sessions
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:14px; line-height:1.6; text-align:center;">
+                Bookmark the events page — new dates always land here first:<br />
+                <a href="https://goldtrails.gold/events" style="color:#b38c14; word-break:break-all;" target="_blank" rel="noopener noreferrer"
+                  >https://goldtrails.gold/events</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:20px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                New to prospecting? The free masterclass is a solid warm-up before you hit the river. Either way, I'm glad you're thinking about training in the field.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 26px 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                See you in the field,<br />
+                <strong>Kevin Hoagland</strong><br />
+                Gold Trails
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 24px 24px 24px; border-top:1px solid #e0d4b3; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:12px; line-height:1.6; text-align:center;">
+                You are receiving this because you asked to be notified about Gold Trails training events.<br />
+                <a href="{% unsubscribe_link %}" style="color:#6b5e4e; text-decoration:underline;">Unsubscribe</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

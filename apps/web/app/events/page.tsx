@@ -14,6 +14,7 @@ import {
   nearbyPlaces,
 } from "@/components/events/events-venue-content";
 import { EventsExpectVideoModal } from "@/components/events/events-expect-video-modal";
+import { EventsNotifyForm } from "@/components/events/events-notify-form";
 import { EventsReviewsSection } from "@/components/events/events-reviews-section";
 import { EventsUpcomingGrid, EventsUpcomingSkeleton } from "@/components/events/events-upcoming-grid";
 import { NewHomeFaq } from "@/components/new-home/new-home-faq";
@@ -384,6 +385,10 @@ export default function EventsPage() {
           <Suspense fallback={<EventsUpcomingSkeleton />}>
             <EventsUpcomingGrid />
           </Suspense>
+
+          <div className="mx-auto mt-12 max-w-3xl">
+            <EventsNotifyForm />
+          </div>
         </div>
       </section>
 
