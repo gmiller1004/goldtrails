@@ -305,6 +305,10 @@ type CartCreateResponse = {
   cartCreate: {
     cart: {
       checkoutUrl: string;
+      discountCodes: Array<{
+        code: string;
+        applicable: boolean;
+      }>;
     } | null;
     userErrors: Array<{
       field?: string[];
@@ -313,11 +317,30 @@ type CartCreateResponse = {
   };
 };
 
+type ProductByIdResponse = {
+  product: {
+    id: string;
+    title: string;
+    variants: {
+      edges: Array<{
+        node: {
+          id: string;
+          availableForSale: boolean;
+        };
+      }>;
+    };
+  } | null;
+};
+
 const CART_CREATE_MUTATION = `
   mutation CartCreate($input: CartInput!) {
     cartCreate(input: $input) {
       cart {
         checkoutUrl
+        discountCodes {
+          code
+          applicable
+        }
       }
       userErrors {
         field
@@ -327,17 +350,48 @@ const CART_CREATE_MUTATION = `
   }
 `;
 
+const PRODUCT_BY_ID_QUERY = `
+  query ProductById($id: ID!) {
+    product(id: $id) {
+      id
+      title
+      variants(first: 5) {
+        edges {
+          node {
+            id
+            availableForSale
+          }
+        }
+      }
+    }
+  }
+`;
+
+export type CreateCheckoutOptions = {
+  discountCodes?: string[];
+  email?: string;
+};
+
 export async function createCheckoutUrl(
   lines: Array<{ variantId: string; quantity: number }>,
+  options: CreateCheckoutOptions = {},
 ): Promise<string | null> {
-  const data = await storefrontRequest<CartCreateResponse>(CART_CREATE_MUTATION, {
-    input: {
-      lines: lines.map((line) => ({
-        merchandiseId: line.variantId,
-        quantity: line.quantity,
-      })),
-    },
-  });
+  const input: Record<string, unknown> = {
+    lines: lines.map((line) => ({
+      merchandiseId: line.variantId,
+      quantity: line.quantity,
+    })),
+  };
+
+  if (options.discountCodes?.length) {
+    input.discountCodes = options.discountCodes;
+  }
+
+  if (options.email) {
+    input.buyerIdentity = { email: options.email };
+  }
+
+  const data = await storefrontRequest<CartCreateResponse>(CART_CREATE_MUTATION, { input });
 
   if (!data) return null;
 
@@ -349,7 +403,38 @@ export async function createCheckoutUrl(
     return null;
   }
 
-  return data.cartCreate.cart?.checkoutUrl ?? null;
+  const cart = data.cartCreate.cart;
+  if (!cart?.checkoutUrl) return null;
+
+  if (options.discountCodes?.length) {
+    for (const code of options.discountCodes) {
+      const applied = cart.discountCodes.find(
+        (entry) => entry.code.toLowerCase() === code.toLowerCase(),
+      );
+      if (!applied?.applicable) {
+        console.warn(`[shopify] Discount code "${code}" was not applicable on cart create.`);
+      }
+    }
+  }
+
+  return cart.checkoutUrl;
+}
+
+/** Resolve default variant GID for a product admin/numeric id or full GID. */
+export async function getProductDefaultVariantId(productId: string): Promise<string | null> {
+  const trimmed = productId.trim();
+  if (!trimmed) return null;
+
+  const gid = trimmed.startsWith("gid://")
+    ? trimmed
+    : `gid://shopify/Product/${trimmed}`;
+
+  const data = await storefrontRequest<ProductByIdResponse>(PRODUCT_BY_ID_QUERY, { id: gid });
+  const variants = data?.product?.variants.edges.map((edge) => edge.node) ?? [];
+  if (!variants.length) return null;
+
+  const available = variants.find((variant) => variant.availableForSale);
+  return (available ?? variants[0])?.id ?? null;
 }
 
 function parseEventDate(node: ProductNode) {

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Klaviyo — Certification flow. Congrats after Final quiz pass.
+      Place after final quiz email → Wait until quiz_final_passed = true → this email.
+
+      Suggested fields in Klaviyo:
+        Subject: You passed the final — claim your certificate & hat
+        Preview text: You scored {{ person.quiz_final_score_percent }}%. Checkout is ready for your free reward kit.
+
+      Merge fields:
+        {{ first_name|default:'Friend' }}
+        {{ person.quiz_final_score_percent }}
+        {{ person.certification_token }}
+
+      Claim CTA (verifies final pass, builds Shopify cart, applies GTCertFinalPassed):
+        https://goldtrails.gold/certification/claim?token={{ person.certification_token|urlencode }}
+    -->
+    <title>You passed the final — claim your certificate &amp; hat</title>
+  </head>
+  <body style="margin:0; padding:0; background-color:#f5f0e6;">
+    <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#f5f0e6; opacity:0;">
+      Final score: {{ person.quiz_final_score_percent }}%. Claim your GPAA certificate and Gold Trails hat.
+    </div>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f0e6; margin:0; padding:24px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px; background-color:#ffffff; border:1px solid #e0d4b3; border-radius:12px;">
+            <tr>
+              <td style="padding:24px 24px 8px 24px; text-align:center;">
+                <img
+                  src="https://cdn.shopify.com/s/files/1/2568/9508/files/goldtrailslogo.jpg?v=1774307068"
+                  alt="Gold Trails logo"
+                  width="56"
+                  style="display:block; margin:0 auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 24px 0 24px; font-family:Georgia, 'Times New Roman', serif; color:#1a140f; font-size:28px; line-height:1.25; text-align:center;">
+                You passed the final
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:17px; line-height:1.65;">
+                Hey <strong>{{ first_name|default:'Friend' }}</strong>,
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                That’s the whole program. You finished the weekly quizzes and cleared the comprehensive final — fundamentals, settings, field skills, recovery, and judgment. I’m proud of you for putting in the work.
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding:22px 24px 0 24px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:280px; background-color:#eef0e8; border:1px solid #d0d5c4; border-radius:12px;">
+                  <tr>
+                    <td style="padding:18px 16px; text-align:center; font-family:Arial, Helvetica, sans-serif;">
+                      <div style="font-size:12px; font-weight:bold; letter-spacing:0.12em; text-transform:uppercase; color:#5a6348;">Your final score</div>
+                      <div style="margin-top:8px; font-family:Georgia, 'Times New Roman', serif; font-size:40px; line-height:1; color:#1a140f;">
+                        {{ person.quiz_final_score_percent }}%
+                      </div>
+                      <div style="margin-top:8px; font-size:13px; color:#5c4f3f;">Passing is 80%+</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:22px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                Your reward is a <strong>GPAA Metal Detecting Certificate</strong> and a <strong>Gold Trails hat</strong>. Tap below to open a free Shopify checkout — we’ll verify you passed, apply your reward discount, and you just enter shipping details.
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding:24px 24px 0 24px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td align="center" style="border-radius:8px; background-color:#d4a017;">
+                      <a
+                        href="https://goldtrails.gold/certification/claim?token={{ person.certification_token|urlencode }}"
+                        style="display:inline-block; padding:14px 28px; font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; color:#ffffff; text-decoration:none;"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Claim certificate &amp; hat
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:14px; line-height:1.6; text-align:center;">
+                Use this personalized button so we can confirm your final pass before checkout.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:20px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                Hang the certificate where you’ll see it. Wear the hat in the field. And keep practicing what you learned — the ground gets quieter and the finds get better when the fundamentals stick.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 26px 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                Congratulations,<br />
+                <strong>Kevin Hoagland</strong><br />
+                Gold Trails
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 24px 24px 24px; border-top:1px solid #e0d4b3; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:12px; line-height:1.6; text-align:center;">
+                You’re receiving this because you completed the GPAA Metal Detecting Certification program.<br />
+                <a href="{% unsubscribe_link %}" style="color:#6b5e4e; text-decoration:underline;">Unsubscribe</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

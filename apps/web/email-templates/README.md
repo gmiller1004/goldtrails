@@ -75,6 +75,7 @@ After step 10, move non-converters to a **monthly newsletter** or **sunset** seg
 | `certification-quiz-week-2-pass.html` | Week 2 quiz cleared — {{ person.quiz_week_2_score_percent }}% |
 | `certification-quiz-week-3-pass.html` | Week 3 complete — {{ person.quiz_week_3_score_percent }}% in the field |
 | `certification-quiz-week-4-pass.html` | All four weekly quizzes done — {{ person.quiz_week_4_score_percent }}% |
+| `certification-quiz-final-pass.html` | You passed the final — claim your certificate & hat |
 
 ## Other email (not in this folder)
 
@@ -184,4 +185,20 @@ Place each after **Wait until** `quiz_week_N_passed` equals true, then continue 
 
 Shared merge fields: `{{ first_name|default:'Friend' }}`, `{% unsubscribe_link %}`.
 
-Score properties are numbers (e.g. `83`) — templates append `%`. Final quiz success email deferred until hat/certificate Shopify checkout is ready.
+Score properties are numbers (e.g. `83`) — templates append `%`.
+
+### Final quiz success + reward claim
+
+| Trigger | Subject | File |
+|---------|---------|------|
+| Wait until `quiz_final_passed` = true | You passed the final — claim your certificate & hat | `certification-quiz-final-pass.html` |
+
+**Claim CTA**
+
+```html
+https://goldtrails.gold/certification/claim?token={{ person.certification_token|urlencode }}
+```
+
+`/certification/claim` verifies the enrollment token + final quiz pass in Neon, creates a Shopify cart for product `CERTIFICATION_REWARD_PRODUCT_ID` (default `10775411458358`), applies discount code `GTCertFinalPassed`, prefills email, and redirects to Checkout.
+
+Env (optional overrides): `CERTIFICATION_REWARD_PRODUCT_ID`, `CERTIFICATION_REWARD_DISCOUNT_CODE`.

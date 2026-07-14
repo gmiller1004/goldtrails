@@ -119,6 +119,18 @@ export function CertificationQuizForm({
         {grade.passed ? (
           <p className="mt-2 text-sm text-[#5a6348]">
             This result is saved to your certification progress.
+            {quiz.slug === "final" ? (
+              <>
+                {" "}
+                <Link
+                  href={`/certification/claim?token=${encodeURIComponent(token)}`}
+                  className="font-semibold !text-[#5a6348] underline underline-offset-2"
+                >
+                  Claim your certificate &amp; hat
+                </Link>
+                .
+              </>
+            ) : null}
           </p>
         ) : null}
 
