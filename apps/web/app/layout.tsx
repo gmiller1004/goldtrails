@@ -3,8 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { Ga4PageView } from "@/components/analytics/ga4-pageview";
 import { MetaPixelPageView } from "@/components/analytics/meta-pixel-pageview";
-import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
 import { AttributionBootstrap } from "@/components/analytics/attribution-bootstrap";
 import { MobileMasterclassCta } from "@/components/mobile-masterclass-cta";
 import { CartProvider } from "@/components/cart/cart-provider";
@@ -128,11 +126,7 @@ export default function RootLayout({
             </>
           ) : null}
           <AttributionBootstrap />
-          <Header />
-          <main className="flex-1">
-            <div className="bg-white">{children}</div>
-          </main>
-          <Footer />
+          <main className="flex-1">{children}</main>
           <MobileMasterclassCta />
           <FloatingCartButton />
           <Toaster />
