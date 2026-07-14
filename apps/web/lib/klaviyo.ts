@@ -11,6 +11,7 @@ const KLAVIYO_API_BASE = "https://a.klaviyo.com";
 const KLAVIYO_REVISION = "2024-10-15";
 
 export const KLAVIYO_EVENTS_NOTIFY_TAG = "gold-trails-events-notify";
+export const KLAVIYO_CERTIFICATION_TAG = "metal-detecting-certification";
 
 export type LeadAttribution = {
   utm_source?: string;
@@ -39,6 +40,15 @@ export type EventsNotifyKlaviyoSubscribeInput = {
   attribution?: LeadAttribution;
 };
 
+export type CertificationKlaviyoSubscribeInput = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  /** Opaque token stored on the profile for quiz magic links. */
+  certificationToken: string;
+  attribution?: LeadAttribution;
+};
+
 type KlaviyoConfig = {
   apiKey: string;
   listId: string;
@@ -56,6 +66,13 @@ export function getKlaviyoConfig(): KlaviyoConfig | null {
 export function getKlaviyoEventsConfig(): KlaviyoConfig | null {
   const apiKey = process.env.KLAVIYO_API_KEY?.trim();
   const listId = process.env.KLAVIYO_EVENTS_LIST_ID?.trim();
+  if (!apiKey || !listId) return null;
+  return { apiKey, listId };
+}
+
+export function getKlaviyoCertificationConfig(): KlaviyoConfig | null {
+  const apiKey = process.env.KLAVIYO_API_KEY?.trim();
+  const listId = process.env.KLAVIYO_CERTIFICATION_LIST_ID?.trim();
   if (!apiKey || !listId) return null;
   return { apiKey, listId };
 }
@@ -88,7 +105,7 @@ async function readKlaviyoError(response: Response): Promise<string> {
 function applyAttributionProperties(
   properties: Record<string, string | boolean>,
   attribution: LeadAttribution | undefined,
-  prefix: "masterclass" | "events",
+  prefix: "masterclass" | "events" | "certification",
 ): void {
   if (!attribution) return;
 
@@ -129,6 +146,21 @@ function buildEventsNotifyProfileProperties(
     events_signup_at: new Date().toISOString(),
   };
   applyAttributionProperties(properties, attribution, "events");
+  return properties;
+}
+
+function buildCertificationProfileProperties(
+  certificationToken: string,
+  attribution?: LeadAttribution,
+): Record<string, string | boolean> {
+  const properties: Record<string, string | boolean> = {
+    metal_detecting_certification: true,
+    certification_enrolled: true,
+    certification_token: certificationToken,
+    certification_signup_source: "goldtrails_new_home",
+    certification_enrolled_at: new Date().toISOString(),
+  };
+  applyAttributionProperties(properties, attribution, "certification");
   return properties;
 }
 
@@ -372,5 +404,28 @@ export async function subscribeEventsNotifyToKlaviyo(
     properties: buildEventsNotifyProfileProperties(input.attribution),
     customSource: "Gold Trails events notify form",
     tags: [KLAVIYO_EVENTS_NOTIFY_TAG],
+  });
+}
+
+export async function subscribeCertificationToKlaviyo(
+  input: CertificationKlaviyoSubscribeInput,
+): Promise<KlaviyoResult> {
+  const config = getKlaviyoCertificationConfig();
+  if (!config) {
+    return {
+      ok: false,
+      message: "Klaviyo certification list is not configured.",
+      status: 500,
+    };
+  }
+
+  return subscribeLeadToKlaviyo({
+    config,
+    email: input.email,
+    firstName: input.firstName,
+    lastName: input.lastName,
+    properties: buildCertificationProfileProperties(input.certificationToken, input.attribution),
+    customSource: "Gold Trails certification signup form",
+    tags: [KLAVIYO_CERTIFICATION_TAG],
   });
 }

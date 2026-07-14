@@ -12,6 +12,7 @@ import { TrainingVideoModal } from "@/components/new-home/training-video-modal";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
 import { PartnersSection } from "@/components/new-home/partners-section";
 import { WaitlistForm } from "@/components/new-home/waitlist-form";
+import { CertificationSignupForm } from "@/components/certification/certification-signup-form";
 import { LeadForm } from "@/components/lead-form";
 import { cn } from "@/lib/utils";
 import { pageMetadata } from "@/lib/site";
@@ -93,7 +94,7 @@ const faqItems = [
   {
     question: "How do I get my Metal Detecting Certificate?",
     answer:
-      "Join the free 12-step lesson plan (coming soon on this page), work through each module, and pass the certification quiz. You'll receive your GPAA Metal Detecting Certificate, a free Gold Trails hat, and discounts on future Gold Trails events.",
+      "Enter your email below to join the free 12-step lesson plan. Work through each email module, pass the weekly quizzes and final exam, and you'll receive your GPAA Metal Detecting Certificate, a free Gold Trails hat, and discounts on future Gold Trails events.",
   },
   {
     question: "Is the masterclass really free?",
@@ -254,13 +255,13 @@ export default function NewHomePage() {
                 className="h-48 w-full object-cover sm:h-56"
               />
             </div>
-            <h3 className="font-serif text-xl font-semibold">Certification waitlist</h3>
+            <h3 className="font-serif text-xl font-semibold">Start free certification</h3>
             <p className="mt-2 text-sm leading-relaxed text-[#5c4f3f]">
-              The 12-step lesson plan and quiz are launching soon. Join the waitlist and we&apos;ll
-              notify you when certification opens — wired to Klaviyo flows later.
+              Join the 12-step email lesson plan. We&apos;ll send lessons to your inbox and include
+              quiz links as you progress — finish strong for your certificate and hat.
             </p>
             <div className="mt-5">
-              <WaitlistForm topic="certification" topicLabel="GPAA Metal Detecting Certification" />
+              <CertificationSignupForm />
             </div>
           </div>
         </div>

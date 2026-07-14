@@ -117,3 +117,37 @@ Paste `events-notify-welcome.html` into the first email action in your events-no
 |------|-----|------|
 | 2 | 3–7 | Reminder when a session is open / low seats (manual or triggered) |
 | 3 | — | New session announcement (triggered when you add Shopify events) |
+
+## Certification list (`/new-home` page)
+
+Signups post to `/api/subscribe/certification` when `KLAVIYO_API_KEY`, `KLAVIYO_CERTIFICATION_LIST_ID`, and `DATABASE_URL` are set.
+
+**Recommended Klaviyo setup**
+
+1. Create list: `Gold Trails — Certification` (dedicated list for the 12-lesson flow).
+2. Set `KLAVIYO_CERTIFICATION_LIST_ID` in `.env.local` / Vercel.
+3. Flow trigger: **When someone is added to list** `Gold Trails — Certification`.
+4. Run Neon migration: `db/migrations/002_certification_enrollments.sql`.
+
+**Profile fields set on subscribe**
+
+| Field | Value |
+|-------|--------|
+| `certification_enrolled` | `true` |
+| `metal_detecting_certification` | `true` |
+| `certification_token` | Opaque token for quiz magic links |
+| `certification_signup_source` | `goldtrails_new_home` |
+| `certification_enrolled_at` | ISO timestamp |
+| Tag | `metal-detecting-certification` |
+
+**Quiz button URL pattern (emails 3 / 6 / 9 / 12)**
+
+```html
+https://goldtrails.gold/certification/quiz/week-1?token={{ person.certification_token|urlencode }}
+https://goldtrails.gold/certification/quiz/week-2?token={{ person.certification_token|urlencode }}
+https://goldtrails.gold/certification/quiz/week-3?token={{ person.certification_token|urlencode }}
+https://goldtrails.gold/certification/quiz/week-4?token={{ person.certification_token|urlencode }}
+https://goldtrails.gold/certification/quiz/final?token={{ person.certification_token|urlencode }}
+```
+
+Note: quiz pages accept the token query param once progress tracking is wired; quizzes already score today without requiring the token.
