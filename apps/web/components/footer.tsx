@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 
 export function Footer() {
   const pathname = usePathname();
-  if (pathname.startsWith("/new-home")) {
+  // Home page renders its own footer.
+  if (pathname === "/") {
     return null;
   }
 

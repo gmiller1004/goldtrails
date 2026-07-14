@@ -13,10 +13,10 @@ const navLinks = [
   { href: "#guides", label: "Guides" },
   { href: "#certification", label: "Certificate" },
   { href: "#webinars", label: "Webinars" },
-  { href: "#events", label: "Events" },
+  { href: "/events", label: "Events" },
   { href: "#about", label: "About" },
   { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function NewHomeHeader() {
@@ -49,6 +49,21 @@ export function NewHomeHeader() {
     [itemCount],
   );
 
+  const renderNavHref = (href: string, className: string, label: string, onClick?: () => void) => {
+    if (href.startsWith("#")) {
+      return (
+        <a key={href} href={href} className={className} onClick={onClick}>
+          {label}
+        </a>
+      );
+    }
+    return (
+      <Link key={href} href={href} className={className} onClick={onClick}>
+        {label}
+      </Link>
+    );
+  };
+
   return (
     <header
       className={cn(
@@ -59,7 +74,7 @@ export function NewHomeHeader() {
       )}
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        <Link href="#top" className="inline-flex min-w-0 items-center gap-2.5 no-underline">
+        <Link href="/" className="inline-flex min-w-0 items-center gap-2.5 no-underline">
           <Image
             src="/logo/goldtrailslogo.jpg"
             alt="Gold Trails"
@@ -71,15 +86,13 @@ export function NewHomeHeader() {
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="rounded-md px-2.5 py-2 text-sm font-medium text-[#5c4f3f] no-underline transition-colors hover:bg-[#eef0e8] hover:text-[#1a140f]"
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) =>
+            renderNavHref(
+              link.href,
+              "rounded-md px-2.5 py-2 text-sm font-medium text-[#5c4f3f] no-underline transition-colors hover:bg-[#eef0e8] hover:text-[#1a140f]",
+              link.label,
+            ),
+          )}
           <Link
             href="/shop"
             className="rounded-md px-2.5 py-2 text-sm font-medium text-[#5c4f3f] no-underline hover:bg-[#efe4cf] hover:text-[#1a140f]"
@@ -87,10 +100,7 @@ export function NewHomeHeader() {
             Shop
           </Link>
           {cartLink}
-          <a
-            href="#masterclass"
-            className={cn(nhGoldButtonClass, "ml-1 px-4 py-2 text-sm")}
-          >
+          <a href="#masterclass" className={cn(nhGoldButtonClass, "ml-1 px-4 py-2 text-sm")}>
             Free book
           </a>
         </nav>
@@ -111,16 +121,14 @@ export function NewHomeHeader() {
       {menuOpen ? (
         <div className="border-t border-[#e0d4b3]/80 bg-[#f7f2e8] px-4 py-4 lg:hidden">
           <nav className="flex flex-col gap-1" aria-label="Mobile">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="rounded-md px-3 py-2.5 text-sm font-medium text-[#1a140f] no-underline hover:bg-[#efe4cf]"
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              renderNavHref(
+                link.href,
+                "rounded-md px-3 py-2.5 text-sm font-medium text-[#1a140f] no-underline hover:bg-[#efe4cf]",
+                link.label,
+                () => setMenuOpen(false),
+              ),
+            )}
             <Link
               href="/shop"
               className="rounded-md px-3 py-2.5 text-sm font-medium text-[#1a140f] no-underline hover:bg-[#efe4cf]"
@@ -160,22 +168,25 @@ export function NewHomeFooter() {
               <p className="text-xs text-[#c4b59a]">Field training · Masterclass · GPAA education</p>
             </div>
           </div>
-          <a
-            href="#masterclass"
-            className={cn(nhGoldButtonClass, "w-full px-5 py-2.5 text-sm sm:w-auto")}
-          >
+          <a href="#masterclass" className={cn(nhGoldButtonClass, "w-full px-5 py-2.5 text-sm sm:w-auto")}>
             Download free masterclass
           </a>
         </div>
         <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
           <Link href="/" className="text-[#c4b59a] no-underline hover:text-white">
-            Current home
+            Home
           </Link>
           <Link href="/events" className="text-[#c4b59a] no-underline hover:text-white">
             Events
           </Link>
           <Link href="/shop" className="text-[#c4b59a] no-underline hover:text-white">
             Shop
+          </Link>
+          <Link href="/guides" className="text-[#c4b59a] no-underline hover:text-white">
+            Guides
+          </Link>
+          <Link href="/about" className="text-[#c4b59a] no-underline hover:text-white">
+            About
           </Link>
           <Link href="/contact" className="text-[#c4b59a] no-underline hover:text-white">
             Contact

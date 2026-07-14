@@ -1,4 +1,4 @@
-/** Shared palette + button styles for /new-home (matches site `primary` gold). */
+/** Shared palette + button styles for the homepage (matches site `primary` gold). */
 export const nh = {
   cream: "#f7f2e8",
   ink: "#1a140f",

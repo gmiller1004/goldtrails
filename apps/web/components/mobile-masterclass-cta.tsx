@@ -5,11 +5,12 @@ import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 
-const hiddenOn = ["/masterclass", "/cart", "/thank-you", "/new-home"];
+const hiddenExact = new Set(["/"]);
+const hiddenPrefixes = ["/masterclass", "/cart", "/thank-you"];
 
 export function MobileMasterclassCta() {
   const pathname = usePathname();
-  if (hiddenOn.some((route) => pathname.startsWith(route))) {
+  if (hiddenExact.has(pathname) || hiddenPrefixes.some((route) => pathname.startsWith(route))) {
     return null;
   }
 
@@ -17,7 +18,7 @@ export function MobileMasterclassCta() {
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-primary/20 bg-white/95 p-3 backdrop-blur md:hidden">
       <Button asChild className="w-full font-semibold">
         <Link
-          href="/masterclass"
+          href="/#masterclass"
           onClick={() =>
             trackEvent("sticky_mobile_cta_click", {
               cta: "masterclass",

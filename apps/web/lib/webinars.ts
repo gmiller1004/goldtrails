@@ -1,4 +1,4 @@
-/** Canonical webinar waitlist topics on `/new-home`. */
+/** Canonical webinar waitlist topics on the homepage (`/#webinars`). */
 export const WEBINAR_WAITLIST_TOPICS = {
   "metal-detecting-101": "Metal Detecting 101",
   "gold-panning-101": "Gold Panning 101",

@@ -47,7 +47,7 @@ function MissingTokenState({ quizTitle }: { quizTitle: string }) {
         quiz links as you go).
       </p>
       <Link
-        href="/new-home#certification"
+        href="/#certification"
         className="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold !text-primary-foreground no-underline hover:bg-primary/90"
       >
         Go to certification signup
@@ -65,7 +65,7 @@ function InvalidTokenState() {
         certification email, or re-enroll with the same email to refresh your token on file.
       </p>
       <Link
-        href="/new-home#certification"
+        href="/#certification"
         className="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold !text-primary-foreground no-underline hover:bg-primary/90"
       >
         Go to certification signup
@@ -139,7 +139,7 @@ export default async function CertificationQuizPage({ params, searchParams }: Pa
 
         <p className="mt-10 text-center text-xs text-[#6d7760]">
           <Link
-            href="/new-home#certification"
+            href="/#certification"
             className="!text-[#5a6348] underline-offset-2 hover:underline"
           >
             Back to certification

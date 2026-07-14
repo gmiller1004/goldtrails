@@ -123,7 +123,7 @@ Paste `events-notify-welcome.html` into the first email action in your events-no
 | 2 | 3–7 | Reminder when a session is open / low seats (manual or triggered) |
 | 3 | — | New session announcement (triggered when you add Shopify events) |
 
-## Certification list (`/new-home` page)
+## Certification list (homepage `/#certification`)
 
 Signups post to `/api/subscribe/certification` when `KLAVIYO_API_KEY`, `KLAVIYO_CERTIFICATION_LIST_ID`, and `DATABASE_URL` are set.
 
@@ -225,7 +225,7 @@ All reminder CTAs use `{{ person.certification_token|urlencode }}` the same way 
 
 **Certificate/hat condition:** We don’t auto-set a “ordered” profile property from Gold Trails yet. Prefer Klaviyo’s Shopify **Placed Order** metric filtered to the reward product (or discount code `GTCertFinalPassed`). If they already ordered, the copy tells them they can ignore the email.
 
-## Webinar waitlist (`/new-home#webinars`)
+## Webinar waitlist (`/#webinars`)
 
 Signups post to `/api/subscribe/webinar` → subscribe to `KLAVIYO_GT_WEBINAR_LIST_ID`, set topic profile properties, and create metric **`Joined Webinar Waitlist`** (with `topic` / `topic_label`) on every join — including additional topics.
 

@@ -79,7 +79,7 @@ export function CertificationClaimClient({ token, learnerName }: CertificationCl
             {isCheckingOut ? "Redirecting to checkout…" : "Continue to checkout"}
           </Button>
           <Link
-            href="/new-home#certification"
+            href="/#certification"
             className="inline-flex items-center justify-center rounded-lg border border-[#e0d4b3] bg-white px-6 py-3 text-sm font-semibold !text-[#1a140f] no-underline hover:bg-[#efe4cf]"
           >
             Back to certification

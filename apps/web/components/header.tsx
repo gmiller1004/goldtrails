@@ -13,10 +13,8 @@ export function Header() {
   const pathname = usePathname();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  if (pathname.startsWith("/new-home")) {
-    return null;
-  }
-
+  // Must run before any early return — switching away from `/` used to add this
+  // hook mid-navigation and crash client-side.
   const links = useMemo(
     () => [
       { href: "/", label: "Home" },
@@ -29,6 +27,11 @@ export function Header() {
     ],
     [],
   );
+
+  // Home page renders its own chrome.
+  if (pathname === "/") {
+    return null;
+  }
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";

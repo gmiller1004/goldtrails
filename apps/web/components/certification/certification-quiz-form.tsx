@@ -170,7 +170,7 @@ export function CertificationQuizForm({
             </Button>
           ) : null}
           <Link
-            href="/new-home#certification"
+            href="/#certification"
             className="inline-flex items-center justify-center rounded-lg border border-[#e0d4b3] bg-[#f7f2e8] px-6 py-3 text-sm font-semibold !text-[#1a140f] no-underline hover:bg-[#efe4cf]"
           >
             Back to certification
