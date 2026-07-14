@@ -1,17 +1,13 @@
 import Link from "next/link";
-import { ClaimCheckoutRedirect } from "@/components/certification/claim-checkout-redirect";
+import { CertificationClaimClient } from "@/components/certification/certification-claim-client";
 import { hasPassedQuiz } from "@/lib/certification/attempts";
 import { getEnrollmentByToken } from "@/lib/certification/enrollments";
-import {
-  CERTIFICATION_REWARD_DISCOUNT_CODE,
-  CERTIFICATION_REWARD_PRODUCT_ID,
-} from "@/lib/certification/reward";
-import { createCheckoutUrl, getProductDefaultVariantId } from "@/lib/shopify";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Claim your certificate & hat",
-  description: "Claim your GPAA Metal Detecting Certificate and Gold Trails hat after passing the final quiz.",
+  description:
+    "Claim your GPAA Metal Detecting Certificate and Gold Trails hat after passing the final quiz.",
   path: "/certification/claim",
 });
 
@@ -19,13 +15,7 @@ type PageProps = {
   searchParams: Promise<{ token?: string }>;
 };
 
-function ClaimError({
-  title,
-  body,
-}: {
-  title: string;
-  body: string;
-}) {
+function ClaimError({ title, body }: { title: string; body: string }) {
   return (
     <div className="min-h-screen bg-[#f7f2e8] text-[#1a140f]">
       <div className="mx-auto w-full max-w-xl px-4 py-16 sm:px-6">
@@ -119,35 +109,6 @@ export default async function CertificationClaimPage({ searchParams }: PageProps
     );
   }
 
-  const variantId = await getProductDefaultVariantId(CERTIFICATION_REWARD_PRODUCT_ID);
-  if (!variantId) {
-    console.error(
-      "[certification/claim] Could not resolve reward variant for product",
-      CERTIFICATION_REWARD_PRODUCT_ID,
-    );
-    return (
-      <ClaimError
-        title="Reward checkout isn’t ready"
-        body="We couldn’t load the certificate & hat product from Shopify. Please contact us and we’ll get your reward shipping."
-      />
-    );
-  }
-
-  const checkoutUrl = await createCheckoutUrl([{ variantId, quantity: 1 }], {
-    discountCodes: [CERTIFICATION_REWARD_DISCOUNT_CODE],
-    email: enrollment.email,
-  });
-
-  if (!checkoutUrl) {
-    return (
-      <ClaimError
-        title="Couldn’t start checkout"
-        body="Shopify checkout didn’t open. Please try again, or contact us so we can process your certificate and hat manually."
-      />
-    );
-  }
-
-  // Client top-level navigate: Shopify checkout sets X-Frame-Options: DENY and cannot
-  // load inside iframes / embedded previews (ERR_BLOCKED_BY_RESPONSE).
-  return <ClaimCheckoutRedirect checkoutUrl={checkoutUrl} />;
+  // Eligibility only — cart/checkout starts on button click (same as /cart for events).
+  return <CertificationClaimClient token={token} learnerName={enrollment.first_name} />;
 }
