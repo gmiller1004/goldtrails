@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { ClaimCheckoutRedirect } from "@/components/certification/claim-checkout-redirect";
 import { hasPassedQuiz } from "@/lib/certification/attempts";
 import { getEnrollmentByToken } from "@/lib/certification/enrollments";
 import {
@@ -147,5 +147,7 @@ export default async function CertificationClaimPage({ searchParams }: PageProps
     );
   }
 
-  redirect(checkoutUrl);
+  // Client top-level navigate: Shopify checkout sets X-Frame-Options: DENY and cannot
+  // load inside iframes / embedded previews (ERR_BLOCKED_BY_RESPONSE).
+  return <ClaimCheckoutRedirect checkoutUrl={checkoutUrl} />;
 }
