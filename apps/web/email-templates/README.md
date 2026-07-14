@@ -199,6 +199,6 @@ Score properties are numbers (e.g. `83`) — templates append `%`.
 https://goldtrails.gold/certification/claim?token={{ person.certification_token|urlencode }}
 ```
 
-`/certification/claim` verifies the enrollment token + final quiz pass in Neon, creates a Shopify cart for product `CERTIFICATION_REWARD_PRODUCT_ID` (default `10775411458358`), applies discount code `GTCertFinalPassed`, prefills email, and redirects to Checkout.
+`/certification/claim` verifies the enrollment token + final quiz pass in Neon, then redirects to an Online Store cart permalink for variant `CERTIFICATION_REWARD_VARIANT_ID` (default `54217881256246`) with discount `GTCertFinalPassed` applied (e.g. `https://gpaastore.com/discount/GTCertFinalPassed?redirect=/cart/54217881256246:1`).
 
-Env (optional overrides): `CERTIFICATION_REWARD_PRODUCT_ID`, `CERTIFICATION_REWARD_DISCOUNT_CODE`.
+Env (optional overrides): `CERTIFICATION_REWARD_VARIANT_ID`, `CERTIFICATION_REWARD_DISCOUNT_CODE`, `SHOPIFY_CHECKOUT_DOMAIN`. The reward product/variant must be published to the **Online Store** sales channel.
