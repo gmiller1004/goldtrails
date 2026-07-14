@@ -76,13 +76,9 @@ export function CertificationSignupForm({ className }: CertificationSignupFormPr
       });
       setIsEnrolled(true);
       reset();
-      toast.success(
-        data.message ??
-          "You're enrolled — check your inbox for lesson 1. We'll email your quiz links as you go.",
-        {
-          className: "border border-primary/40 bg-white text-foreground",
-        },
-      );
+      toast.success("You're enrolled — check your inbox (and spam) for lesson 1.", {
+        className: "border border-primary/40 bg-white text-foreground",
+      });
     } catch {
       trackEvent("certification_signup_failure");
       toast.error("Could not enroll right now. Please try again.");
@@ -93,11 +89,33 @@ export function CertificationSignupForm({ className }: CertificationSignupFormPr
 
   if (isEnrolled) {
     return (
-      <div className={cn("rounded-xl border border-[#d0d5c4] bg-white p-5 text-center", className)}>
-        <p className="font-serif text-xl font-semibold text-[#1a140f]">You&apos;re enrolled</p>
-        <p className="mt-2 text-sm leading-relaxed text-[#5c4f3f]">
-          Check your inbox for lesson 1. Quiz links will arrive in later emails — keep an eye out
-          for Weeks 1–4 and the final exam.
+      <div className={cn("rounded-xl border border-[#d0d5c4] bg-white p-5 text-left", className)}>
+        <p className="font-serif text-xl font-semibold text-[#1a140f] text-center">
+          You&apos;re enrolled — here&apos;s what to expect
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-[#5c4f3f]">
+          Your certification lessons are delivered by email. To make sure you don&apos;t miss a
+          week, please:
+        </p>
+        <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-[#5c4f3f]">
+          <li>
+            Mark{" "}
+            <a
+              href="mailto:gpaastore@goldprospectors.org"
+              className="font-semibold !text-[#5a6348] underline underline-offset-2"
+            >
+              gpaastore@goldprospectors.org
+            </a>{" "}
+            as a safe / trusted sender
+          </li>
+          <li>Check Junk and Spam if lesson 1 doesn&apos;t land in your inbox within a few minutes</li>
+          <li>
+            Keep an eye out for Weeks 1–4 quiz links and the final exam as you progress through the
+            program
+          </li>
+        </ul>
+        <p className="mt-3 text-sm leading-relaxed text-[#5c4f3f]">
+          Missing those emails means missing quiz links — and your path to the certificate and hat.
         </p>
       </div>
     );

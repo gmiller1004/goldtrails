@@ -257,8 +257,9 @@ export default function NewHomePage() {
             </div>
             <h3 className="font-serif text-xl font-semibold">Start free certification</h3>
             <p className="mt-2 text-sm leading-relaxed text-[#5c4f3f]">
-              Join the 12-step email lesson plan. We&apos;ll send lessons to your inbox and include
-              quiz links as you progress — finish strong for your certificate and hat.
+              Join the 12-step email lesson plan. Lessons and quiz links arrive in your inbox — mark{" "}
+              <span className="font-medium text-[#1a140f]">gpaastore@goldprospectors.org</span> as a
+              safe sender so you don&apos;t miss them. Finish strong for your certificate and hat.
             </p>
             <div className="mt-5">
               <CertificationSignupForm />
