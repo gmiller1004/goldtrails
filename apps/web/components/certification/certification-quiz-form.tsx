@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { CertificationQuizNextSteps } from "@/components/certification/certification-quiz-next-steps";
@@ -36,6 +36,14 @@ export function CertificationQuizForm({
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [grade, setGrade] = useState<GradePayload | null>(null);
+  const resultsTopRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!grade) return;
+    // Submit lives at the bottom; jump to top so score + next-step CTAs are visible.
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    resultsTopRef.current?.focus({ preventScroll: true });
+  }, [grade]);
 
   const answeredCount = useMemo(
     () => quiz.questions.filter((question) => Boolean(answers[question.id])).length,
@@ -107,7 +115,11 @@ export function CertificationQuizForm({
   if (grade) {
     const percentLabel = Math.round(grade.percent * 100);
     return (
-      <div className="rounded-2xl border border-[#d0d5c4] bg-white p-6 shadow-sm sm:p-8">
+      <div
+        ref={resultsTopRef}
+        tabIndex={-1}
+        className="rounded-2xl border border-[#d0d5c4] bg-white p-6 shadow-sm outline-none sm:p-8"
+      >
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#5a6348]">Results</p>
         <h2 className="mt-2 font-serif text-2xl font-semibold text-[#1a140f] sm:text-3xl">
           {grade.passed ? "You passed" : "Keep practicing"}
