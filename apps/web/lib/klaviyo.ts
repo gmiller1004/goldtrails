@@ -12,6 +12,7 @@ const KLAVIYO_REVISION = "2024-10-15";
 
 export const KLAVIYO_EVENTS_NOTIFY_TAG = "gold-trails-events-notify";
 export const KLAVIYO_CERTIFICATION_TAG = "metal-detecting-certification";
+export const KLAVIYO_WEBINAR_WAITLIST_TAG = "gt-webinar-waitlist";
 
 export type LeadAttribution = {
   utm_source?: string;
@@ -49,6 +50,15 @@ export type CertificationKlaviyoSubscribeInput = {
   attribution?: LeadAttribution;
 };
 
+export type WebinarWaitlistKlaviyoSubscribeInput = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  topic: string;
+  topicLabel: string;
+  attribution?: LeadAttribution;
+};
+
 type KlaviyoConfig = {
   apiKey: string;
   listId: string;
@@ -73,6 +83,13 @@ export function getKlaviyoEventsConfig(): KlaviyoConfig | null {
 export function getKlaviyoCertificationConfig(): KlaviyoConfig | null {
   const apiKey = process.env.KLAVIYO_API_KEY?.trim();
   const listId = process.env.KLAVIYO_CERTIFICATION_LIST_ID?.trim();
+  if (!apiKey || !listId) return null;
+  return { apiKey, listId };
+}
+
+export function getKlaviyoWebinarConfig(): KlaviyoConfig | null {
+  const apiKey = process.env.KLAVIYO_API_KEY?.trim();
+  const listId = process.env.KLAVIYO_GT_WEBINAR_LIST_ID?.trim();
   if (!apiKey || !listId) return null;
   return { apiKey, listId };
 }
@@ -105,7 +122,7 @@ async function readKlaviyoError(response: Response): Promise<string> {
 function applyAttributionProperties(
   properties: Record<string, string | boolean>,
   attribution: LeadAttribution | undefined,
-  prefix: "masterclass" | "events" | "certification",
+  prefix: "masterclass" | "events" | "certification" | "webinar",
 ): void {
   if (!attribution) return;
 
@@ -161,6 +178,25 @@ function buildCertificationProfileProperties(
     certification_enrolled_at: new Date().toISOString(),
   };
   applyAttributionProperties(properties, attribution, "certification");
+  return properties;
+}
+
+function buildWebinarWaitlistProfileProperties(
+  topic: string,
+  topicLabel: string,
+  attribution?: LeadAttribution,
+): Record<string, string | boolean> {
+  // metal-detecting-101 → webinar_interest_metal_detecting_101
+  const topicKey = topic.replace(/-/g, "_");
+  const properties: Record<string, string | boolean> = {
+    gt_webinar_waitlist: true,
+    webinar_topic_of_interest: topic,
+    webinar_topic_of_interest_label: topicLabel,
+    [`webinar_interest_${topicKey}`]: true,
+    webinar_waitlist_source: "goldtrails_new_home",
+    webinar_waitlist_joined_at: new Date().toISOString(),
+  };
+  applyAttributionProperties(properties, attribution, "webinar");
   return properties;
 }
 
@@ -427,6 +463,33 @@ export async function subscribeCertificationToKlaviyo(
     properties: buildCertificationProfileProperties(input.certificationToken, input.attribution),
     customSource: "Gold Trails certification signup form",
     tags: [KLAVIYO_CERTIFICATION_TAG],
+  });
+}
+
+export async function subscribeWebinarWaitlistToKlaviyo(
+  input: WebinarWaitlistKlaviyoSubscribeInput,
+): Promise<KlaviyoResult> {
+  const config = getKlaviyoWebinarConfig();
+  if (!config) {
+    return {
+      ok: false,
+      message: "Klaviyo webinar list is not configured.",
+      status: 500,
+    };
+  }
+
+  return subscribeLeadToKlaviyo({
+    config,
+    email: input.email,
+    firstName: input.firstName,
+    lastName: input.lastName,
+    properties: buildWebinarWaitlistProfileProperties(
+      input.topic,
+      input.topicLabel,
+      input.attribution,
+    ),
+    customSource: "Gold Trails webinar waitlist form",
+    tags: [KLAVIYO_WEBINAR_WAITLIST_TAG],
   });
 }
 

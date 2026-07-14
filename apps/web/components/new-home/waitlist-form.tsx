@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { getAttribution } from "@/lib/attribution";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,13 +25,11 @@ type WaitlistFormProps = {
   onDark?: boolean;
 };
 
-/** Mock waitlist — Klaviyo profile fields / API wiring TBD. */
 export function WaitlistForm({
   topic,
   topicLabel,
   className,
   compact = false,
-  onDark = false,
 }: WaitlistFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -47,9 +46,31 @@ export function WaitlistForm({
     setIsSubmitting(true);
     trackEvent("webinar_waitlist_submit", { topic, topic_label: topicLabel });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 400));
+      const response = await fetch("/api/subscribe/webinar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: values.email,
+          topic,
+          topicLabel,
+          attribution: getAttribution(),
+        }),
+      });
+      const data = (await response.json()) as {
+        success?: boolean;
+        error?: string;
+        message?: string;
+      };
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error ?? "Could not join the waitlist.");
+      }
+
       trackEvent("webinar_waitlist_success", { topic, topic_label: topicLabel });
-      toast.success(`You're on the waitlist for ${topicLabel}. We'll email you when seats open.`);
+      toast.success(
+        data.message ?? `You're on the waitlist for ${topicLabel}. We'll email you when seats open.`,
+        { className: "border border-primary/40 bg-white text-foreground" },
+      );
       reset();
     } catch {
       trackEvent("webinar_waitlist_failure", { topic });

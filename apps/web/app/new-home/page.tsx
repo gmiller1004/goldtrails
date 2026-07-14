@@ -50,25 +50,25 @@ const guides = [
 
 const webinars = [
   {
-    topic: "metal-detecting-101",
+    topic: "metal-detecting-101" as const,
     title: "Metal Detecting 101",
     description: "Detector basics, tones, and field routines you can repeat on every hunt.",
     image: "/images/gt4.jpg",
   },
   {
-    topic: "gold-panning-101",
+    topic: "gold-panning-101" as const,
     title: "Gold Panning 101",
     description: "Reading water, sample workflow, and panning technique for beginners.",
     image: "/images/gt3.jpg",
   },
   {
-    topic: "where-to-find-gold",
+    topic: "where-to-find-gold" as const,
     title: "Where to Find the Gold?",
     description: "Research tools, geology clues, and how to pick ground worth your drive.",
     image: "/images/gt1.jpg",
   },
   {
-    topic: "prospecting-gear-101",
+    topic: "prospecting-gear-101" as const,
     title: "Prospecting Gear 101",
     description: "Essential kit for detecting, digging, and recovering targets cleanly.",
     image: "/images/gt2.jpg",
