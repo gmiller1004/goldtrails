@@ -420,22 +420,40 @@ export async function createCheckoutUrl(
   return sanitizeCheckoutUrl(cart.checkoutUrl);
 }
 
-/** Strip theme-preview / admin crumbs that break customer checkout. */
+/**
+ * Normalize Storefront cart checkout URLs for headless use.
+ *
+ * GPAA's primary storefront domain (gpaastore.com) often carries theme-preview
+ * cookies / Liquid redirects for staff. That appends `preview_theme_id` and
+ * yields ERR_BLOCKED_BY_RESPONSE or "checkout isn't available in preview".
+ * Prefer the stable *.myshopify.com host from SHOPIFY_STORE_DOMAIN instead —
+ * same cart/checkout session, fewer preview-mode footguns.
+ */
 export function sanitizeCheckoutUrl(rawUrl: string): string {
   try {
     const url = new URL(rawUrl);
     const stripKeys = [
       "preview_theme_id",
       "preview_theme",
+      "preview_key",
       "theme_id",
       "auto_redirect",
       "edge_redirect",
       "skip_shop_pay",
       "_su_rec",
+      "pb",
+      "_fd",
     ];
     for (const key of stripKeys) {
       url.searchParams.delete(key);
     }
+
+    const storeDomain = process.env.SHOPIFY_STORE_DOMAIN?.trim();
+    if (storeDomain) {
+      url.protocol = "https:";
+      url.host = storeDomain;
+    }
+
     return url.toString();
   } catch {
     return rawUrl;
