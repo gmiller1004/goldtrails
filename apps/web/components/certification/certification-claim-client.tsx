@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
 import { trackEvent } from "@/lib/analytics";
+import { navigateToShopifyCheckout } from "@/lib/navigate-to-shopify-checkout";
 import { cn } from "@/lib/utils";
 
 type CertificationClaimClientProps = {
@@ -51,8 +52,8 @@ export function CertificationClaimClient({ token, learnerName }: CertificationCl
           }
         })(),
       });
-      // Match events/shop cart: full-page navigation after a user gesture.
-      window.location.href = data.checkoutUrl;
+      navigateToShopifyCheckout(data.checkoutUrl);
+      setIsCheckingOut(false);
     } catch (error) {
       trackEvent("certification_claim_checkout_failure");
       toast.error(
@@ -76,8 +77,9 @@ export function CertificationClaimClient({ token, learnerName }: CertificationCl
           automatically.
         </p>
         <p className="mt-3 text-xs leading-relaxed text-[#6d7760]">
-          Tip: test in an Incognito window (no Shopify admin / theme-preview cookies). Staff sessions
-          on gpaastore.com can push checkout into preview mode and block it.
+          Checkout finishes on gpaastore.com (GPAA&apos;s Shopify store) — that redirect is
+          expected. Test in a Chrome Incognito window while logged out of Shopify admin; staff
+          theme-preview cookies can block checkout with ERR_BLOCKED_BY_RESPONSE.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button

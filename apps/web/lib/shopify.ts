@@ -151,9 +151,12 @@ const PRODUCTS_QUERY = `
 `;
 
 function getStorefrontConfig() {
-  const domain = process.env.SHOPIFY_STORE_DOMAIN;
-  const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-  const apiVersion = process.env.SHOPIFY_STOREFRONT_API_VERSION ?? "2025-01";
+  const domain = process.env.SHOPIFY_STORE_DOMAIN?.trim();
+  const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN?.trim();
+  // Strip accidental inline comments from .env (e.g. `2025-01  # latest`).
+  const apiVersion = (process.env.SHOPIFY_STOREFRONT_API_VERSION ?? "2025-01")
+    .split(/\s+#/)[0]
+    ?.trim() || "2025-01";
 
   if (!domain || !token) {
     return null;
@@ -421,13 +424,10 @@ export async function createCheckoutUrl(
 }
 
 /**
- * Normalize Storefront cart checkout URLs for headless use.
+ * Strip theme-preview / admin crumbs from Storefront checkout URLs.
  *
- * GPAA's primary storefront domain (gpaastore.com) often carries theme-preview
- * cookies / Liquid redirects for staff. That appends `preview_theme_id` and
- * yields ERR_BLOCKED_BY_RESPONSE or "checkout isn't available in preview".
- * Prefer the stable *.myshopify.com host from SHOPIFY_STORE_DOMAIN instead —
- * same cart/checkout session, fewer preview-mode footguns.
+ * Note: rewriting host to *.myshopify.com does not help for this shop —
+ * Shopify always 301s to the primary domain (gpaastore.com).
  */
 export function sanitizeCheckoutUrl(rawUrl: string): string {
   try {
@@ -447,13 +447,6 @@ export function sanitizeCheckoutUrl(rawUrl: string): string {
     for (const key of stripKeys) {
       url.searchParams.delete(key);
     }
-
-    const storeDomain = process.env.SHOPIFY_STORE_DOMAIN?.trim();
-    if (storeDomain) {
-      url.protocol = "https:";
-      url.host = storeDomain;
-    }
-
     return url.toString();
   } catch {
     return rawUrl;

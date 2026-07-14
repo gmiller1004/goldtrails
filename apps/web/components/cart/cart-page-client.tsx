@@ -7,6 +7,7 @@ import { useCart } from "@/components/cart/cart-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { trackEvent } from "@/lib/analytics";
+import { navigateToShopifyCheckout } from "@/lib/navigate-to-shopify-checkout";
 
 function parsePrice(price: string) {
   const [currency, amount] = price.split(" ");
@@ -52,7 +53,7 @@ export function CartPageClient() {
         value: Number(total),
         currency,
       });
-      window.location.href = payload.checkoutUrl;
+      navigateToShopifyCheckout(payload.checkoutUrl);
     } catch {
       toast.error("Could not start checkout. Please try again.");
       setIsCheckingOut(false);
