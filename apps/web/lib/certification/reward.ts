@@ -27,21 +27,18 @@ export const CERTIFICATION_CHECKOUT_DOMAIN = (
  * Build an Online Store cart permalink with discount.
  * Same family of links as gpaastore.com/discount/...?redirect=/cart/...
  * Requires the variant to be published to the Online Store sales channel.
+ *
+ * Do not append checkout[email] — Shopify mangles it into an invalid
+ * `checkout={"email"=>...}` query and checkout fails with
+ * "expected String to be a Hash: checkout".
  */
-export function buildCertificationClaimCheckoutUrl(email?: string | null): string {
+export function buildCertificationClaimCheckoutUrl(): string {
   const variantId = CERTIFICATION_REWARD_VARIANT_ID.replace(/\D/g, "");
   const code = CERTIFICATION_REWARD_DISCOUNT_CODE;
   const domain = CERTIFICATION_CHECKOUT_DOMAIN;
 
   // /discount/CODE?redirect=/cart/VARIANT:1 — proven on this shop for promo deep-links
-  const redirectPath = `/cart/${variantId}:1`;
   const url = new URL(`https://${domain}/discount/${encodeURIComponent(code)}`);
-  url.searchParams.set("redirect", redirectPath);
-
-  // Best-effort email prefill once they reach checkout (ignored if Shopify drops it).
-  if (email?.trim()) {
-    url.searchParams.set("checkout[email]", email.trim());
-  }
-
+  url.searchParams.set("redirect", `/cart/${variantId}:1`);
   return url.toString();
 }

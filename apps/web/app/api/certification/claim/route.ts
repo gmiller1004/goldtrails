@@ -79,7 +79,7 @@ export async function POST(request: Request) {
   }
 
   // Online Store cart permalink (not Storefront cartCreate) — matches working GPAA promo links.
-  const checkoutUrl = buildCertificationClaimCheckoutUrl(enrollment.email);
+  const checkoutUrl = buildCertificationClaimCheckoutUrl();
 
   return NextResponse.json({ success: true, checkoutUrl }, { status: 200 });
 }
