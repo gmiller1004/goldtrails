@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { NewHomeFaq } from "@/components/new-home/new-home-faq";
 import { NewHomeJumpStrip } from "@/components/new-home/new-home-jump-strip";
-import { NewHomeFooter, NewHomeHeader } from "@/components/new-home/new-home-chrome";
 import { NewHomeEventReviews } from "@/components/new-home/new-home-event-reviews";
 import { NewHomeEvents, NewHomeEventsSkeleton } from "@/components/new-home/new-home-events";
 import { NewHomeReviews } from "@/components/new-home/new-home-reviews";
@@ -115,8 +114,6 @@ const faqItems = [
 export default function HomePage() {
   return (
     <div id="top" className="min-h-screen bg-[#f7f2e8] text-[#1a140f]">
-      <NewHomeHeader />
-
       {/* Hero + masterclass lead */}
       <section
         id="masterclass"
@@ -432,8 +429,6 @@ export default function HomePage() {
       </section>
 
       {/* Partners & sponsors — hidden until partner logos are ready */}
-
-      <NewHomeFooter />
     </div>
   );
 }

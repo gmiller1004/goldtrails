@@ -2,24 +2,32 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, ShoppingCart, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/components/cart/cart-provider";
 import { cn } from "@/lib/utils";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
 
+/** Primary nav: home anchors resolve to `/#…` off the homepage. Shop is intentionally omitted. */
 const navLinks = [
-  { href: "#masterclass", label: "Masterclass" },
-  { href: "#guides", label: "Guides" },
-  { href: "#certification", label: "Certificate" },
-  { href: "#webinars", label: "Webinars" },
-  { href: "/events", label: "Events" },
-  { href: "#about", label: "About" },
-  { href: "#faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
-];
+  { kind: "home", hash: "#masterclass", label: "Masterclass" },
+  { kind: "home", hash: "#guides", label: "Guides" },
+  { kind: "home", hash: "#certification", label: "Certificate" },
+  { kind: "home", hash: "#webinars", label: "Webinars" },
+  { kind: "page", href: "/events", label: "Events" },
+  { kind: "home", hash: "#about", label: "About" },
+  { kind: "home", hash: "#faq", label: "FAQ" },
+  { kind: "page", href: "/contact", label: "Contact" },
+] as const;
+
+function homeSectionHref(hash: string, onHome: boolean) {
+  return onHome ? hash : `/${hash}`;
+}
 
 export function NewHomeHeader() {
+  const pathname = usePathname();
+  const onHome = pathname === "/";
   const { itemCount } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -49,20 +57,31 @@ export function NewHomeHeader() {
     [itemCount],
   );
 
-  const renderNavHref = (href: string, className: string, label: string, onClick?: () => void) => {
-    if (href.startsWith("#")) {
+  const navClass =
+    "rounded-md px-2.5 py-2 text-sm font-medium text-[#5c4f3f] no-underline transition-colors hover:bg-[#eef0e8] hover:text-[#1a140f]";
+  const mobileNavClass =
+    "rounded-md px-3 py-2.5 text-sm font-medium text-[#1a140f] no-underline hover:bg-[#efe4cf]";
+
+  const renderNavLinks = (className: string, onNavigate?: () => void) =>
+    navLinks.map((link) => {
+      if (link.kind === "home") {
+        return (
+          <a
+            key={link.hash}
+            href={homeSectionHref(link.hash, onHome)}
+            className={className}
+            onClick={onNavigate}
+          >
+            {link.label}
+          </a>
+        );
+      }
       return (
-        <a key={href} href={href} className={className} onClick={onClick}>
-          {label}
-        </a>
+        <Link key={link.href} href={link.href} className={className} onClick={onNavigate}>
+          {link.label}
+        </Link>
       );
-    }
-    return (
-      <Link key={href} href={href} className={className} onClick={onClick}>
-        {label}
-      </Link>
-    );
-  };
+    });
 
   return (
     <header
@@ -86,21 +105,12 @@ export function NewHomeHeader() {
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-          {navLinks.map((link) =>
-            renderNavHref(
-              link.href,
-              "rounded-md px-2.5 py-2 text-sm font-medium text-[#5c4f3f] no-underline transition-colors hover:bg-[#eef0e8] hover:text-[#1a140f]",
-              link.label,
-            ),
-          )}
-          <Link
-            href="/shop"
-            className="rounded-md px-2.5 py-2 text-sm font-medium text-[#5c4f3f] no-underline hover:bg-[#efe4cf] hover:text-[#1a140f]"
-          >
-            Shop
-          </Link>
+          {renderNavLinks(navClass)}
           {cartLink}
-          <a href="#masterclass" className={cn(nhGoldButtonClass, "ml-1 px-4 py-2 text-sm")}>
+          <a
+            href={homeSectionHref("#masterclass", onHome)}
+            className={cn(nhGoldButtonClass, "ml-1 px-4 py-2 text-sm")}
+          >
             Free book
           </a>
         </nav>
@@ -121,23 +131,9 @@ export function NewHomeHeader() {
       {menuOpen ? (
         <div className="border-t border-[#e0d4b3]/80 bg-[#f7f2e8] px-4 py-4 lg:hidden">
           <nav className="flex flex-col gap-1" aria-label="Mobile">
-            {navLinks.map((link) =>
-              renderNavHref(
-                link.href,
-                "rounded-md px-3 py-2.5 text-sm font-medium text-[#1a140f] no-underline hover:bg-[#efe4cf]",
-                link.label,
-                () => setMenuOpen(false),
-              ),
-            )}
-            <Link
-              href="/shop"
-              className="rounded-md px-3 py-2.5 text-sm font-medium text-[#1a140f] no-underline hover:bg-[#efe4cf]"
-              onClick={() => setMenuOpen(false)}
-            >
-              Shop
-            </Link>
+            {renderNavLinks(mobileNavClass, () => setMenuOpen(false))}
             <a
-              href="#masterclass"
+              href={homeSectionHref("#masterclass", onHome)}
               className={cn(nhGoldButtonClass, "mt-2 px-4 py-3 text-sm")}
               onClick={() => setMenuOpen(false)}
             >
@@ -168,7 +164,7 @@ export function NewHomeFooter() {
               <p className="text-xs text-[#c4b59a]">Field training · Masterclass · GPAA education</p>
             </div>
           </div>
-          <a href="#masterclass" className={cn(nhGoldButtonClass, "w-full px-5 py-2.5 text-sm sm:w-auto")}>
+          <a href="/#masterclass" className={cn(nhGoldButtonClass, "w-full px-5 py-2.5 text-sm sm:w-auto")}>
             Download free masterclass
           </a>
         </div>
@@ -178,9 +174,6 @@ export function NewHomeFooter() {
           </Link>
           <Link href="/events" className="text-[#c4b59a] no-underline hover:text-white">
             Events
-          </Link>
-          <Link href="/shop" className="text-[#c4b59a] no-underline hover:text-white">
-            Shop
           </Link>
           <Link href="/guides" className="text-[#c4b59a] no-underline hover:text-white">
             Guides

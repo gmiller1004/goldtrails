@@ -7,6 +7,7 @@ import { AttributionBootstrap } from "@/components/analytics/attribution-bootstr
 import { MobileMasterclassCta } from "@/components/mobile-masterclass-cta";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { FloatingCartButton } from "@/components/cart/floating-cart-button";
+import { NewHomeFooter, NewHomeHeader } from "@/components/new-home/new-home-chrome";
 import { Toaster } from "@/components/ui/toaster";
 import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE, getSiteUrl, SITE_NAME } from "@/lib/site";
 import "./globals.css";
@@ -126,7 +127,9 @@ export default function RootLayout({
             </>
           ) : null}
           <AttributionBootstrap />
+          <NewHomeHeader />
           <main className="flex-1">{children}</main>
+          <NewHomeFooter />
           <MobileMasterclassCta />
           <FloatingCartButton />
           <Toaster />
