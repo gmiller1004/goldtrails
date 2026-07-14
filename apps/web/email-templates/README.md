@@ -202,3 +202,25 @@ https://goldtrails.gold/certification/claim?token={{ person.certification_token|
 `/certification/claim` verifies the enrollment token + final quiz pass in Neon, then redirects to an Online Store cart permalink for variant `CERTIFICATION_REWARD_VARIANT_ID` (default `54217881256246`) with discount `GTCertFinalPassed` applied (e.g. `https://gpaastore.com/discount/GTCertFinalPassed?redirect=/cart/54217881256246:1`).
 
 Env (optional overrides): `CERTIFICATION_REWARD_VARIANT_ID`, `CERTIFICATION_REWARD_DISCOUNT_CODE`, `SHOPIFY_CHECKOUT_DOMAIN`. The reward product/variant must be published to the **Online Store** sales channel.
+
+### Reminder emails (2 days after invite if incomplete)
+
+After each quiz invite (or final-pass claim email), add:
+
+1. **Time delay** — 2 days  
+2. **Conditional split** — property is **not** true (see table)  
+3. **True branch** — send the reminder template below  
+4. **False branch** — continue flow (they already passed / claimed)
+
+| Reminder for | Skip if | Subject | File | CTA |
+|--------------|---------|---------|------|-----|
+| Week 1 quiz | `quiz_week_1_passed` = true | Quick reminder — your Week 1 quiz is waiting | `certification-quiz-week-1-reminder.html` | `/certification/quiz/week-1?token=…` |
+| Week 2 quiz | `quiz_week_2_passed` = true | Reminder — finish your Week 2 quiz | `certification-quiz-week-2-reminder.html` | `/certification/quiz/week-2?token=…` |
+| Week 3 quiz | `quiz_week_3_passed` = true | Reminder — your Week 3 field skills quiz | `certification-quiz-week-3-reminder.html` | `/certification/quiz/week-3?token=…` |
+| Week 4 quiz | `quiz_week_4_passed` = true | Reminder — Week 4 quiz still open | `certification-quiz-week-4-reminder.html` | `/certification/quiz/week-4?token=…` |
+| Final quiz | `quiz_final_passed` = true | Reminder — your certification final is waiting | `certification-quiz-final-reminder.html` | `/certification/quiz/final?token=…` |
+| Certificate & hat | Shopify Placed Order for reward product / `GTCertFinalPassed` (or custom `certification_reward_claimed`) | Reminder — claim your certificate & hat | `certification-claim-reminder.html` | `/certification/claim?token=…` |
+
+All reminder CTAs use `{{ person.certification_token|urlencode }}` the same way as the quiz/claim success emails.
+
+**Certificate/hat condition:** We don’t auto-set a “ordered” profile property from Gold Trails yet. Prefer Klaviyo’s Shopify **Placed Order** metric filtered to the reward product (or discount code `GTCertFinalPassed`). If they already ordered, the copy tells them they can ignore the email.

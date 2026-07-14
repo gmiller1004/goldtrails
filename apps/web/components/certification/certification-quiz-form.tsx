@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { CertificationQuizNextSteps } from "@/components/certification/certification-quiz-next-steps";
 import { Button } from "@/components/ui/button";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
 import { trackEvent } from "@/lib/analytics";
@@ -119,22 +120,16 @@ export function CertificationQuizForm({
         {grade.passed ? (
           <p className="mt-2 text-sm text-[#5a6348]">
             This result is saved to your certification progress.
-            {quiz.slug === "final" ? (
-              <>
-                {" "}
-                <Link
-                  href={`/certification/claim?token=${encodeURIComponent(token)}`}
-                  className="font-semibold !text-[#5a6348] underline underline-offset-2"
-                >
-                  Claim your certificate &amp; hat
-                </Link>
-                .
-              </>
-            ) : null}
           </p>
         ) : null}
 
-        <ul className="mt-6 space-y-3">
+        <CertificationQuizNextSteps
+          quizSlug={quiz.slug}
+          passed={grade.passed}
+          claimToken={token}
+        />
+
+        <ul className="mt-8 space-y-3">
           {quiz.questions.map((question, index) => {
             const ok = grade.results[question.id];
             return (

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Klaviyo — Certification flow. Reminder to claim certificate & hat.
+      Place after certification-quiz-final-pass.html → Wait 2 days →
+      Conditional: person has NOT ordered the reward bundle (Shopify Placed Order
+      for the cert+hat product / discount GTCertFinalPassed), or skip if you track
+      a custom property such as certification_reward_claimed = true.
+
+      Suggested fields in Klaviyo:
+        Subject: Reminder — claim your certificate &amp; hat
+        Preview text: Free shipping checkout for your GPAA certificate and Gold Trails hat.
+
+      Merge fields:
+        {{ first_name|default:'Friend' }}
+        {{ person.certification_token }}
+        {{ person.quiz_final_score_percent }}  → optional
+
+      Claim CTA:
+        https://goldtrails.gold/certification/claim?token={{ person.certification_token|urlencode }}
+    -->
+    <title>Reminder — claim your certificate &amp; hat</title>
+  </head>
+  <body style="margin:0; padding:0; background-color:#f5f0e6;">
+    <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#f5f0e6; opacity:0;">
+      Reminder: claim your GPAA Metal Detecting Certificate and Gold Trails hat.
+    </div>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f0e6; margin:0; padding:24px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px; background-color:#ffffff; border:1px solid #e0d4b3; border-radius:12px;">
+            <tr>
+              <td style="padding:24px 24px 8px 24px; text-align:center;">
+                <img
+                  src="https://cdn.shopify.com/s/files/1/2568/9508/files/goldtrailslogo.jpg?v=1774307068"
+                  alt="Gold Trails logo"
+                  width="56"
+                  style="display:block; margin:0 auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 24px 0 24px; font-family:Georgia, 'Times New Roman', serif; color:#1a140f; font-size:28px; line-height:1.25; text-align:center;">
+                Your certificate &amp; hat are ready
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:17px; line-height:1.65;">
+                Hey <strong>{{ first_name|default:'Friend' }}</strong>,
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                You already passed the final{% if person.quiz_final_score_percent %} ({{ person.quiz_final_score_percent }}%){% endif %}. What’s left is the fun part: claiming your <strong>GPAA Metal Detecting Certificate</strong> and <strong>Gold Trails hat</strong>.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                Tap below, enter your shipping address, and we’ll apply your reward discount automatically. If you already placed the order, you can ignore this note — your kit is on its way.
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding:24px 24px 0 24px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td align="center" style="border-radius:8px; background-color:#d4a017;">
+                      <a
+                        href="https://goldtrails.gold/certification/claim?token={{ person.certification_token|urlencode }}"
+                        style="display:inline-block; padding:14px 28px; font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; color:#ffffff; text-decoration:none;"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Claim certificate &amp; hat
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:14px; line-height:1.6; text-align:center;">
+                Use this personalized button so we can confirm your final pass before checkout.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 26px 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                Wear it with pride,<br />
+                <strong>Kevin Hoagland</strong><br />
+                Gold Trails
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 24px 24px 24px; border-top:1px solid #e0d4b3; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:12px; line-height:1.6; text-align:center;">
+                You’re receiving this because you completed the GPAA Metal Detecting Certification program.<br />
+                <a href="{% unsubscribe_link %}" style="color:#6b5e4e; text-decoration:underline;">Unsubscribe</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
