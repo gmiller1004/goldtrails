@@ -77,9 +77,8 @@ export function CertificationClaimClient({ token, learnerName }: CertificationCl
           automatically.
         </p>
         <p className="mt-3 text-xs leading-relaxed text-[#6d7760]">
-          Checkout finishes on gpaastore.com (GPAA&apos;s Shopify store) — that redirect is
-          expected. Test in a Chrome Incognito window while logged out of Shopify admin; staff
-          theme-preview cookies can block checkout with ERR_BLOCKED_BY_RESPONSE.
+          Checkout finishes on gpaastore.com via a full-page redirect (not an embed). Prefer a
+          normal Chrome/Safari tab — Shopify blocks framed checkouts.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button

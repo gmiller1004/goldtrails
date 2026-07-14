@@ -424,27 +424,14 @@ export async function createCheckoutUrl(
 }
 
 /**
- * Strip theme-preview / admin crumbs from Storefront checkout URLs.
- *
- * Note: rewriting host to *.myshopify.com does not help for this shop —
- * Shopify always 301s to the primary domain (gpaastore.com).
+ * Pass through Storefront checkoutUrl as Shopify returned it.
+ * Only strip theme-preview params if they ever appear on the initial URL.
+ * Do not rewrite host or invent /checkouts/... paths.
  */
 export function sanitizeCheckoutUrl(rawUrl: string): string {
   try {
     const url = new URL(rawUrl);
-    const stripKeys = [
-      "preview_theme_id",
-      "preview_theme",
-      "preview_key",
-      "theme_id",
-      "auto_redirect",
-      "edge_redirect",
-      "skip_shop_pay",
-      "_su_rec",
-      "pb",
-      "_fd",
-    ];
-    for (const key of stripKeys) {
+    for (const key of ["preview_theme_id", "preview_theme", "preview_key", "theme_id"]) {
       url.searchParams.delete(key);
     }
     return url.toString();

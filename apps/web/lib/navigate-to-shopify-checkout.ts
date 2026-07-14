@@ -1,21 +1,19 @@
 /**
- * Navigate to Shopify checkout.
+ * Full-page navigate to Shopify checkoutUrl (same pattern as other GPAA headless).
  *
- * gpaastore.com sets X-Frame-Options: DENY / frame-ancestors 'none', so
- * navigations from embedded shells surface as ERR_BLOCKED_BY_RESPONSE.
- * Use a new tab when framed; same-tab assign in a normal browser window.
+ * Shopify checkout sets X-Frame-Options: DENY / frame-ancestors 'none'. Loading it
+ * inside an iframe → ERR_BLOCKED_BY_RESPONSE. Always drive the top browsing context.
  */
 export function navigateToShopifyCheckout(checkoutUrl: string): void {
   if (typeof window === "undefined") return;
 
-  let embedded = false;
   try {
-    embedded = window.self !== window.top;
+    if (window.top && window.top !== window.self) {
+      window.top.location.href = checkoutUrl;
+      return;
+    }
   } catch {
-    embedded = true;
-  }
-
-  if (embedded) {
+    // Cross-origin parent (e.g. IDE preview) — cannot assign top; open a real tab.
     const opened = window.open(checkoutUrl, "_blank", "noopener,noreferrer");
     if (!opened) {
       window.location.assign(checkoutUrl);
