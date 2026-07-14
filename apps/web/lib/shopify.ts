@@ -417,7 +417,29 @@ export async function createCheckoutUrl(
     }
   }
 
-  return cart.checkoutUrl;
+  return sanitizeCheckoutUrl(cart.checkoutUrl);
+}
+
+/** Strip theme-preview / admin crumbs that break customer checkout. */
+export function sanitizeCheckoutUrl(rawUrl: string): string {
+  try {
+    const url = new URL(rawUrl);
+    const stripKeys = [
+      "preview_theme_id",
+      "preview_theme",
+      "theme_id",
+      "auto_redirect",
+      "edge_redirect",
+      "skip_shop_pay",
+      "_su_rec",
+    ];
+    for (const key of stripKeys) {
+      url.searchParams.delete(key);
+    }
+    return url.toString();
+  } catch {
+    return rawUrl;
+  }
 }
 
 /** Resolve default variant GID for a product admin/numeric id or full GID. */
