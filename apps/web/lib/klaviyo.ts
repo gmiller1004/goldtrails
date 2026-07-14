@@ -429,3 +429,78 @@ export async function subscribeCertificationToKlaviyo(
     tags: [KLAVIYO_CERTIFICATION_TAG],
   });
 }
+
+function quizSlugToPropertyKey(slug: string): string {
+  return slug.replace(/-/g, "_"); // week-1 → week_1, final → final
+}
+
+/**
+ * Mirror quiz attempt status onto the Klaviyo profile.
+ * Pass flags are sticky (once true, a later failed retake does not clear them).
+ */
+export async function syncCertificationQuizProgressToKlaviyo(input: {
+  email: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  quizSlug: string;
+  percent: number;
+  passed: boolean;
+  /** All quiz slugs this learner has ever passed (including this attempt if passed). */
+  passedSlugs: string[];
+}): Promise<KlaviyoResult> {
+  const config = getKlaviyoCertificationConfig();
+  if (!config) {
+    return {
+      ok: false,
+      message: "Klaviyo certification list is not configured.",
+      status: 500,
+    };
+  }
+
+  const key = quizSlugToPropertyKey(input.quizSlug);
+  const scorePercent = Math.round(input.percent * 100);
+  const now = new Date().toISOString();
+
+  const properties: Record<string, string | boolean | number> = {
+    [`quiz_${key}_last_score_percent`]: scorePercent,
+    [`quiz_${key}_last_attempt_at`]: now,
+  };
+
+  if (input.passed) {
+    properties[`quiz_${key}_passed`] = true;
+    properties[`quiz_${key}_score_percent`] = scorePercent;
+    properties[`quiz_${key}_passed_at`] = now;
+  }
+
+  const weeklyRequired = ["week-1", "week-2", "week-3", "week-4"];
+  const allWeeklyPassed = weeklyRequired.every((slug) => input.passedSlugs.includes(slug));
+  const finalPassed = input.passedSlugs.includes("final");
+
+  if (allWeeklyPassed) {
+    properties.certification_weekly_quizzes_passed = true;
+  }
+  if (allWeeklyPassed && finalPassed) {
+    properties.certification_quizzes_complete = true;
+    properties.certification_eligible = true;
+  }
+
+  const response = await klaviyoRequest(config.apiKey, "/api/profile-import", {
+    method: "POST",
+    body: JSON.stringify({
+      data: {
+        type: "profile",
+        attributes: {
+          email: input.email,
+          ...(input.firstName ? { first_name: input.firstName } : {}),
+          ...(input.lastName ? { last_name: input.lastName } : {}),
+          properties,
+        },
+      },
+    }),
+  });
+
+  if (response.ok) return { ok: true };
+
+  const message = await readKlaviyoError(response);
+  return { ok: false, message, status: response.status };
+}

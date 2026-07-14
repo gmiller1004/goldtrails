@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
@@ -20,9 +21,17 @@ type GradePayload = {
 
 type CertificationQuizFormProps = {
   quiz: PublicQuiz;
+  token: string;
+  learnerName?: string | null;
+  alreadyPassed?: boolean;
 };
 
-export function CertificationQuizForm({ quiz }: CertificationQuizFormProps) {
+export function CertificationQuizForm({
+  quiz,
+  token,
+  learnerName,
+  alreadyPassed = false,
+}: CertificationQuizFormProps) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [grade, setGrade] = useState<GradePayload | null>(null);
@@ -34,6 +43,7 @@ export function CertificationQuizForm({ quiz }: CertificationQuizFormProps) {
 
   const allAnswered = answeredCount === quiz.questions.length;
   const passPercentLabel = Math.round(quiz.passPercent * 100);
+  const greeting = learnerName?.trim() ? learnerName.trim() : null;
 
   const onSelect = (questionId: string, choiceId: string) => {
     if (grade) return;
@@ -53,7 +63,7 @@ export function CertificationQuizForm({ quiz }: CertificationQuizFormProps) {
       const response = await fetch("/api/certification/quiz/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: quiz.slug, answers }),
+        body: JSON.stringify({ slug: quiz.slug, token, answers }),
       });
       const data = (await response.json()) as {
         success?: boolean;
@@ -73,13 +83,15 @@ export function CertificationQuizForm({ quiz }: CertificationQuizFormProps) {
       });
 
       if (data.result.passed) {
-        toast.success("Nice work — you passed this quiz.");
+        toast.success("Nice work — you passed this quiz. Your progress is saved.");
       } else {
         toast.message("Not quite — review the misses and try again.");
       }
-    } catch {
+    } catch (error) {
       trackEvent("certification_quiz_failure", { slug: quiz.slug });
-      toast.error("Could not score your quiz right now. Please try again.");
+      toast.error(
+        error instanceof Error ? error.message : "Could not score your quiz right now. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -104,6 +116,11 @@ export function CertificationQuizForm({ quiz }: CertificationQuizFormProps) {
           <strong className="text-[#1a140f]">{grade.total}</strong> ({percentLabel}%). Passing is{" "}
           {passPercentLabel}% or higher.
         </p>
+        {grade.passed ? (
+          <p className="mt-2 text-sm text-[#5a6348]">
+            This result is saved to your certification progress.
+          </p>
+        ) : null}
 
         <ul className="mt-6 space-y-3">
           {quiz.questions.map((question, index) => {
@@ -133,12 +150,12 @@ export function CertificationQuizForm({ quiz }: CertificationQuizFormProps) {
               Retake quiz
             </Button>
           ) : null}
-          <a
+          <Link
             href="/new-home#certification"
             className="inline-flex items-center justify-center rounded-lg border border-[#e0d4b3] bg-[#f7f2e8] px-6 py-3 text-sm font-semibold !text-[#1a140f] no-underline hover:bg-[#efe4cf]"
           >
             Back to certification
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -146,6 +163,18 @@ export function CertificationQuizForm({ quiz }: CertificationQuizFormProps) {
 
   return (
     <div className="space-y-6">
+      {alreadyPassed ? (
+        <div className="rounded-2xl border border-[#c5d0b8] bg-[#eef0e8] p-5 text-sm text-[#3d4535]">
+          {greeting ? `Nice work, ${greeting} — y` : "Y"}ou&apos;ve already passed this quiz. You can
+          retake it for practice; your pass stays on record.
+        </div>
+      ) : greeting ? (
+        <div className="rounded-2xl border border-[#d0d5c4] bg-white p-5 text-sm text-[#5c4f3f] shadow-sm">
+          Welcome back, <strong className="text-[#1a140f]">{greeting}</strong>. Your answers will be
+          saved to your certification progress.
+        </div>
+      ) : null}
+
       <div className="rounded-2xl border border-[#d0d5c4] bg-white p-5 shadow-sm sm:p-6">
         <p className="text-sm text-[#5c4f3f]">
           Answer all {quiz.questionCount} questions. Passing score:{" "}

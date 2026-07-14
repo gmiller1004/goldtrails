@@ -127,7 +127,9 @@ Signups post to `/api/subscribe/certification` when `KLAVIYO_API_KEY`, `KLAVIYO_
 1. Create list: `Gold Trails — Certification` (dedicated list for the 12-lesson flow).
 2. Set `KLAVIYO_CERTIFICATION_LIST_ID` in `.env.local` / Vercel.
 3. Flow trigger: **When someone is added to list** `Gold Trails — Certification`.
-4. Run Neon migration: `db/migrations/002_certification_enrollments.sql`.
+4. Run Neon migrations:
+   - `db/migrations/002_certification_enrollments.sql`
+   - `db/migrations/003_certification_quiz_attempts.sql`
 
 **Profile fields set on subscribe**
 
@@ -140,6 +142,19 @@ Signups post to `/api/subscribe/certification` when `KLAVIYO_API_KEY`, `KLAVIYO_
 | `certification_enrolled_at` | ISO timestamp |
 | Tag | `metal-detecting-certification` |
 
+**Profile fields set when a quiz is passed** (sticky — failed retakes do not clear a pass)
+
+| Field | Example |
+|-------|---------|
+| `quiz_week_1_passed` | `true` |
+| `quiz_week_1_score_percent` | `83` |
+| `quiz_week_1_passed_at` | ISO timestamp |
+| `quiz_final_passed` | `true` (after final) |
+| `certification_weekly_quizzes_passed` | `true` when weeks 1–4 all passed |
+| `certification_quizzes_complete` / `certification_eligible` | `true` when weeks + final passed |
+
+Also updated on every attempt: `quiz_*_last_score_percent`, `quiz_*_last_attempt_at`.
+
 **Quiz button URL pattern (emails 3 / 6 / 9 / 12)**
 
 ```html
@@ -150,4 +165,4 @@ https://goldtrails.gold/certification/quiz/week-4?token={{ person.certification_
 https://goldtrails.gold/certification/quiz/final?token={{ person.certification_token|urlencode }}
 ```
 
-Note: quiz pages accept the token query param once progress tracking is wired; quizzes already score today without requiring the token.
+Quiz pages require a valid `token` query param matching Neon `certification_enrollments.access_token`.
