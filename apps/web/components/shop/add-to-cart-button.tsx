@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCart } from "@/components/cart/cart-provider";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ export function AddToCartButton({
   label,
   onAdded,
 }: AddToCartButtonProps) {
+  const router = useRouter();
   const { addItem } = useCart();
   const variantId = selectedVariantId ?? product.variantId;
   const price = selectedPrice ?? product.price;
@@ -60,6 +62,10 @@ export function AddToCartButton({
         });
         toast.success(`${product.title} added to cart`, {
           className: "border border-primary/40 bg-white text-foreground",
+          action: {
+            label: "View cart",
+            onClick: () => router.push("/cart"),
+          },
         });
       }}
     >

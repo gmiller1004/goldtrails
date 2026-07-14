@@ -36,7 +36,7 @@ export function Header() {
   };
 
   return (
-    <header className="border-b border-primary/20 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70">
+    <header className="sticky top-0 z-40 border-b border-primary/20 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/80">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="inline-flex items-center gap-3 no-underline">
           <Image

@@ -14,17 +14,12 @@ type CertificationClaimClientProps = {
   learnerName?: string | null;
 };
 
-/**
- * Same pattern as /cart checkout: user click → POST for checkoutUrl → window.location.href.
- */
 export function CertificationClaimClient({ token, learnerName }: CertificationClaimClientProps) {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const greeting = learnerName?.trim() ? learnerName.trim() : null;
 
   const checkout = async () => {
     setIsCheckingOut(true);
-    setCheckoutUrl(null);
     trackEvent("certification_claim_checkout_click");
     try {
       const response = await fetch("/api/certification/claim", {
@@ -42,7 +37,6 @@ export function CertificationClaimClient({ token, learnerName }: CertificationCl
         throw new Error(data.error ?? "Could not start checkout.");
       }
 
-      setCheckoutUrl(data.checkoutUrl);
       trackEvent("certification_claim_checkout_redirect", {
         host: (() => {
           try {
@@ -72,13 +66,8 @@ export function CertificationClaimClient({ token, learnerName }: CertificationCl
         <h1 className="mt-2 font-serif text-3xl font-semibold">Claim your certificate &amp; hat</h1>
         <p className="mt-4 text-sm leading-relaxed text-[#5c4f3f] sm:text-base">
           {greeting ? `Nice work, ${greeting}. ` : null}
-          You&apos;ve passed the final quiz. Checkout runs on Shopify — same secure flow as Gold
-          Trails events. Enter your shipping address and we&apos;ll apply your reward discount
-          automatically.
-        </p>
-        <p className="mt-3 text-xs leading-relaxed text-[#6d7760]">
-          Checkout finishes on gpaastore.com via a full-page redirect (not an embed). Prefer a
-          normal Chrome/Safari tab — Shopify blocks framed checkouts.
+          You&apos;ve passed the final quiz. Continue to checkout to enter your shipping address —
+          your reward discount is applied automatically.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button
@@ -96,14 +85,6 @@ export function CertificationClaimClient({ token, learnerName }: CertificationCl
             Back to certification
           </Link>
         </div>
-        {checkoutUrl ? (
-          <p className="mt-6 break-all rounded-xl border border-[#e0d4b3] bg-white p-3 text-xs text-[#6d7760]">
-            Checkout URL:{" "}
-            <a href={checkoutUrl} className="!text-[#5a6348] underline">
-              {checkoutUrl}
-            </a>
-          </p>
-        ) : null}
       </div>
     </div>
   );

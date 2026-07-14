@@ -8,6 +8,7 @@ import { Header } from "@/components/header";
 import { AttributionBootstrap } from "@/components/analytics/attribution-bootstrap";
 import { MobileMasterclassCta } from "@/components/mobile-masterclass-cta";
 import { CartProvider } from "@/components/cart/cart-provider";
+import { FloatingCartButton } from "@/components/cart/floating-cart-button";
 import { Toaster } from "@/components/ui/toaster";
 import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE, getSiteUrl, SITE_NAME } from "@/lib/site";
 import "./globals.css";
@@ -133,6 +134,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <MobileMasterclassCta />
+          <FloatingCartButton />
           <Toaster />
         </CartProvider>
       </body>
