@@ -224,3 +224,20 @@ After each quiz invite (or final-pass claim email), add:
 All reminder CTAs use `{{ person.certification_token|urlencode }}` the same way as the quiz/claim success emails.
 
 **Certificate/hat condition:** We don’t auto-set a “ordered” profile property from Gold Trails yet. Prefer Klaviyo’s Shopify **Placed Order** metric filtered to the reward product (or discount code `GTCertFinalPassed`). If they already ordered, the copy tells them they can ignore the email.
+
+## Webinar waitlist (`/new-home#webinars`)
+
+Signups post to `/api/subscribe/webinar` → subscribe to `KLAVIYO_GT_WEBINAR_LIST_ID`, set topic profile properties, and create metric **`Joined Webinar Waitlist`** (with `topic` / `topic_label`) on every join — including additional topics.
+
+### Flow setup
+
+1. Trigger: **Metric** → `Joined Webinar Waitlist`  
+2. Allow re-entry (or short cooldown) so a second topic fires again  
+3. Email: paste `webinar-waitlist-confirmation.html`  
+4. Subject: `You're on the waitlist for {{ event.topic_label|default:person.webinar_topic_of_interest_label|default:'your webinar' }}`
+
+| File | Merge fields |
+|------|----------------|
+| `webinar-waitlist-confirmation.html` | `{{ event.topic_label }}`, `{{ event.topic }}`, `{{ first_name|default:'Friend' }}` |
+
+API key needs **`events:write`** (plus existing profiles/lists/subscriptions scopes).

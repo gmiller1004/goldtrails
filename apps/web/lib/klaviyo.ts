@@ -13,6 +13,8 @@ const KLAVIYO_REVISION = "2024-10-15";
 export const KLAVIYO_EVENTS_NOTIFY_TAG = "gold-trails-events-notify";
 export const KLAVIYO_CERTIFICATION_TAG = "metal-detecting-certification";
 export const KLAVIYO_WEBINAR_WAITLIST_TAG = "gt-webinar-waitlist";
+/** Metric name for Klaviyo flow trigger (fires on every webinar waitlist join). */
+export const KLAVIYO_WEBINAR_WAITLIST_METRIC = "Joined Webinar Waitlist";
 
 export type LeadAttribution = {
   utm_source?: string;
@@ -364,6 +366,55 @@ async function applyProfileTags(
   }
 }
 
+/**
+ * Record a custom metric event (202 Accepted). Used to trigger flows on every
+ * waitlist join even when the profile is already on the list.
+ * Requires private API key scope: events:write
+ */
+async function createKlaviyoEvent(
+  apiKey: string,
+  input: {
+    email: string;
+    metricName: string;
+    properties: Record<string, string | boolean | number>;
+    uniqueId?: string;
+  },
+): Promise<KlaviyoResult> {
+  const response = await klaviyoRequest(apiKey, "/api/events", {
+    method: "POST",
+    body: JSON.stringify({
+      data: {
+        type: "event",
+        attributes: {
+          properties: input.properties,
+          metric: {
+            data: {
+              type: "metric",
+              attributes: {
+                name: input.metricName,
+              },
+            },
+          },
+          profile: {
+            data: {
+              type: "profile",
+              attributes: {
+                email: input.email,
+              },
+            },
+          },
+          ...(input.uniqueId ? { unique_id: input.uniqueId } : {}),
+        },
+      },
+    }),
+  });
+
+  if (response.status === 202 || response.ok) return { ok: true };
+
+  const message = await readKlaviyoError(response);
+  return { ok: false, message, status: response.status };
+}
+
 async function subscribeLeadToKlaviyo(options: {
   config: KlaviyoConfig;
   email: string;
@@ -478,7 +529,7 @@ export async function subscribeWebinarWaitlistToKlaviyo(
     };
   }
 
-  return subscribeLeadToKlaviyo({
+  const subscribeResult = await subscribeLeadToKlaviyo({
     config,
     email: input.email,
     firstName: input.firstName,
@@ -491,6 +542,29 @@ export async function subscribeWebinarWaitlistToKlaviyo(
     customSource: "Gold Trails webinar waitlist form",
     tags: [KLAVIYO_WEBINAR_WAITLIST_TAG],
   });
+
+  if (!subscribeResult.ok) return subscribeResult;
+
+  // Fire every join (including additional topics) so a metric-triggered flow can confirm.
+  const eventResult = await createKlaviyoEvent(config.apiKey, {
+    email: input.email,
+    metricName: KLAVIYO_WEBINAR_WAITLIST_METRIC,
+    properties: {
+      topic: input.topic,
+      topic_label: input.topicLabel,
+      source: "goldtrails_new_home",
+    },
+    uniqueId: `webinar-waitlist:${input.email}:${input.topic}:${Date.now()}`,
+  });
+
+  if (!eventResult.ok) {
+    console.warn(
+      `[klaviyo] ${KLAVIYO_WEBINAR_WAITLIST_METRIC} event failed (list subscribe still succeeded):`,
+      eventResult.message,
+    );
+  }
+
+  return { ok: true };
 }
 
 function quizSlugToPropertyKey(slug: string): string {
