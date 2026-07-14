@@ -234,10 +234,10 @@ Signups post to `/api/subscribe/webinar` → subscribe to `KLAVIYO_GT_WEBINAR_LI
 1. Trigger: **Metric** → `Joined Webinar Waitlist`  
 2. Allow re-entry (or short cooldown) so a second topic fires again  
 3. Email: paste `webinar-waitlist-confirmation.html`  
-4. Subject: `You're on the waitlist for {{ event.topic_label|default:person.webinar_topic_of_interest_label|default:'your webinar' }}`
+4. Subject: `You're on the waitlist for {{ event.topic_label|default:'your webinar' }}`
 
 | File | Merge fields |
 |------|----------------|
-| `webinar-waitlist-confirmation.html` | `{{ event.topic_label }}`, `{{ event.topic }}`, `{{ first_name|default:'Friend' }}` |
+| `webinar-waitlist-confirmation.html` | `{{ event.topic_label }}`, `{{ event.topic }}`, `{{ first_name|default:'Friend' }}` (no `person.*` — metric preview has no profile context) |
 
 API key needs **`events:write`** (plus existing profiles/lists/subscriptions scopes).

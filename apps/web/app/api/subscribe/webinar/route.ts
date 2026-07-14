@@ -53,8 +53,6 @@ export async function POST(request: Request) {
 
   const result = await subscribeWebinarWaitlistToKlaviyo({
     email,
-    firstName: "Friend",
-    lastName: "",
     topic,
     topicLabel,
     attribution,

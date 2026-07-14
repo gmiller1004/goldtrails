@@ -54,8 +54,9 @@ export type CertificationKlaviyoSubscribeInput = {
 
 export type WebinarWaitlistKlaviyoSubscribeInput = {
   email: string;
-  firstName: string;
-  lastName: string;
+  /** Omit when the form is email-only so we do not overwrite an existing Klaviyo name. */
+  firstName?: string;
+  lastName?: string;
   topic: string;
   topicLabel: string;
   attribution?: LeadAttribution;
@@ -205,9 +206,13 @@ function buildWebinarWaitlistProfileProperties(
 /** Upsert profile fields before list subscribe so flow emails have first_name. */
 async function createOrUpdateProfile(
   config: KlaviyoConfig,
-  input: { email: string; firstName: string; lastName: string },
+  input: { email: string; firstName?: string; lastName?: string },
   properties: Record<string, string | boolean>,
 ): Promise<{ ok: true; profileId?: string } | { ok: false; message: string; status: number }> {
+  // Omit blank names — including them overwrites an existing Klaviyo first_name / last_name.
+  const firstName = input.firstName?.trim();
+  const lastName = input.lastName?.trim();
+
   const response = await klaviyoRequest(config.apiKey, "/api/profile-import", {
     method: "POST",
     body: JSON.stringify({
@@ -215,8 +220,8 @@ async function createOrUpdateProfile(
         type: "profile",
         attributes: {
           email: input.email,
-          first_name: input.firstName,
-          last_name: input.lastName,
+          ...(firstName ? { first_name: firstName } : {}),
+          ...(lastName ? { last_name: lastName } : {}),
           properties,
         },
       },
@@ -375,11 +380,16 @@ async function createKlaviyoEvent(
   apiKey: string,
   input: {
     email: string;
+    firstName?: string;
+    lastName?: string;
     metricName: string;
     properties: Record<string, string | boolean | number>;
     uniqueId?: string;
   },
 ): Promise<KlaviyoResult> {
+  const firstName = input.firstName?.trim();
+  const lastName = input.lastName?.trim();
+
   const response = await klaviyoRequest(apiKey, "/api/events", {
     method: "POST",
     body: JSON.stringify({
@@ -400,6 +410,8 @@ async function createKlaviyoEvent(
               type: "profile",
               attributes: {
                 email: input.email,
+                ...(firstName ? { first_name: firstName } : {}),
+                ...(lastName ? { last_name: lastName } : {}),
               },
             },
           },
@@ -418,8 +430,8 @@ async function createKlaviyoEvent(
 async function subscribeLeadToKlaviyo(options: {
   config: KlaviyoConfig;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   properties: Record<string, string | boolean>;
   customSource: string;
   tags?: string[];
@@ -548,6 +560,8 @@ export async function subscribeWebinarWaitlistToKlaviyo(
   // Fire every join (including additional topics) so a metric-triggered flow can confirm.
   const eventResult = await createKlaviyoEvent(config.apiKey, {
     email: input.email,
+    firstName: input.firstName,
+    lastName: input.lastName,
     metricName: KLAVIYO_WEBINAR_WAITLIST_METRIC,
     properties: {
       topic: input.topic,

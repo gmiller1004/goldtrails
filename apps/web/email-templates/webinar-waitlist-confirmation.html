@@ -12,17 +12,15 @@
         3. Re-entry: allow (or short cooldown) so joining a second topic sends again
 
       Suggested fields in Klaviyo:
-        Subject: You're on the waitlist for {{ event.topic_label|default:person.webinar_topic_of_interest_label|default:'your webinar' }}
+        Subject: You're on the waitlist for {{ event.topic_label|default:'your webinar' }}
         Preview text: We'll email you when registration opens for {{ event.topic_label|default:'this session' }}.
 
-      Event properties (from API):
+      Event properties (from API) — use these only (metric preview has no `person`):
         {{ event.topic }}         → metal-detecting-101
         {{ event.topic_label }}   → Metal Detecting 101
         {{ event.source }}        → goldtrails_new_home
 
-      Profile fallbacks:
-        {{ person.webinar_topic_of_interest_label }}
-        {{ first_name|default:'Friend' }}
+      Also: {{ first_name|default:'Friend' }}
 
       CTA: https://goldtrails.gold/new-home#webinars
     -->
@@ -30,7 +28,7 @@
   </head>
   <body style="margin:0; padding:0; background-color:#f5f0e6;">
     <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#f5f0e6; opacity:0;">
-      You're on the waitlist for {{ event.topic_label|default:person.webinar_topic_of_interest_label|default:'your webinar' }}. We'll email you when seats open.
+      You're on the waitlist for {{ event.topic_label|default:'your webinar' }}. We'll email you when seats open.
     </div>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f0e6; margin:0; padding:24px 12px;">
       <tr>
@@ -59,7 +57,7 @@
             <tr>
               <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
                 Thanks for raising your hand for
-                <strong>{{ event.topic_label|default:person.webinar_topic_of_interest_label|default:'this Gold Trails webinar' }}</strong>.
+                <strong>{{ event.topic_label|default:'this Gold Trails webinar' }}</strong>.
                 You're on the waitlist — when registration opens, you'll get the details first.
               </td>
             </tr>
@@ -70,7 +68,7 @@
                     <td style="padding:18px 16px; text-align:center; font-family:Arial, Helvetica, sans-serif;">
                       <div style="font-size:12px; font-weight:bold; letter-spacing:0.12em; text-transform:uppercase; color:#5a6348;">Your topic</div>
                       <div style="margin-top:8px; font-family:Georgia, 'Times New Roman', serif; font-size:22px; line-height:1.3; color:#1a140f;">
-                        {{ event.topic_label|default:person.webinar_topic_of_interest_label|default:'Gold Trails webinar' }}
+                        {{ event.topic_label|default:'Gold Trails webinar' }}
                       </div>
                     </td>
                   </tr>
@@ -79,11 +77,6 @@
             </tr>
             <tr>
               <td style="padding:22px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
-                If you join waitlists for other webinars, you'll get a confirmation for each one — same list, different topics.
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
                 Tip: mark <strong>gpaastore@goldprospectors.org</strong> as a safe sender and check spam so you don't miss the registration email.
               </td>
             </tr>
