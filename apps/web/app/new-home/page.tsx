@@ -248,8 +248,8 @@ export default function NewHomePage() {
           <div className="rounded-2xl border border-[#e0d4b3] bg-[#f7f2e8] p-6 shadow-sm sm:p-8">
             <div className="mb-6 overflow-hidden rounded-xl border border-[#e0d4b3] bg-white">
               <Image
-                src="/images/gt4.jpg"
-                alt="Detector training in the field"
+                src="/images/certificate-hat.jpeg"
+                alt="GPAA Metal Detecting Certificate and Gold Trails hat"
                 width={800}
                 height={500}
                 className="h-48 w-full object-cover sm:h-56"

@@ -71,6 +71,10 @@ After step 10, move non-converters to a **monthly newsletter** or **sunset** seg
 | `nurture-youtube-followup.html` | One more rabbit hole for detectorists |
 | `gpaa-membership-reminder.html` | Still planning your next prospecting trip? |
 | `events-notify-welcome.html` | You're on the list for Gold Trails field training |
+| `certification-quiz-week-1-pass.html` | Nice work — you passed Week 1 |
+| `certification-quiz-week-2-pass.html` | Week 2 quiz cleared — {{ person.quiz_week_2_score_percent }}% |
+| `certification-quiz-week-3-pass.html` | Week 3 complete — {{ person.quiz_week_3_score_percent }}% in the field |
+| `certification-quiz-week-4-pass.html` | All four weekly quizzes done — {{ person.quiz_week_4_score_percent }}% |
 
 ## Other email (not in this folder)
 
@@ -166,3 +170,18 @@ https://goldtrails.gold/certification/quiz/final?token={{ person.certification_t
 ```
 
 Quiz pages require a valid `token` query param matching Neon `certification_enrollments.access_token`.
+
+### Quiz success emails (after each weekly pass)
+
+Place each after **Wait until** `quiz_week_N_passed` equals true, then continue to the next lesson email.
+
+| Week | Wait condition | Subject | File | Score merge field |
+|------|----------------|---------|------|-------------------|
+| 1 | `quiz_week_1_passed` | Nice work — you passed Week 1 | `certification-quiz-week-1-pass.html` | `{{ person.quiz_week_1_score_percent }}` |
+| 2 | `quiz_week_2_passed` | Week 2 quiz cleared — {{ person.quiz_week_2_score_percent }}% | `certification-quiz-week-2-pass.html` | `{{ person.quiz_week_2_score_percent }}` |
+| 3 | `quiz_week_3_passed` | Week 3 complete — {{ person.quiz_week_3_score_percent }}% in the field | `certification-quiz-week-3-pass.html` | `{{ person.quiz_week_3_score_percent }}` |
+| 4 | `quiz_week_4_passed` | All four weekly quizzes done — {{ person.quiz_week_4_score_percent }}% | `certification-quiz-week-4-pass.html` | `{{ person.quiz_week_4_score_percent }}` (+ final quiz CTA) |
+
+Shared merge fields: `{{ first_name|default:'Friend' }}`, `{% unsubscribe_link %}`.
+
+Score properties are numbers (e.g. `83`) — templates append `%`. Final quiz success email deferred until hat/certificate Shopify checkout is ready.
