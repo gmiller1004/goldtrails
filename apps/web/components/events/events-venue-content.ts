@@ -1,5 +1,6 @@
-export const KEVIN_EVENTS_VIDEO_URL =
-  "https://cdn.shopify.com/videos/c/o/v/4cf65830c8c241f6aa02a2a241e7d175.mp4";
+/** Public YouTube: What to Expect at a Gold Trails Event (Italian Bar). */
+export const KEVIN_EVENTS_YOUTUBE_VIDEO_ID = "IX-8SYLmvC4";
+export const KEVIN_EVENTS_YOUTUBE_URL = `https://youtu.be/${KEVIN_EVENTS_YOUTUBE_VIDEO_ID}`;
 
 export const italianBarPhotos = {
   hero: { src: "/italian-bar/italian-bar-2.jpg", alt: "Italian Bar camp on the Stanislaus River" },

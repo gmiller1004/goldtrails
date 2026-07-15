@@ -1,8 +1,8 @@
 "use client";
 
 import { Play, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { KEVIN_EVENTS_VIDEO_URL } from "@/components/events/events-venue-content";
+import { useEffect, useState } from "react";
+import { KEVIN_EVENTS_YOUTUBE_VIDEO_ID } from "@/components/events/events-venue-content";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +12,6 @@ type EventsExpectVideoModalProps = {
 
 export function EventsExpectVideoModal({ className }: EventsExpectVideoModalProps) {
   const [open, setOpen] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -24,12 +23,10 @@ export function EventsExpectVideoModal({ className }: EventsExpectVideoModalProp
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
-    void videoRef.current?.play().catch(() => undefined);
 
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
-      videoRef.current?.pause();
     };
   }, [open]);
 
@@ -71,15 +68,13 @@ export function EventsExpectVideoModal({ className }: EventsExpectVideoModalProp
               </button>
             </div>
             <div className="relative aspect-video w-full bg-black">
-              <video
-                ref={videoRef}
-                src={KEVIN_EVENTS_VIDEO_URL}
-                controls
-                playsInline
-                className="absolute inset-0 h-full w-full"
-              >
-                Your browser does not support embedded video playback.
-              </video>
+              <iframe
+                title="What to expect at a Gold Trails event with Kevin Hoagland"
+                src={`https://www.youtube.com/embed/${KEVIN_EVENTS_YOUTUBE_VIDEO_ID}?autoplay=1&rel=0`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full border-0"
+              />
             </div>
           </div>
         </div>
