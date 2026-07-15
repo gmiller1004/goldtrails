@@ -386,6 +386,37 @@ export default function EventsPage() {
             <EventsUpcomingGrid />
           </Suspense>
 
+          <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-[#d0d5c4] bg-[#eef0e8] p-6 text-center sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#5a6348]">
+              Member pricing
+            </p>
+            <h3 className="mt-2 font-serif text-2xl font-semibold text-[#1a140f]">
+              Want member pricing?
+            </h3>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#5c4f3f]">
+              GPAA and LDMA members may qualify for discounted Gold Trails event registration. Join,
+              then come back and reserve your session.
+            </p>
+            <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+              <Link
+                href="https://goldprospectors.org/join"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(nhGoldButtonClass, "px-6 py-3 text-sm")}
+              >
+                Join GPAA
+              </Link>
+              <Link
+                href="https://myldma.com/memberships"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-lg border border-[#e0d4b3] bg-white px-6 py-3 text-sm font-semibold !text-[#1a140f] no-underline shadow-sm hover:bg-[#efe4cf]"
+              >
+                Join LDMA
+              </Link>
+            </div>
+          </div>
+
           <div className="mx-auto mt-12 max-w-3xl">
             <EventsNotifyForm />
           </div>

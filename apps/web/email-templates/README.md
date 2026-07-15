@@ -241,3 +241,17 @@ Signups post to `/api/subscribe/webinar` → subscribe to `KLAVIYO_GT_WEBINAR_LI
 | `webinar-waitlist-confirmation.html` | `{{ event.topic_label }}`, `{{ event.topic }}`, `{{ first_name|default:'Friend' }}` (no `person.*` — metric preview has no profile context) |
 
 API key needs **`events:write`** (plus existing profiles/lists/subscriptions scopes).
+
+## Campaign — Italian Bar events promo
+
+One-shot (or segment) blast to push registration while seats remain and sessions are under ~2 months out.
+
+| File | Use |
+|------|-----|
+| `events-promo-italian-bar.html` | Klaviyo **Campaign** (not a flow step) |
+
+**Subject:** `Seats are limited — Gold Trails at Italian Bar starts soon`  
+**Preview:** `Hands-on training with Kevin in California gold country. Register while spots remain.`  
+**CTA:** https://goldtrails.gold/events  
+
+**Audience tips:** Masterclass + certification + events-notify segments; exclude profiles who already purchased a `gold-trails-event` product if Shopify sync is available. Dates stay on the events page so you don’t have to edit the HTML for each session.

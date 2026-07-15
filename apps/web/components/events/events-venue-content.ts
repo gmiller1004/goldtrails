@@ -1,5 +1,5 @@
 export const KEVIN_EVENTS_VIDEO_URL =
-  "https://cdn.shopify.com/videos/c/o/v/56a24afad22e47f0976e8c132d60f96b.mov";
+  "https://cdn.shopify.com/videos/c/o/v/4cf65830c8c241f6aa02a2a241e7d175.mp4";
 
 export const italianBarPhotos = {
   hero: { src: "/italian-bar/italian-bar-2.jpg", alt: "Italian Bar camp on the Stanislaus River" },
