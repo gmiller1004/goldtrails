@@ -7,6 +7,8 @@ export type ShopifyProduct = {
   images: string[];
   handle: string;
   description: string;
+  /** Shopify rich text HTML when available — prefer for product detail pages. */
+  descriptionHtml: string;
   tags: string[];
   eventDate?: string | null;
   eventStartDate?: string | null;
@@ -29,6 +31,7 @@ type ProductNode = {
   title: string;
   handle: string;
   description: string;
+  descriptionHtml: string;
   tags: string[];
   featuredImage: {
     url: string;
@@ -96,6 +99,7 @@ const PRODUCTS_QUERY = `
           title
           handle
           description
+          descriptionHtml
           tags
           featuredImage {
             url
@@ -265,6 +269,7 @@ function mapProduct(node: ProductNode): ShopifyProduct {
     images: node.images.edges.map((edge) => edge.node.url).filter(Boolean),
     handle: node.handle,
     description: node.description,
+    descriptionHtml: node.descriptionHtml ?? "",
     tags: node.tags,
     eventDate: node.metafield?.value ?? null,
     eventStartDate,
