@@ -255,9 +255,9 @@ export default async function GroundBalanceLandingPage() {
             Now that you can make the ground disappear… here&apos;s where to swing the coil
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[#c4b59a] sm:text-base">
-            Skills stick when you practice on real mineralized ground. GPAA membership opens
-            member claims nationwide — and Gold Trails field events with Kevin take the same
-            lessons into the dirt at Italian Bar.
+            Skills stick when you practice on real mineralized ground — not a backyard patch.
+            GPAA membership opens member claims nationwide, and Gold Trails field events with
+            Kevin take the same lessons into the dirt at Italian Bar.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a href="#membership" className={cn(nhGoldButtonClass, "px-8 py-3 text-base")}>
@@ -283,9 +283,13 @@ export default async function GroundBalanceLandingPage() {
             <h2 className="mt-2 font-serif text-3xl font-semibold sm:text-4xl">
               Practice these skills on real gold ground
             </h2>
+            <p className="mt-3 text-base font-medium leading-relaxed text-[#3d4535] sm:text-lg">
+              Hot ground is where most people quit — and where the gold still is.
+            </p>
             <p className="mt-3 text-sm leading-relaxed text-[#5c4f3f] sm:text-base">
-              Join the Gold Prospectors Association of America and bring Kevin&apos;s detector
-              habits to member claims — with your household covered.
+              The tip only becomes yours when you swing it on mineralized claims, not carpet. Join
+              GPAA and bring Kevin&apos;s detector habits to member ground — with your household
+              covered.
             </p>
           </div>
 
