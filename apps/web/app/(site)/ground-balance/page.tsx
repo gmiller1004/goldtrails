@@ -4,7 +4,8 @@ import Link from "next/link";
 import { LeadForm } from "@/components/lead-form";
 import { JoinGpaaButton } from "@/components/ground-balance/join-gpaa-button";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
-import { testimonials } from "@/lib/testimonials";
+import { getGroundBalanceBookReviews } from "@/lib/ground-balance-reviews";
+import type { MasterclassReview } from "@/lib/masterclass-reviews";
 import { cn } from "@/lib/utils";
 import { pageMetadata } from "@/lib/site";
 
@@ -69,11 +70,32 @@ const membershipBenefits = [
   },
 ] as const;
 
-const skillTestimonials = testimonials.filter((t) =>
-  /detector|machine|skills|nugget|confidence|class|learning/i.test(`${t.title} ${t.quote}`),
-);
+function BookReviewQuote({
+  review,
+  className,
+}: {
+  review: MasterclassReview;
+  className?: string;
+}) {
+  return (
+    <blockquote className={cn("rounded-2xl border border-[#e0d4b3] bg-[#f7f2e8] p-5 shadow-sm sm:p-6", className)}>
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#5a6348]">
+        Masterclass reader
+      </p>
+      <p className="mt-3 text-sm leading-relaxed text-[#5c4f3f]">&ldquo;{review.body}&rdquo;</p>
+      <footer className="mt-3 text-sm font-semibold text-[#1a140f]">
+        {review.reviewerName}
+        <span className="mt-0.5 block text-xs font-medium text-[#6d7760]">
+          {review.rating}/5 · Metal Detecting Masterclass
+        </span>
+      </footer>
+    </blockquote>
+  );
+}
 
-export default function GroundBalanceLandingPage() {
+export default async function GroundBalanceLandingPage() {
+  const { featured, supporting } = await getGroundBalanceBookReviews();
+
   return (
     <div className="bg-[#f7f2e8] text-[#1a140f]">
       {/* Hero */}
@@ -124,6 +146,15 @@ export default function GroundBalanceLandingPage() {
                 <span className="font-medium text-[#1a140f]">gpaastore@goldprospectors.org</span> as
                 a safe sender.
               </p>
+              <figure className="mx-auto mt-5 max-w-md rounded-xl border border-[#e0d4b3]/80 bg-white/70 px-5 py-4 text-center shadow-sm">
+                <blockquote className="text-sm leading-relaxed text-[#5c4f3f] sm:text-[0.95rem]">
+                  &ldquo;{featured.body}&rdquo;
+                </blockquote>
+                <figcaption className="mt-2 text-xs font-semibold text-[#1a140f]">
+                  — {featured.reviewerName}
+                  <span className="font-medium text-[#6d7760]"> · masterclass reader</span>
+                </figcaption>
+              </figure>
             </div>
 
             <div className="mx-auto hidden w-full max-w-[12rem] lg:block">
@@ -204,17 +235,11 @@ export default function GroundBalanceLandingPage() {
           </div>
 
           <div className="space-y-4">
-            {skillTestimonials.slice(0, 3).map((item) => (
-              <blockquote
-                key={item.name}
-                className="rounded-2xl border border-[#e0d4b3] bg-[#f7f2e8] p-5 shadow-sm sm:p-6"
-              >
-                <p className="text-sm leading-relaxed text-[#5c4f3f]">&ldquo;{item.quote}&rdquo;</p>
-                <footer className="mt-3 text-sm font-semibold text-[#1a140f]">
-                  {item.name}
-                  <span className="mt-0.5 block text-xs font-medium text-[#6d7760]">{item.title}</span>
-                </footer>
-              </blockquote>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#5a6348]">
+              From people who read the book
+            </p>
+            {supporting.map((review) => (
+              <BookReviewQuote key={review.id} review={review} />
             ))}
           </div>
         </div>
