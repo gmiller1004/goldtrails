@@ -8,6 +8,7 @@ const STATIC_PATHS: Array<{ path: string; priority: number; changeFrequency: Met
     { path: "/masterclass", priority: 0.95, changeFrequency: "monthly" },
     { path: "/events", priority: 0.95, changeFrequency: "weekly" },
     { path: "/shop", priority: 0.95, changeFrequency: "weekly" },
+    { path: "/ground-balance", priority: 0.9, changeFrequency: "monthly" },
     { path: "/guides", priority: 0.9, changeFrequency: "monthly" },
     { path: "/about", priority: 0.85, changeFrequency: "monthly" },
     { path: "/testimonials", priority: 0.8, changeFrequency: "monthly" },
