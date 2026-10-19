@@ -5,6 +5,7 @@ import {
   EventChips,
   EventImmersive,
   EventsBreadcrumbs,
+  FeeDisclosure,
   KnowBeforeYouGoItems,
   MembershipCallout,
   VenueHeroImage,
@@ -193,6 +194,8 @@ export function EventProductPage({ product }: { product: ShopifyProduct }) {
               Requests inside that window help us cover committed costs and staffing.
             </p>
           </div>
+
+          <FeeDisclosure venue={venue} className="mt-4" />
 
           {venue.membership.kind !== "required" ? (
             <MembershipCallout membership={venue.membership} className="mt-10" />

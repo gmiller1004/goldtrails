@@ -10,6 +10,7 @@ import {
   EventImmersive,
   EventsBreadcrumbs,
   EventsFaqSection,
+  FeeDisclosure,
   MembershipCallout,
   VenueHeroImage,
   VenueHighlights,
@@ -83,6 +84,7 @@ export function EventsVenuePage({ venue }: { venue: EventVenue }) {
           </Suspense>
 
           <MembershipCallout membership={venue.membership} className="mt-12" />
+          <FeeDisclosure venue={venue} className="mx-auto mt-6 max-w-3xl" />
 
           <div className="mx-auto mt-12 max-w-3xl">
             <EventsNotifyForm

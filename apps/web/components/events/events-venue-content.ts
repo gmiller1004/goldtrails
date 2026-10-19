@@ -35,9 +35,9 @@ export const hubBenefits = [
     description: "Concepts become muscle memory through drills you run in the field the same day.",
   },
   {
-    title: "Leave with a playbook",
+    title: "Leave with a handbook",
     description:
-      "Repeatable routines for settings, sampling, and recovery so your next trip starts stronger.",
+      "Every attendee gets a course handbook — a field textbook with room for notes — so the routines you learn go home with you.",
   },
 ] as const;
 

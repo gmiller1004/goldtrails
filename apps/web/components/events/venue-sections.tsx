@@ -438,6 +438,16 @@ export function MembershipCallout({
   );
 }
 
+export function FeeDisclosure({ venue, className }: { venue: EventVenue; className?: string }) {
+  if (!venue.feeDisclosure) return null;
+  return (
+    <div className={cn("rounded-xl border border-[#d0d5c4]/80 bg-[#eef0e8]/80 px-4 py-4 sm:px-5 sm:py-5", className)}>
+      <p className="text-xs font-medium uppercase tracking-[0.18em] text-[#5a6348]">{venue.feeDisclosure.title}</p>
+      <p className="mt-2 text-xs leading-relaxed text-[#5c4f3f] sm:text-sm">{venue.feeDisclosure.body}</p>
+    </div>
+  );
+}
+
 export function EventsFaqSection({
   title = "Event questions",
   children,

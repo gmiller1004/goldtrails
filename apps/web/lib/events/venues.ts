@@ -118,6 +118,8 @@ export type EventVenue = {
   sessionChips: string[];
   /** Gear attendees must bring, shown next to registration and on session cards. */
   gearRequirement?: { short: string; detail: string; link?: VenueLink };
+  /** What the registration fee covers, for venues whose field time is on public land. */
+  feeDisclosure?: { title: string; body: string };
   faq: Array<{ question: string; answer: string }>;
 };
 
@@ -218,9 +220,9 @@ const italianBar: EventVenue = {
       description: "One group dinner is included — a chance to swap stories with Kevin and fellow prospectors.",
     },
     {
-      title: "Beginner to advanced",
+      title: "Your course handbook",
       description:
-        "First time with a pan or fine-tuning your coil — sessions meet you where you are and build skills you can use on your own claims.",
+        "Every attendee gets a course handbook — a field textbook that guides you through each lesson, with room for notes you'll use long after the weekend.",
     },
   ],
   immersive: {
@@ -230,7 +232,7 @@ const italianBar: EventVenue = {
   knowBeforeYouGo: [
     {
       label: "What's included",
-      body: "Two days of detecting and wet prospecting instruction, a dry campsite on property, and one group dinner.",
+      body: "Two days of detecting and wet prospecting instruction, your course handbook, a dry campsite on property, and one group dinner.",
     },
     { label: "Camp season", body: "Italian Bar is typically open March 15 through October 31." },
     {
@@ -343,7 +345,7 @@ const italianBar: EventVenue = {
     ],
   },
   cardBadge: "Campsite + Dinner Included",
-  sessionChips: ["Dry campsite included", "Dinner included"],
+  sessionChips: ["Course handbook", "Dry campsite included", "Dinner included"],
   faq: [
     {
       question: "Where is Italian Bar?",
@@ -358,7 +360,7 @@ const italianBar: EventVenue = {
     {
       question: "What's included?",
       answer:
-        "Two days of training with Kevin, a dry campsite on property at Italian Bar, and one group dinner.",
+        "Two days of training with Kevin, your course handbook, a dry campsite on property at Italian Bar, and one group dinner.",
     },
     {
       question: "How much does it cost and how big is the group?",
@@ -422,7 +424,7 @@ const morristown: EventVenue = {
   },
   stats: [
     { value: "2 + ½", label: "Days of training" },
-    { value: "30", label: "Seats per session" },
+    { value: "30", label: "Classroom seats" },
     { value: "120 ac", label: "GPAA claim ground" },
     { value: "15 min", label: "Classroom to claims" },
   ],
@@ -468,14 +470,15 @@ const morristown: EventVenue = {
           { label: "Midday", title: "Lunch included", detail: "Lunch is provided both days." },
           {
             label: "Afternoon",
-            title: "Field session on the Maricopa Group claims",
-            detail: "About 15 minutes from the classroom. Swing, dig, and recover targets with Kevin coaching nearby.",
+            title: "Field time on the Maricopa Group claims",
+            detail:
+              "About 15 minutes from the classroom. Put the morning's lessons to work on GPAA claim ground with Kevin nearby.",
           },
         ],
       },
       {
         label: "Optional half day",
-        note: "Included",
+        note: "Optional",
         blocks: [
           {
             label: "Morning",
@@ -485,7 +488,8 @@ const morristown: EventVenue = {
         ],
       },
     ],
-    footnote: "Exact start times and meeting details are sent with your registration confirmation.",
+    footnote:
+      "Your course handbook goes with you all weekend. Exact start times and field meeting details are sent with your registration confirmation.",
   },
   benefits: [
     {
@@ -504,17 +508,18 @@ const morristown: EventVenue = {
         "Practice on the Maricopa Group claims — mineralized Arizona desert ground where good habits pay off.",
     },
     {
-      title: "Small group, capped at 30",
-      description: "Seats are limited so everyone gets real coaching time in the field, not just a seat in a lecture.",
+      title: "Your course handbook",
+      description:
+        "Every attendee gets a course handbook — a field textbook that guides you through each lesson, with room for notes you'll use long after the weekend.",
     },
     {
       title: "Lunch included",
       description: "Lunch is provided both days so you can stay focused on learning, not hunting for a drive-thru.",
     },
     {
-      title: "Bonus half day on the claims",
+      title: "Optional half day on the claims",
       description:
-        "Stay for an optional half day to prospect on your own with Kevin available for help — included with registration.",
+        "Stay the day after the event to prospect on your own at your own pace, with Kevin available for help.",
     },
   ],
   immersive: {
@@ -522,6 +527,10 @@ const morristown: EventVenue = {
     body: "Every classroom lesson goes straight to the dirt. You'll dial in ground balance on hot desert soil, learn what your detector is telling you, and recover targets with Kevin coaching nearby — then come back the next day and do it better.",
   },
   knowBeforeYouGo: [
+    {
+      label: "Included with registration",
+      body: "Classroom instruction with Kevin, your course handbook, and lunch both days.",
+    },
     {
       label: "GPAA membership required",
       body: "You must be an active GPAA member to attend, since the field sessions are on GPAA claims. Not a member yet? Join before you register.",
@@ -641,13 +650,17 @@ const morristown: EventVenue = {
     body: "Field sessions are held on GPAA claims, so an active GPAA membership is required to attend. Not a member yet? Learn about membership and join, then come back to register.",
     links: [{ label: "Learn about GPAA membership", href: GPAA_JOIN_URL }],
   },
-  cardBadge: "Lunch Included",
-  sessionChips: ["Classroom + claims", "Lunch included", "GPAA members", "Bring a gold detector"],
+  cardBadge: "Handbook + Lunch Included",
+  sessionChips: ["Classroom + claims", "Course handbook", "Lunch included", "GPAA members", "Bring a gold detector"],
   gearRequirement: {
     short: "Bring your own gold detector",
     detail:
       "Demo detectors are not available. Bring a gold detector such as a Garrett GoldMaster 24k, Fisher Gold Bug 2, or Minelab Gold Monster 1000 or 2000.",
     link: { label: "Shop gold detectors →", href: "/shop" },
+  },
+  feeDisclosure: {
+    title: "About your registration fee",
+    body: "Your registration fee covers the classroom instruction at the 1899 Historic Hotel, your course handbook, and lunch. No fee is charged for access to or use of public lands. Afternoon field time takes place on the Maricopa Group, GPAA mining claims located on public land managed by the Bureau of Land Management. Access to the claims is a benefit of active GPAA membership and is subject to GPAA claim rules and BLM regulations. Field meeting details are shared with registered attendees.",
   },
   faq: [
     {
@@ -671,13 +684,13 @@ const morristown: EventVenue = {
         "It's a metal detecting masterclass: detector setup and settings, ground balance, reading tones, coil control, and target recovery — plus the geology you need to know where to detect.",
     },
     {
-      question: "What's included?",
+      question: "What does my registration cover?",
       answer:
-        "Two days of classroom and field training with Kevin, lunch both days, and an optional half day the day after to prospect on your own with Kevin available for help.",
+        "Registration covers both classroom mornings with Kevin at the 1899 Historic Hotel, your course handbook, and lunch both days. Afternoon field time on the Maricopa Group claims and the optional half day are on public land, and no fee is charged for access to or use of public lands. Claim access is a benefit of active GPAA membership.",
     },
     {
       question: "How much does it cost and how big is the group?",
-      answer: "Registration is $600 per person, and each session is capped at 30 attendees.",
+      answer: "Registration is $600 per person, and classroom seating is capped at 30 attendees per session.",
     },
     {
       question: "Where can I stay?",
