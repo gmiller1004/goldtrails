@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
-import { getDetectors, getEvents } from "@/lib/shopify";
+import { getUpcomingSessions } from "@/lib/events/sessions";
+import { eventVenues, venuePath } from "@/lib/events/venues";
+import { getDetectors } from "@/lib/shopify";
 import { getSiteUrl } from "@/lib/site";
 
 const STATIC_PATHS: Array<{ path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"] }> =
@@ -31,10 +33,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority,
   }));
 
-  const [gear, events] = await Promise.all([getDetectors(), getEvents()]);
+  const venueEntries: MetadataRoute.Sitemap = eventVenues.map((venue) => ({
+    url: `${base}${venuePath(venue)}`,
+    lastModified,
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  }));
+
+  const [gear, sessions] = await Promise.all([getDetectors(), getUpcomingSessions()]);
   const handles = new Set<string>();
   for (const p of gear) handles.add(p.handle);
-  for (const p of events) handles.add(p.handle);
+  for (const { event } of sessions) handles.add(event.handle);
 
   const shopEntries: MetadataRoute.Sitemap = [...handles].map((handle) => ({
     url: `${base}/shop/${handle}`,
@@ -43,5 +52,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticEntries, ...shopEntries];
+  return [...staticEntries, ...venueEntries, ...shopEntries];
 }

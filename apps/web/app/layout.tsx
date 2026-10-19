@@ -7,7 +7,8 @@ import { AttributionBootstrap } from "@/components/analytics/attribution-bootstr
 import { MobileMasterclassCta } from "@/components/mobile-masterclass-cta";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { FloatingCartButton } from "@/components/cart/floating-cart-button";
-import { NewHomeFooter, NewHomeHeader } from "@/components/new-home/new-home-chrome";
+import { NewHomeHeader } from "@/components/new-home/new-home-chrome";
+import { NewHomeFooter } from "@/components/new-home/new-home-footer";
 import { Toaster } from "@/components/ui/toaster";
 import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE, getSiteUrl, SITE_NAME } from "@/lib/site";
 import "./globals.css";

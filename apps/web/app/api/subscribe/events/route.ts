@@ -5,6 +5,10 @@ import { getKlaviyoEventsConfig, subscribeEventsNotifyToKlaviyo } from "@/lib/kl
 const eventsSubscribeSchema = z.object({
   name: z.string().trim().optional(),
   email: z.string().email("A valid email is required."),
+  locations: z
+    .array(z.string().trim().toLowerCase().regex(/^[a-z0-9-]{1,40}$/))
+    .max(20)
+    .optional(),
   attribution: z
     .object({
       utm_source: z.string().optional(),
@@ -51,6 +55,7 @@ export async function POST(request: Request) {
     email,
     firstName: resolvedFirstName,
     lastName,
+    locations: parsed.data.locations ?? [],
     attribution,
   });
 

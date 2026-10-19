@@ -358,7 +358,8 @@ export default function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#5a6348]">In the dirt</p>
             <h2 className="mt-2 font-serif text-3xl font-semibold sm:text-4xl">Gold Trails events</h2>
             <p className="mt-3 max-w-xl text-sm text-[#5c4f3f] sm:text-base">
-              Hands-on training with Kevin at real claims — Italian Bar and more on the calendar.
+              Hands-on training with Kevin on real gold ground — California and Arizona, with more states
+              on the way.
             </p>
           </div>
           <Link

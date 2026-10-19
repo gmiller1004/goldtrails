@@ -40,6 +40,8 @@ export type EventsNotifyKlaviyoSubscribeInput = {
   email: string;
   firstName: string;
   lastName: string;
+  /** State slugs (e.g. "arizona") and/or "new-locations". */
+  locations?: string[];
   attribution?: LeadAttribution;
 };
 
@@ -159,12 +161,20 @@ function buildMasterclassProfileProperties(
 
 function buildEventsNotifyProfileProperties(
   attribution?: LeadAttribution,
+  locations: string[] = [],
 ): Record<string, string | boolean> {
   const properties: Record<string, string | boolean> = {
     gold_trails_events_notify: true,
     events_signup_source: "goldtrails_events_page",
     events_signup_at: new Date().toISOString(),
   };
+  if (locations.length) {
+    properties.events_interest_locations = locations.join(", ");
+    // Per-location booleans accumulate across signups, so segments stay accurate.
+    for (const location of locations) {
+      properties[`events_interest_${location.replace(/-/g, "_")}`] = true;
+    }
+  }
   applyAttributionProperties(properties, attribution, "events");
   return properties;
 }
@@ -500,7 +510,7 @@ export async function subscribeEventsNotifyToKlaviyo(
     email: input.email,
     firstName: input.firstName,
     lastName: input.lastName,
-    properties: buildEventsNotifyProfileProperties(input.attribution),
+    properties: buildEventsNotifyProfileProperties(input.attribution, input.locations),
     customSource: "Gold Trails events notify form",
     tags: [KLAVIYO_EVENTS_NOTIFY_TAG],
   });

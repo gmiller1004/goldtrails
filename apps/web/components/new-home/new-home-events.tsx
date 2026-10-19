@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { EventCard } from "@/components/event-card";
-import { getEvents } from "@/lib/shopify";
+import { getUpcomingSessions } from "@/lib/events/sessions";
+import { toCardVenue } from "@/lib/events/venues";
 
 export function NewHomeEventsSkeleton() {
   return (
@@ -16,9 +17,9 @@ export function NewHomeEventsSkeleton() {
 }
 
 export async function NewHomeEvents() {
-  const events = (await getEvents()).slice(0, 4);
+  const sessions = (await getUpcomingSessions()).slice(0, 4);
 
-  if (!events.length) {
+  if (!sessions.length) {
     return (
       <p className="rounded-2xl border border-dashed border-[#e0d4b3] bg-white p-8 text-center text-sm text-[#5c4f3f]">
         New field events are being scheduled. Check back soon or visit the{" "}
@@ -32,8 +33,8 @@ export async function NewHomeEvents() {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {events.map((event) => (
-        <EventCard key={event.id} event={event} compact />
+      {sessions.map(({ event, venue }) => (
+        <EventCard key={event.id} event={event} venue={toCardVenue(venue)} compact />
       ))}
     </div>
   );

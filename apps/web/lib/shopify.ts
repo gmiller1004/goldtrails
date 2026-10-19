@@ -14,6 +14,8 @@ export type ShopifyProduct = {
   eventStartDate?: string | null;
   eventEndDate?: string | null;
   eventLocation?: string | null;
+  /** Venue slug from `custom.venue` (see lib/events/venues.ts). */
+  eventVenue?: string | null;
   variantId: string | null;
   variantTitle?: string | null;
   availableForSale: boolean;
@@ -65,6 +67,9 @@ type ProductNode = {
     value: string | null;
   } | null;
   locationMetafield: {
+    value: string | null;
+  } | null;
+  venueMetafield: {
     value: string | null;
   } | null;
   variants: {
@@ -133,6 +138,9 @@ const PRODUCTS_QUERY = `
             value
           }
           locationMetafield: metafield(namespace: "custom", key: "location") {
+            value
+          }
+          venueMetafield: metafield(namespace: "custom", key: "venue") {
             value
           }
           variants(first: 50) {
@@ -275,6 +283,7 @@ function mapProduct(node: ProductNode): ShopifyProduct {
     eventStartDate,
     eventEndDate,
     eventLocation: node.locationMetafield?.value?.trim() || null,
+    eventVenue: node.venueMetafield?.value?.trim() || null,
     variantId,
     variantTitle: defaultVariant?.title ?? null,
     availableForSale,

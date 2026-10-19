@@ -257,7 +257,8 @@ export default async function GroundBalanceLandingPage() {
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[#c4b59a] sm:text-base">
             Skills stick when you practice on real mineralized ground — not a backyard patch.
             GPAA membership opens member claims nationwide, and Gold Trails field events with
-            Kevin take the same lessons into the dirt at Italian Bar.
+            Kevin — including the new Metal Detecting Hands-On Masterclass in Arizona — take the
+            same lessons into the dirt.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a href="#membership" className={cn(nhGoldButtonClass, "px-8 py-3 text-base")}>
@@ -370,7 +371,7 @@ export default async function GroundBalanceLandingPage() {
               into practical routines beginners and experienced hunters can run on every hunt.
             </p>
             <p className="mt-4 text-sm leading-relaxed text-[#5c4f3f] sm:text-base">
-              From the free masterclass to Italian Bar field events, the goal is the same: leave
+              From the free masterclass to Gold Trails field events, the goal is the same: leave
               you more confident with your machine on real ground.
             </p>
           </div>

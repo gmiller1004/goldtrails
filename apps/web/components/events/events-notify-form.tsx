@@ -12,18 +12,27 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
 
+export const NEW_LOCATIONS_INTEREST = "new-locations";
+
 const eventsNotifySchema = z.object({
   name: z.string().trim().optional(),
   email: z.string().email("Please enter a valid email address."),
+  locations: z.array(z.string()),
 });
 
 type EventsNotifyValues = z.infer<typeof eventsNotifySchema>;
 
 type EventsNotifyFormProps = {
   className?: string;
+  /** States offered as interest checkboxes. */
+  states: Array<{ slug: string; name: string }>;
+  /** Pre-checked state slugs (e.g. the current venue's state). */
+  defaultLocations?: string[];
+  /** Venue name for venue-specific copy, e.g. "Morristown". */
+  venueName?: string;
 };
 
-export function EventsNotifyForm({ className }: EventsNotifyFormProps) {
+export function EventsNotifyForm({ className, states, defaultLocations = [], venueName }: EventsNotifyFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const {
@@ -36,6 +45,7 @@ export function EventsNotifyForm({ className }: EventsNotifyFormProps) {
     defaultValues: {
       name: "",
       email: "",
+      locations: defaultLocations,
     },
   });
 
@@ -48,6 +58,7 @@ export function EventsNotifyForm({ className }: EventsNotifyFormProps) {
     setIsSubmitting(true);
     trackEvent("events_notify_form_submit", {
       has_name: Boolean(values.name?.trim()),
+      locations: values.locations.join(","),
     });
 
     try {
@@ -59,6 +70,7 @@ export function EventsNotifyForm({ className }: EventsNotifyFormProps) {
         body: JSON.stringify({
           name: values.name?.trim() || "",
           email: values.email,
+          locations: values.locations,
           attribution,
         }),
       });
@@ -71,6 +83,7 @@ export function EventsNotifyForm({ className }: EventsNotifyFormProps) {
 
       trackEvent("events_notify_form_success", {
         has_name: Boolean(values.name?.trim()),
+        locations: values.locations.join(","),
       });
       setIsSubscribed(true);
       reset();
@@ -99,11 +112,16 @@ export function EventsNotifyForm({ className }: EventsNotifyFormProps) {
       >
         <p className="font-serif text-xl font-semibold text-[#1a140f]">You&apos;re on the list</p>
         <p className="mt-2 text-sm leading-relaxed text-[#5c4f3f]">
-          We&apos;ll email you when Kevin announces new Gold Trails training sessions at Italian Bar.
+          We&apos;ll email you when Kevin announces new Gold Trails training sessions.
         </p>
       </div>
     );
   }
+
+  const locationOptions = [
+    ...states.map((state) => ({ value: state.slug, label: state.name })),
+    { value: NEW_LOCATIONS_INTEREST, label: "New states as they open" },
+  ];
 
   return (
     <div
@@ -117,8 +135,8 @@ export function EventsNotifyForm({ className }: EventsNotifyFormProps) {
         Get notified about future Gold Trails training events
       </h2>
       <p className="mt-3 text-sm leading-relaxed text-[#5c4f3f] sm:text-base">
-        New Italian Bar sessions sell out fast. Join the list for early notice when dates open — no
-        spam, just field training updates.
+        {venueName ? `${venueName} sessions` : "Sessions"} are capped and fill up. Join the list for early
+        notice when dates open — no spam, just field training updates.
       </p>
 
       <form className="mt-6 space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -152,6 +170,23 @@ export function EventsNotifyForm({ className }: EventsNotifyFormProps) {
             {errors.email ? <p className="text-xs text-[#b38c14]">{errors.email.message}</p> : null}
           </div>
         </div>
+
+        <fieldset>
+          <legend className="text-sm font-medium text-[#1a140f]">Which locations interest you?</legend>
+          <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
+            {locationOptions.map((option) => (
+              <label key={option.value} className="inline-flex items-center gap-2 text-sm text-[#5c4f3f]">
+                <input
+                  type="checkbox"
+                  value={option.value}
+                  className="h-4 w-4 rounded border-[#d0d5c4] accent-[#5a6348]"
+                  {...register("locations")}
+                />
+                {option.label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
 
         <Button
           type="submit"
