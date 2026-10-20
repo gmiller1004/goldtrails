@@ -4,21 +4,27 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!--
-      Klaviyo — Campaign to attendees of a past Gold Trails event (e.g. Italian Bar, Sept 2026).
+      SendGrid Single Send — Kevin's thank-you to attendees of a past Gold Trails event
+      (e.g. Italian Bar, Sept 2026): manual update download + review & photo request.
 
-      Suggested fields in Klaviyo:
-        Subject: How was Italian Bar? (photos welcome)
-        Preview text: Two minutes helps other prospectors — and we'd love to see your finds.
+      Suggested fields:
+        From: Kevin Hoagland
+        Subject: Thank you, Gold Trails Family — your manual update is inside
+        Preview text: Two updated manual pages, plus a quick way to share your review and photos.
 
-      Primary CTA: https://goldtrails.gold/review/events
-      Optional: preselect a session with ?event=<key> (keys in lib/events/review-events.ts),
-      e.g. https://goldtrails.gold/review/events?event=italian-bar-2026-09-04
+      Links:
+        Manual update (insert after page 23): https://goldtrails.gold/downloads/gold-trails-granite-lesson-22a.pdf
+        Review + photos: https://goldtrails.gold/review/events
+          (optionally preselect a session with ?event=<key>; keys live in lib/events/review-events.ts)
+
+      {{{unsubscribe}}} and the {{Sender_*}} tags are SendGrid Marketing Campaigns tags; SendGrid
+      requires both on Single Sends. Replace them if you send from another platform.
     -->
-    <title>How was your time in the field?</title>
+    <title>Thank you, Gold Trails Family</title>
   </head>
   <body style="margin:0; padding:0; background-color:#f5f0e6;">
     <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#f5f0e6; opacity:0;">
-      Two minutes helps other prospectors — and we'd love to see your finds.
+      Two updated manual pages, plus a quick way to share your review and photos.
     </div>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f0e6; margin:0; padding:24px 12px;">
       <tr>
@@ -36,51 +42,126 @@
             </tr>
             <tr>
               <td style="padding:8px 24px 0 24px; font-family:Georgia, 'Times New Roman', serif; color:#1a140f; font-size:28px; line-height:1.25; text-align:center;">
-                How was your time at Italian Bar?
+                Thank you, Gold Trails Family
               </td>
             </tr>
             <tr>
               <td style="padding:18px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:17px; line-height:1.65;">
-                Hey <strong>{{ first_name|default:'Friend' }}</strong>,
+                Gold Trails Family,
               </td>
             </tr>
             <tr>
               <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
-                Thank you for spending a few days in the field with me last month. I'd love to hear how it went — what clicked, what you found, and what you'd tell another prospector who's thinking about coming out.
+                Thank you for spending time with me. I truly appreciated the opportunity to share my years of experience with you. I appreciated every question and the looks on so many of your faces when the parts fell into place in the classroom and in the field.
               </td>
             </tr>
             <tr>
               <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
-                It only takes a couple of minutes. And if you snapped any photos — finds, the river, camp, the crew — please add a few. They help new folks picture themselves out there.
+                As promised, below you'll find a link to the updated pages for your Gold Trails manual &mdash; insert the update after page 23. You'll also find a link to leave your review of the class, where you can share your photos from the event, too.
               </td>
             </tr>
             <tr>
-              <td align="center" style="padding:24px 24px 0 24px;">
-                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                You are all Gold Trails alumni, and I expect to hear from you when you have questions and anytime you want to show off your gold!
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                Please do not hesitate to contact me in the future. Remember, you are now more than a member coming to a training; you are family. My email is
+                <a href="mailto:khoagland@goldprospectors.org" style="color:#b38c14; font-weight:bold;">khoagland@goldprospectors.org</a>.
+              </td>
+            </tr>
+
+            <!-- Manual update -->
+            <tr>
+              <td style="padding:24px 24px 0 24px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f0e6; border:1px solid #e0d4b3; border-radius:10px;">
                   <tr>
-                    <td align="center" style="border-radius:8px; background-color:#d4a017;">
-                      <a
-                        href="https://goldtrails.gold/review/events"
-                        style="display:inline-block; padding:14px 28px; font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; color:#ffffff; text-decoration:none;"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Share your review &amp; photos
-                      </a>
+                    <td style="padding:18px 20px 0 20px; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:12px; line-height:1.5; text-transform:uppercase; letter-spacing:0.12em;">
+                      Manual update
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 20px 0 20px; font-family:Georgia, 'Times New Roman', serif; color:#1a140f; font-size:20px; line-height:1.3;">
+                      Gold Trails Granite &mdash; Lesson 22A
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:8px 20px 0 20px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:15px; line-height:1.6;">
+                      Two updated pages for your Gold Trails manual. Print them and insert them after page 23.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:16px 20px 20px 20px;">
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="border-radius:8px; background-color:#d4a017;">
+                            <a
+                              href="https://goldtrails.gold/downloads/gold-trails-granite-lesson-22a.pdf"
+                              style="display:inline-block; padding:12px 22px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; color:#ffffff; text-decoration:none;"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Download the manual update (PDF)
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
+
+            <!-- Review + photos -->
             <tr>
-              <td style="padding:20px 24px 0 24px; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:14px; line-height:1.6; text-align:center;">
-                Or copy this link into your browser:<br />
-                <a href="https://goldtrails.gold/review/events" style="color:#b38c14; word-break:break-all;">https://goldtrails.gold/review/events</a>
+              <td style="padding:16px 24px 0 24px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f0e6; border:1px solid #e0d4b3; border-radius:10px;">
+                  <tr>
+                    <td style="padding:18px 20px 0 20px; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:12px; line-height:1.5; text-transform:uppercase; letter-spacing:0.12em;">
+                      Please leave a review
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 20px 0 20px; font-family:Georgia, 'Times New Roman', serif; color:#1a140f; font-size:20px; line-height:1.3;">
+                      How am I doing?
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:8px 20px 0 20px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:15px; line-height:1.6;">
+                      My goal is to help you find more gold. Please let me know how I am doing.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 20px 0 20px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:15px; line-height:1.6;">
+                      <strong>Photos:</strong> you can add up to five photos right on the review form &mdash; finds, field time, camp life. When you add them, the form asks your permission to use them in the magazine and on the GPAA, LDMA, and Gold Trails websites, so there's no need to rename your files.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:16px 20px 20px 20px;">
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="border-radius:8px; background-color:#d4a017;">
+                            <a
+                              href="https://goldtrails.gold/review/events"
+                              style="display:inline-block; padding:12px 22px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; color:#ffffff; text-decoration:none;"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Leave a review &amp; share photos
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
+
             <tr>
-              <td style="padding:20px 24px 8px 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
-                See you in the field,<br />
+              <td style="padding:24px 24px 8px 24px; font-family:Arial, Helvetica, sans-serif; color:#1a140f; font-size:16px; line-height:1.65;">
+                With my highest regards,<br />
                 <strong>Kevin Hoagland</strong><br />
                 Gold Trails
               </td>
@@ -88,7 +169,8 @@
             <tr>
               <td style="padding:16px 24px 24px 24px; border-top:1px solid #e0d4b3; font-family:Arial, Helvetica, sans-serif; color:#6b5e4e; font-size:12px; line-height:1.6; text-align:center;">
                 You are receiving this because you attended a Gold Trails event.<br />
-                <a href="{% unsubscribe_link %}" style="color:#6b5e4e; text-decoration:underline;">Unsubscribe</a>
+                {{Sender_Name}} &middot; {{Sender_Address}}, {{Sender_City}}, {{Sender_State}} {{Sender_Zip}}<br />
+                <a href="{{{unsubscribe}}}" style="color:#6b5e4e; text-decoration:underline;">Unsubscribe</a>
               </td>
             </tr>
           </table>

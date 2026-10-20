@@ -30,9 +30,9 @@ export function getReviewableEvent(key: string | null | undefined): ReviewableEv
 export const MAX_REVIEW_PHOTOS = 5;
 
 /** Stored verbatim with each review that includes photos — change the version if the wording changes. */
-export const PHOTO_CONSENT_VERSION = "2026-10-20";
+export const PHOTO_CONSENT_VERSION = "2026-10-20.2";
 export const PHOTO_CONSENT_TEXT =
-  "I took these photos or have permission to share them, and the people pictured are okay with being shown. I give Gold Trails and the Gold Prospectors Association of America permission to use, edit, and publish these photos, along with my review and name, on their websites, social media, email, advertising, and other marketing materials, without payment or further approval.";
+  "I took these photos or have permission to share them, and the people pictured are okay with being shown. I give Gold Trails, the Gold Prospectors Association of America (GPAA), and the Lost Dutchman's Mining Association (LDMA) permission to use, edit, and publish these photos, along with my review and name, in Gold Prospectors magazine, on their websites and social media, and in email, advertising, and other marketing materials, without payment or further approval.";
 
 export const REVIEW_PUBLISH_NOTICE =
   "By submitting, you agree that Gold Trails may publish your review, rating, and first name with last initial on our website and in marketing materials. Reviews are checked before they're published.";

@@ -257,16 +257,19 @@ One-shot (or segment) blast to push registration while seats remain and sessions
 
 **Audience tips:** Masterclass + certification + events-notify segments; exclude profiles who already purchased a `gold-trails-event` product if Shopify sync is available. Dates stay on the events page so you don’t have to edit the HTML for each session.
 
-## Campaign — Event review request
+## Single Send — Kevin's post-event thank-you (manual update + review request)
 
-Send to attendees of a past session (e.g. a segment of people who purchased the September 2026 Italian Bar event products).
+Send to attendees of a past session (e.g. everyone who attended the September 2026 Italian Bar events).
 
 | File | Use |
 |------|-----|
-| `event-review-request.html` | Klaviyo **Campaign** to past attendees |
+| `event-review-request.html` | **SendGrid Single Send** to past attendees (uses SendGrid `{{{unsubscribe}}}` and `{{Sender_*}}` tags) |
 
-**Subject:** `How was Italian Bar? (photos welcome)`  
-**Preview:** `Two minutes helps other prospectors — and we'd love to see your finds.`  
-**CTA:** https://goldtrails.gold/review/events (add `?event=<key>` to preselect a session — keys live in `lib/events/review-events.ts`)
+**From:** Kevin Hoagland  
+**Subject:** `Thank you, Gold Trails Family — your manual update is inside`  
+**Preview:** `Two updated manual pages, plus a quick way to share your review and photos.`  
+**Links:**
+- Manual update (Gold Trails Granite, Lesson 22A — insert after page 23): https://goldtrails.gold/downloads/gold-trails-granite-lesson-22a.pdf
+- Review + photos: https://goldtrails.gold/review/events (add `?event=<key>` to preselect a session — keys live in `lib/events/review-events.ts`)
 
 Reviews (with optional photos and a marketing-use consent checkbox) are emailed to `SENDGRID_CONTACT_TO_EMAIL` for one-click approval, then appear in the event review carousels.
