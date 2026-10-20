@@ -29,6 +29,27 @@ function StarRating({ rating }: { rating: number }) {
 function EventTestimonialCard({ testimonial }: { testimonial: EventTestimonial }) {
   return (
     <figure data-review-card className={reviewCardClassName}>
+      {testimonial.photos.length ? (
+        <div className="-mx-1 mb-3 flex gap-2 overflow-hidden">
+          {testimonial.photos.slice(0, 3).map((url) => (
+            <a
+              key={url}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block flex-1 overflow-hidden rounded-lg border border-[#e0d4b3]"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={url}
+                alt={`Photo from ${testimonial.reviewerName}'s review`}
+                loading="lazy"
+                className="aspect-square w-full object-cover"
+              />
+            </a>
+          ))}
+        </div>
+      ) : null}
       <StarRating rating={testimonial.rating} />
       {testimonial.title ? (
         <p className="mt-2 text-sm font-semibold leading-snug text-[#1a140f]">{testimonial.title}</p>

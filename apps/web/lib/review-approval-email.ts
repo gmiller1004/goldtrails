@@ -1,4 +1,4 @@
-const LOGO_URL =
+export const LOGO_URL =
   "https://cdn.shopify.com/s/files/1/2568/9508/files/goldtrailslogo.jpg?v=1774307068";
 
 export type ReviewApprovalEmailInput = {
@@ -9,7 +9,7 @@ export type ReviewApprovalEmailInput = {
   approveUrl: string;
 };
 
-function escapeHtml(s: string) {
+export function escapeHtml(s: string) {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -68,6 +68,23 @@ export function buildReviewApprovalHtml(input: ReviewApprovalEmailInput): string
 }
 
 export async function sendReviewApprovalEmail(input: ReviewApprovalEmailInput): Promise<void> {
+  await sendApprovalEmail({
+    subject: `Approve masterclass review — ${input.reviewerName}`,
+    text: buildReviewApprovalText(input),
+    html: buildReviewApprovalHtml(input),
+  });
+}
+
+/** Sends a transactional approval email to the site's review inbox via SendGrid. */
+export async function sendApprovalEmail({
+  subject,
+  text,
+  html,
+}: {
+  subject: string;
+  text: string;
+  html: string;
+}): Promise<void> {
   const apiKey = process.env.SENDGRID_API_KEY;
   const from = process.env.SENDGRID_FROM_EMAIL;
   const to = process.env.SENDGRID_CONTACT_TO_EMAIL || process.env.CONTACT_TO_EMAIL;
@@ -78,8 +95,6 @@ export async function sendReviewApprovalEmail(input: ReviewApprovalEmailInput): 
     );
     throw new Error("Email not configured.");
   }
-
-  const subject = `Approve masterclass review — ${input.reviewerName}`;
 
   const res = await fetch("https://api.sendgrid.com/v3/mail/send", {
     method: "POST",
@@ -97,8 +112,8 @@ export async function sendReviewApprovalEmail(input: ReviewApprovalEmailInput): 
         open_tracking: { enable: false },
       },
       content: [
-        { type: "text/plain", value: buildReviewApprovalText(input) },
-        { type: "text/html", value: buildReviewApprovalHtml(input) },
+        { type: "text/plain", value: text },
+        { type: "text/html", value: html },
       ],
     }),
   });

@@ -16,13 +16,14 @@ type JudgeMeResponse = {
 };
 
 export type EventTestimonial = {
-  id: number;
+  id: string;
   rating: number;
   title: string | null;
   body: string;
   reviewerName: string;
   productTitle: string;
   createdAt: string | null;
+  photos: string[];
 };
 
 const PAGE_SIZE = 100;
@@ -86,13 +87,14 @@ export async function getGoldTrailsTestimonials(): Promise<EventTestimonial[]> {
       .filter((review) => !review.hidden)
       .filter((review) => isTargetEventProduct(review.product_title))
       .map((review) => ({
-        id: review.id,
+        id: `judgeme-${review.id}`,
         rating: review.rating,
         title: review.title?.trim() || null,
         body: review.body?.trim() || "",
         reviewerName: review.reviewer?.name?.trim() || "Gold Trails Member",
         productTitle: review.product_title?.trim() || "Gold Trails",
         createdAt: review.created_at ?? null,
+        photos: [],
       }))
       .filter((review) => review.body.length > 0)
       .sort((a, b) => {

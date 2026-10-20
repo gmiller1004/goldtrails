@@ -20,14 +20,14 @@ const COLLAPSED_CLAMP_STYLE = {
 };
 
 export function EventTestimonialsGrid({ testimonials }: EventTestimonialsGridProps) {
-  const [expandedById, setExpandedById] = useState<Record<number, boolean>>({});
+  const [expandedById, setExpandedById] = useState<Record<string, boolean>>({});
 
-  const toggle = (id: number) => {
+  const toggle = (id: string) => {
     setExpandedById((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const shouldShowToggleById = useMemo(() => {
-    const map: Record<number, boolean> = {};
+    const map: Record<string, boolean> = {};
     for (const review of testimonials) {
       map[review.id] = review.body.length > READ_MORE_THRESHOLD;
     }

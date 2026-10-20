@@ -1,8 +1,8 @@
 import { EventTestimonialsSlider } from "@/components/new-home/event-testimonials-slider";
-import { getGoldTrailsTestimonials } from "@/lib/judgeme";
+import { getEventTestimonials } from "@/lib/event-testimonials";
 
 export async function NewHomeEventReviews() {
-  const testimonials = await getGoldTrailsTestimonials();
+  const testimonials = await getEventTestimonials();
 
   if (!testimonials.length) {
     return null;

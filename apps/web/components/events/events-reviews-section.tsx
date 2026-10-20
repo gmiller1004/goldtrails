@@ -1,8 +1,8 @@
 import { EventTestimonialsSlider } from "@/components/new-home/event-testimonials-slider";
-import { getGoldTrailsTestimonials } from "@/lib/judgeme";
+import { getEventTestimonials } from "@/lib/event-testimonials";
 
 export async function EventsReviewsSection() {
-  const testimonials = await getGoldTrailsTestimonials();
+  const testimonials = await getEventTestimonials();
 
   if (!testimonials.length) {
     return null;
@@ -19,7 +19,7 @@ export async function EventsReviewsSection() {
           What attendees say about Gold Trails
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-[#5c4f3f] sm:text-base">
-          Verified Judge.me reviews from detectorists who trained at Gold Trails events.
+          Reviews and photos from detectorists who trained at Gold Trails events.
         </p>
       </div>
       <EventTestimonialsSlider testimonials={testimonials} />

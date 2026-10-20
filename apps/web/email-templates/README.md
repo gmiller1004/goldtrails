@@ -12,6 +12,7 @@ HTML files for **one masterclass nurture flow** in Klaviyo. Paste each file into
 | **Magazine / publications** (same email for all; sign in to catch up) | [goldprospectors.org/publications](https://www.goldprospectors.org/publications) |
 | **YouTube** (education, no hard sell) | [youtube.com/@goldprospectors](https://www.youtube.com/@goldprospectors) |
 | **Masterclass review** | [goldtrails.gold/review/masterclass](https://goldtrails.gold/review/masterclass) |
+| **Event review** | [goldtrails.gold/review/events](https://goldtrails.gold/review/events) |
 
 Mix **value** emails (tips, YouTube) with **conversion** emails (events, property guide, join). Not every message needs a button or a membership pitch.
 
@@ -255,3 +256,17 @@ One-shot (or segment) blast to push registration while seats remain and sessions
 **CTA:** https://goldtrails.gold/events  
 
 **Audience tips:** Masterclass + certification + events-notify segments; exclude profiles who already purchased a `gold-trails-event` product if Shopify sync is available. Dates stay on the events page so you don’t have to edit the HTML for each session.
+
+## Campaign — Event review request
+
+Send to attendees of a past session (e.g. a segment of people who purchased the September 2026 Italian Bar event products).
+
+| File | Use |
+|------|-----|
+| `event-review-request.html` | Klaviyo **Campaign** to past attendees |
+
+**Subject:** `How was Italian Bar? (photos welcome)`  
+**Preview:** `Two minutes helps other prospectors — and we'd love to see your finds.`  
+**CTA:** https://goldtrails.gold/review/events (add `?event=<key>` to preselect a session — keys live in `lib/events/review-events.ts`)
+
+Reviews (with optional photos and a marketing-use consent checkbox) are emailed to `SENDGRID_CONTACT_TO_EMAIL` for one-click approval, then appear in the event review carousels.
