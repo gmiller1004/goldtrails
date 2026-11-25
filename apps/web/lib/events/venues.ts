@@ -120,6 +120,8 @@ export type EventVenue = {
   gearRequirement?: { short: string; detail: string; link?: VenueLink };
   /** What the registration fee covers, for venues whose field time is on public land. */
   feeDisclosure?: { title: string; body: string };
+  /** Venue promo video shown near the top of venue and session pages. */
+  video?: { youtubeId: string; title: string; eyebrow: string; heading: string; uploadDate: string; description: string };
   faq: Array<{ question: string; answer: string }>;
 };
 
@@ -657,6 +659,15 @@ const morristown: EventVenue = {
     detail:
       "Demo detectors are not available. Bring a gold detector such as a Garrett GoldMaster 24k, Fisher Gold Bug 2, or Minelab Gold Monster 1000 or 2000.",
     link: { label: "Shop gold detectors →", href: "/shop" },
+  },
+  video: {
+    youtubeId: "quOmL2CBBhw",
+    title: "Metal Detecting Masterclass with Kevin Hoagland — Morristown, Arizona",
+    eyebrow: "Watch",
+    heading: "Kevin walks you through the two days",
+    uploadDate: "2026-11-10",
+    description:
+      "Kevin Hoagland explains the two-day Metal Detecting Hands-On Masterclass in Morristown, Arizona: classroom geology, hydrology, and research, then one-on-one field coaching on GPAA claims.",
   },
   feeDisclosure: {
     title: "About your registration fee",

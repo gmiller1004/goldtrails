@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { EventsExpectVideoModal } from "@/components/events/events-expect-video-modal";
+import { YouTubeLite } from "@/components/events/youtube-lite";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
 import type { EventVenue, VenueMembership } from "@/lib/events/venues";
 import { cn } from "@/lib/utils";
@@ -86,6 +87,33 @@ export function VenueStats({ venue }: { venue: EventVenue }) {
           </li>
         ))}
       </ul>
+    </section>
+  );
+}
+
+export function VenueVideo({ venue, source }: { venue: EventVenue; source: string }) {
+  if (!venue.video) return null;
+  const { youtubeId, title, description, uploadDate } = venue.video;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: title,
+    description,
+    uploadDate,
+    thumbnailUrl: [`https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`],
+    embedUrl: `https://www.youtube.com/embed/${youtubeId}`,
+    contentUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
+  };
+  return (
+    <section className="border-b border-[#d0d5c4]/60 bg-[#eef0e8]/60">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="mb-6 text-center">
+          <p className={eyebrowClass}>{venue.video.eyebrow}</p>
+          <h2 className="mt-2 font-serif text-2xl font-semibold sm:text-3xl">{venue.video.heading}</h2>
+        </div>
+        <YouTubeLite videoId={venue.video.youtubeId} title={venue.video.title} source={source} />
+      </div>
     </section>
   );
 }
@@ -238,10 +266,12 @@ export function EventImmersive({
   photo,
   title,
   body,
+  showVideoButton = true,
 }: {
   photo: { src: string; alt: string };
   title: string;
   body: string;
+  showVideoButton?: boolean;
 }) {
   return (
     <section className="border-t border-[#3d4535]/40 bg-[#3d4535] text-[#f7f2e8]">
@@ -253,7 +283,7 @@ export function EventImmersive({
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#b8c4a8]">Immersive field work</p>
           <h2 className="mt-2 font-serif text-3xl font-semibold text-white sm:text-4xl">{title}</h2>
           <p className="mt-4 text-sm leading-relaxed text-[#c4b59a] sm:text-base">{body}</p>
-          <EventsExpectVideoModal className="!mt-6" />
+          {showVideoButton ? <EventsExpectVideoModal className="!mt-6" /> : null}
         </div>
       </div>
     </section>

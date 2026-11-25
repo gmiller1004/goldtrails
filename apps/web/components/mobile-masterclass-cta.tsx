@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 
-const hiddenExact = new Set(["/", "/ground-balance"]);
+const hiddenExact = new Set(["/", "/ground-balance", "/black-friday"]);
 const hiddenPrefixes = ["/masterclass", "/cart", "/thank-you"];
 
 export function MobileMasterclassCta() {

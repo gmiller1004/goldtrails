@@ -14,6 +14,7 @@ import {
   VenueSchedule,
   VenueStats,
   VenueStory,
+  VenueVideo,
 } from "@/components/events/venue-sections";
 import { ProductDescription } from "@/components/shop/product-description";
 import { ProductImageGallery } from "@/components/shop/product-image-gallery";
@@ -83,11 +84,17 @@ export function EventProductPage({ product }: { product: ShopifyProduct }) {
       </section>
 
       <VenueStats venue={venue} />
+      <VenueVideo venue={venue} source={`session-${product.handle}`} />
       <VenueStory venue={venue} />
       <VenueHighlights venue={venue} />
       <VenueSchedule venue={venue} />
       <EventBenefitsGrid benefits={venue.benefits} />
-      <EventImmersive photo={venue.photos.immersive} title={venue.immersive.title} body={venue.immersive.body} />
+      <EventImmersive
+        photo={venue.photos.immersive}
+        title={venue.immersive.title}
+        body={venue.immersive.body}
+        showVideoButton={!venue.video}
+      />
 
       {/* Register this session */}
       <section

@@ -18,6 +18,7 @@ import {
   VenueSchedule,
   VenueStats,
   VenueStory,
+  VenueVideo,
 } from "@/components/events/venue-sections";
 import { NewHomeFaq } from "@/components/new-home/new-home-faq";
 import { nhGoldButtonClass } from "@/components/new-home/new-home-styles";
@@ -55,6 +56,7 @@ export function EventsVenuePage({ venue }: { venue: EventVenue }) {
       </section>
 
       <VenueStats venue={venue} />
+      <VenueVideo venue={venue} source={`venue-${venue.slug}`} />
       <VenueStory venue={venue} />
       <VenueHighlights venue={venue} />
       <VenueSchedule venue={venue} />
@@ -62,7 +64,12 @@ export function EventsVenuePage({ venue }: { venue: EventVenue }) {
         benefits={venue.benefits}
         subtitle="Structured coaching, real ground, and repeatable skills you can take to your next hunt."
       />
-      <EventImmersive photo={venue.photos.immersive} title={venue.immersive.title} body={venue.immersive.body} />
+      <EventImmersive
+        photo={venue.photos.immersive}
+        title={venue.immersive.title}
+        body={venue.immersive.body}
+        showVideoButton={!venue.video}
+      />
       <VenuePlanTrip venue={venue} />
 
       <section

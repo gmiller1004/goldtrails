@@ -533,7 +533,90 @@ export async function getDetectors(): Promise<ShopifyProduct[]> {
   return data.products.edges.map((edge) => edge.node).map(mapProduct);
 }
 
+type ProductByHandleResponse = {
+  product: ProductNode | null;
+};
+
+const PRODUCT_NODE_FIELDS = `
+  id
+  title
+  handle
+  description
+  descriptionHtml
+  tags
+  featuredImage {
+    url
+  }
+  images(first: 12) {
+    edges {
+      node {
+        url
+      }
+    }
+  }
+  priceRange {
+    minVariantPrice {
+      amount
+      currencyCode
+    }
+  }
+  metafield(namespace: "custom", key: "event_date") {
+    value
+  }
+  startDateMetafield: metafield(namespace: "custom", key: "start-date") {
+    value
+  }
+  startDateMetafieldAlt: metafield(namespace: "custom", key: "start_date") {
+    value
+  }
+  endDateMetafield: metafield(namespace: "custom", key: "end-date") {
+    value
+  }
+  endDateMetafieldAlt: metafield(namespace: "custom", key: "end_date") {
+    value
+  }
+  locationMetafield: metafield(namespace: "custom", key: "location") {
+    value
+  }
+  venueMetafield: metafield(namespace: "custom", key: "venue") {
+    value
+  }
+  variants(first: 50) {
+    edges {
+      node {
+        id
+        title
+        availableForSale
+        price {
+          amount
+          currencyCode
+        }
+      }
+    }
+  }
+`;
+
+const PRODUCT_BY_HANDLE_QUERY = `
+  query ProductByHandle($handle: String!) {
+    product(handle: $handle) {
+      ${PRODUCT_NODE_FIELDS}
+    }
+  }
+`;
+
+/** Fetch a single product by handle via Storefront API (any tag / publication). */
+export async function getProductByHandle(handle: string): Promise<ShopifyProduct | null> {
+  const data = await storefrontRequest<ProductByHandleResponse>(PRODUCT_BY_HANDLE_QUERY, {
+    handle,
+  });
+  if (!data?.product) return null;
+  return mapProduct(data.product);
+}
+
 export async function getShopProductByHandle(handle: string): Promise<ShopifyProduct | null> {
+  const byHandle = await getProductByHandle(handle);
+  if (byHandle) return byHandle;
+
   const [gear, events] = await Promise.all([getDetectors(), getEvents()]);
   const products = [...gear, ...events];
   return products.find((product) => product.handle === handle) ?? null;
